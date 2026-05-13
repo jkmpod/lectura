@@ -1,0 +1,12 @@
+{
+  "lessons": [
+    {
+      "id": "intro-hypothesis-testing",
+      "file": "intro-hypothesis-testing.json"
+    },
+    {
+      "id": "linear-regression-basics",
+      "file": "linear-regression-basics.json"
+    }
+  ]
+}

@@ -1,0 +1,225 @@
+{
+  "id": "intro-hypothesis-testing",
+  "title": "Hypothesis Testing: An Introduction",
+  "subtitle": "Null and alternative hypotheses, Type I and Type II errors",
+  "instructor": "Prof. Andrew Thangaraj",
+  "course": "Statistics II",
+  "youtubeId": "dQw4w9WgXcQ",
+  "thumbnailUrl": null,
+  "duration": 600,
+
+  "concepts": [
+    { "title": "What is a hypothesis", "timestamp": 12 },
+    { "title": "Null vs alternative hypothesis", "timestamp": 95 },
+    { "title": "Choosing a significance level", "timestamp": 210 },
+    { "title": "Type I and Type II errors", "timestamp": 340 },
+    { "title": "Interpreting p-values", "timestamp": 460 }
+  ],
+
+  "annotations": [
+    {
+      "id": "a1",
+      "type": "context",
+      "behavior": "soft",
+      "timestamp": 30,
+      "title": "Why we need formal testing",
+      "body": "Informal judgments about data are easily fooled by chance. Hypothesis testing was developed precisely to discipline our intuition — to keep us from declaring an effect real when it could have arisen from random variation alone."
+    },
+    {
+      "id": "a2",
+      "type": "quiz",
+      "behavior": "pause",
+      "timestamp": 155,
+      "title": "Quick check",
+      "question": "Which of these is a valid null hypothesis?",
+      "options": [
+        "The students study very hard",
+        "The mean exam score equals 60",
+        "The data are interesting",
+        "The teacher is effective"
+      ],
+      "correctIndex": 1,
+      "hint": "A null hypothesis must be a precise, testable claim about a population parameter — not a vague assertion.",
+      "explanation": "Null hypotheses must be specific statements about parameters that can be tested with data. 'Mean equals 60' is precise and falsifiable; the others are too vague to test statistically."
+    },
+    {
+      "id": "a3",
+      "type": "context",
+      "behavior": "soft",
+      "timestamp": 270,
+      "title": "Why 0.05?",
+      "body": "There is nothing magical about α = 0.05. It is a convention dating to R.A. Fisher in the 1920s. Some fields (particle physics) use 0.0000003; others (exploratory medicine) use 0.10. The right α depends on the cost of each kind of mistake in your context."
+    },
+    {
+      "id": "a4",
+      "type": "quiz",
+      "behavior": "pause",
+      "timestamp": 410,
+      "title": "Concept check",
+      "question": "A medical test concludes a healthy person has a disease. What kind of error is this?",
+      "options": ["Type I error", "Type II error", "Sampling error", "No error — it's just a wrong diagnosis"],
+      "correctIndex": 0,
+      "hint": "Map this to the null hypothesis 'the person is healthy.' The test is rejecting that null. Was it true?",
+      "explanation": "If H₀ is 'person is healthy' and the test rejects H₀ even though the person was in fact healthy, that's rejecting a true null — a Type I error (false positive). False negatives, missing a real disease, would be Type II."
+    },
+    {
+      "id": "a5",
+      "type": "recap",
+      "behavior": "marker",
+      "timestamp": 580,
+      "title": "What you've learned",
+      "body": "You now have the full hypothesis-testing skeleton: state H₀ and H₁, choose α, collect data, compute a p-value, and compare. The two errors (Type I and Type II) are the unavoidable price of working with samples. Next lesson: how to compute the test statistic for the common cases."
+    }
+  ],
+
+  "transcript": {
+    "en": [
+      { "start": 0,   "end": 12,  "text": "Welcome back. Today we're going to talk about one of the most important ideas in statistical inference: hypothesis testing." },
+      { "start": 12,  "end": 28,  "text": "A hypothesis, in the statistical sense, is a precise claim about a population parameter — something we want to evaluate using sample data." },
+      { "start": 28,  "end": 48,  "text": "For example, we might claim that the average height of students in a college is 170 centimetres. That is a hypothesis we can test." },
+      { "start": 48,  "end": 70,  "text": "The procedure of hypothesis testing gives us a principled way to decide whether the data we have is consistent with that claim, or whether it contradicts it." },
+      { "start": 70,  "end": 95,  "text": "Now, every hypothesis test has two competing statements. These are called the null hypothesis and the alternative hypothesis." },
+      { "start": 95,  "end": 125, "text": "The null hypothesis, written H-naught, is typically the statement of no effect or no difference. It represents the status quo." },
+      { "start": 125, "end": 160, "text": "The alternative hypothesis, written H-one or H-A, is what we will conclude if we find enough evidence to reject the null." },
+      { "start": 160, "end": 210, "text": "It is important to remember that we never prove the null hypothesis. We either reject it, or we fail to reject it. There is an asymmetry built into this framework." },
+      { "start": 210, "end": 245, "text": "Before collecting data, we also choose a significance level, denoted by the Greek letter alpha. Common choices are 0.05, 0.01, and 0.10." },
+      { "start": 245, "end": 290, "text": "The significance level represents how much risk we are willing to tolerate of making a wrong decision when the null hypothesis is in fact true." },
+      { "start": 290, "end": 340, "text": "This brings us to the two types of errors we can make. These errors are unavoidable in any statistical decision-making procedure." },
+      { "start": 340, "end": 385, "text": "A Type I error occurs when we reject the null hypothesis even though it was actually true. We have detected an effect that is not really there." },
+      { "start": 385, "end": 430, "text": "A Type II error is the opposite. It occurs when we fail to reject the null hypothesis even though it was actually false. We have missed a real effect." },
+      { "start": 430, "end": 460, "text": "The probability of a Type I error is exactly the alpha we chose. The probability of a Type II error is called beta, and one minus beta is the power of the test." },
+      { "start": 460, "end": 510, "text": "After collecting the data, we compute a test statistic and from it a p-value. The p-value is one of the most misunderstood quantities in all of statistics." },
+      { "start": 510, "end": 560, "text": "The p-value is the probability, assuming the null hypothesis is true, of observing data at least as extreme as what we actually observed." },
+      { "start": 560, "end": 600, "text": "If the p-value is smaller than alpha, we reject the null. Otherwise, we fail to reject it. That is the entire decision rule, and we will spend the rest of the course unpacking what it really means." }
+    ],
+    "hi": [
+      { "start": 0,   "end": 12,  "text": "वापस स्वागत है। आज हम सांख्यिकीय अनुमान के सबसे महत्वपूर्ण विचारों में से एक — परिकल्पना परीक्षण — पर बात करेंगे।" },
+      { "start": 12,  "end": 28,  "text": "सांख्यिकीय अर्थ में, एक परिकल्पना जनसंख्या के किसी पैरामीटर के बारे में एक सटीक दावा है, जिसे हम नमूना डेटा का उपयोग करके परखना चाहते हैं।" },
+      { "start": 28,  "end": 48,  "text": "उदाहरण के लिए, हम दावा कर सकते हैं कि किसी कॉलेज के छात्रों की औसत ऊँचाई 170 सेंटीमीटर है। यह एक ऐसी परिकल्पना है जिसका परीक्षण किया जा सकता है।" },
+      { "start": 48,  "end": 70,  "text": "परिकल्पना परीक्षण की प्रक्रिया हमें यह तय करने का एक व्यवस्थित तरीका देती है कि हमारे पास जो डेटा है वह उस दावे के अनुरूप है या उसका खंडन करता है।" },
+      { "start": 70,  "end": 95,  "text": "अब, प्रत्येक परिकल्पना परीक्षण में दो प्रतिस्पर्धी कथन होते हैं। इन्हें null hypothesis और alternative hypothesis कहा जाता है।" },
+      { "start": 95,  "end": 125, "text": "Null hypothesis, जिसे H-naught लिखा जाता है, आमतौर पर 'कोई प्रभाव नहीं' या 'कोई अंतर नहीं' का कथन होता है। यह यथास्थिति का प्रतिनिधित्व करता है।" },
+      { "start": 125, "end": 160, "text": "Alternative hypothesis, जिसे H-one या H-A लिखा जाता है, वह है जिसे हम तब निष्कर्ष के रूप में स्वीकार करेंगे जब null को अस्वीकार करने के लिए पर्याप्त सबूत मिल जाएगा।" },
+      { "start": 160, "end": 210, "text": "यह याद रखना महत्वपूर्ण है कि हम कभी भी null hypothesis को सिद्ध नहीं करते। हम या तो इसे अस्वीकार करते हैं, या इसे अस्वीकार करने में विफल रहते हैं। इस ढांचे में एक असमानता निहित है।" },
+      { "start": 210, "end": 245, "text": "डेटा एकत्र करने से पहले, हम एक significance level भी चुनते हैं, जिसे ग्रीक अक्षर alpha से दर्शाया जाता है। सामान्य विकल्प 0.05, 0.01 और 0.10 हैं।" },
+      { "start": 245, "end": 290, "text": "Significance level यह दर्शाता है कि null hypothesis के वास्तव में सत्य होने पर भी गलत निर्णय लेने का कितना जोखिम हम सहन करने को तैयार हैं।" },
+      { "start": 290, "end": 340, "text": "यह हमें उन दो प्रकार की त्रुटियों तक ले जाता है जो हम कर सकते हैं। ये त्रुटियाँ किसी भी सांख्यिकीय निर्णय प्रक्रिया में अपरिहार्य हैं।" },
+      { "start": 340, "end": 385, "text": "Type I error तब होती है जब हम null hypothesis को अस्वीकार कर देते हैं जबकि वह वास्तव में सत्य थी। हमने एक ऐसा प्रभाव खोज लिया जो वास्तव में नहीं था।" },
+      { "start": 385, "end": 430, "text": "Type II error इसके विपरीत है। यह तब होती है जब हम null hypothesis को अस्वीकार करने में विफल रहते हैं जबकि वह वास्तव में असत्य थी। हमने एक वास्तविक प्रभाव चूक दिया।" },
+      { "start": 430, "end": 460, "text": "Type I error की प्रायिकता बिल्कुल वही alpha होती है जिसे हमने चुना था। Type II error की प्रायिकता को beta कहते हैं, और एक माइनस beta परीक्षण की power होती है।" },
+      { "start": 460, "end": 510, "text": "डेटा एकत्र करने के बाद, हम एक test statistic की गणना करते हैं और उससे एक p-value निकालते हैं। P-value पूरी सांख्यिकी में सबसे ग़लत समझी जाने वाली मात्राओं में से एक है।" },
+      { "start": 510, "end": 560, "text": "P-value वह प्रायिकता है, यह मानते हुए कि null hypothesis सत्य है, कि हमें वास्तव में देखे गए डेटा जितना या उससे अधिक चरम डेटा प्राप्त हो।" },
+      { "start": 560, "end": 600, "text": "यदि p-value alpha से छोटा है, तो हम null को अस्वीकार करते हैं। अन्यथा, हम अस्वीकार करने में विफल रहते हैं। यही पूरा निर्णय नियम है, और हम शेष पाठ्यक्रम में यह समझने में बिताएँगे कि इसका वास्तव में क्या अर्थ है।" }
+    ],
+    "ta": [
+      { "start": 0,   "end": 12,  "text": "மீண்டும் வரவேற்கிறேன். இன்று நாம் புள்ளியியல் அனுமானத்தின் மிக முக்கியமான கருத்துகளில் ஒன்றான கருதுகோள் சோதனை பற்றி பேசப் போகிறோம்." },
+      { "start": 12,  "end": 28,  "text": "புள்ளியியல் அர்த்தத்தில், ஒரு கருதுகோள் என்பது மக்கள்தொகை அளவுருவைப் பற்றிய ஒரு துல்லியமான கூற்று — மாதிரித் தரவைப் பயன்படுத்தி நாம் மதிப்பீடு செய்ய விரும்பும் ஒன்று." },
+      { "start": 28,  "end": 48,  "text": "உதாரணமாக, ஒரு கல்லூரியில் மாணவர்களின் சராசரி உயரம் 170 சென்டிமீட்டர் என்று நாம் கூறலாம். இது நாம் சோதனை செய்யக்கூடிய ஒரு கருதுகோள்." },
+      { "start": 48,  "end": 70,  "text": "கருதுகோள் சோதனை நடைமுறை, நம்மிடம் உள்ள தரவு அந்தக் கூற்றுடன் ஒத்துப்போகிறதா அல்லது அதை மறுக்கிறதா என்பதைத் தீர்மானிக்க ஒரு கொள்கைப்பூர்வமான வழியை வழங்குகிறது." },
+      { "start": 70,  "end": 95,  "text": "ஒவ்வொரு கருதுகோள் சோதனையிலும் இரண்டு போட்டியிடும் அறிக்கைகள் உள்ளன. இவை null hypothesis மற்றும் alternative hypothesis என அழைக்கப்படுகின்றன." },
+      { "start": 95,  "end": 125, "text": "Null hypothesis, H-naught என எழுதப்படுவது, பொதுவாக 'எந்த விளைவும் இல்லை' அல்லது 'எந்த வேறுபாடும் இல்லை' என்ற அறிக்கையாகும். இது தற்போதைய நிலையைக் குறிக்கிறது." },
+      { "start": 125, "end": 160, "text": "Alternative hypothesis, H-one அல்லது H-A என எழுதப்படுவது, null-ஐ நிராகரிக்க போதுமான ஆதாரம் கிடைத்தால் நாம் முடிவாக ஏற்றுக்கொள்வது." },
+      { "start": 160, "end": 210, "text": "நாம் ஒருபோதும் null hypothesis-ஐ நிரூபிக்க மாட்டோம் என்பதை நினைவில் கொள்வது முக்கியம். நாம் அதை நிராகரிக்கிறோம், அல்லது நிராகரிக்கத் தவறுகிறோம். இந்த கட்டமைப்பில் ஒரு சமச்சீரற்ற தன்மை உள்ளது." },
+      { "start": 210, "end": 245, "text": "தரவைச் சேகரிக்கும் முன், கிரேக்க எழுத்து alpha-வால் குறிக்கப்படும் ஒரு significance level-ஐயும் தேர்வு செய்கிறோம். பொதுவான தேர்வுகள் 0.05, 0.01, மற்றும் 0.10." },
+      { "start": 245, "end": 290, "text": "Null hypothesis உண்மையில் சரியாக இருக்கும்போதும் தவறான முடிவை எடுக்கும் எவ்வளவு ஆபத்தை நாம் ஏற்றுக்கொள்ள தயாராக இருக்கிறோம் என்பதை significance level குறிக்கிறது." },
+      { "start": 290, "end": 340, "text": "இது நாம் செய்யக்கூடிய இரண்டு வகையான பிழைகளுக்கு நம்மை இட்டுச் செல்கிறது. எந்தவொரு புள்ளியியல் முடிவெடுக்கும் நடைமுறையிலும் இந்த பிழைகள் தவிர்க்க முடியாதவை." },
+      { "start": 340, "end": 385, "text": "Null hypothesis உண்மையில் சரியாக இருக்கும்போதே நாம் அதை நிராகரித்தால் Type I error நிகழ்கிறது. உண்மையில் இல்லாத ஒரு விளைவை நாம் கண்டறிந்துள்ளோம்." },
+      { "start": 385, "end": 430, "text": "Type II error இதற்கு நேர்மாறானது. Null hypothesis உண்மையில் தவறாக இருக்கும்போதே நாம் அதை நிராகரிக்கத் தவறினால் இது நிகழ்கிறது. ஒரு உண்மையான விளைவை நாம் தவறவிட்டோம்." },
+      { "start": 430, "end": 460, "text": "Type I error-இன் நிகழ்தகவு நாம் தேர்ந்தெடுத்த அதே alpha ஆகும். Type II error-இன் நிகழ்தகவு beta எனப்படுகிறது, மற்றும் ஒன்று கழித்தல் beta என்பது சோதனையின் power ஆகும்." },
+      { "start": 460, "end": 510, "text": "தரவைச் சேகரித்த பிறகு, நாம் ஒரு test statistic-ஐ கணக்கிடுகிறோம், அதிலிருந்து p-value-ஐ கண்டறிகிறோம். P-value என்பது புள்ளியியலில் மிகவும் தவறாகப் புரிந்துகொள்ளப்பட்ட அளவுகளில் ஒன்று." },
+      { "start": 510, "end": 560, "text": "Null hypothesis சரி என்று வைத்துக்கொண்டால், நாம் உண்மையில் கவனித்த தரவைப் போலவே அல்லது அதைவிட தீவிரமான தரவைப் பெறும் நிகழ்தகவு தான் p-value." },
+      { "start": 560, "end": 600, "text": "P-value alpha-ஐ விட சிறியதாக இருந்தால், நாம் null-ஐ நிராகரிக்கிறோம். இல்லையெனில், நிராகரிக்கத் தவறுகிறோம். அதுவே முழு முடிவு விதி, அதன் உண்மையான அர்த்தத்தை விரித்துரைப்பதில் மீதமுள்ள பாடத்தைச் செலவிடுவோம்." }
+    ]
+  },
+
+  "questions": [
+    {
+      "id": "q1",
+      "question": "If we reject the null hypothesis when it is in fact true, which type of error have we committed?",
+      "options": ["Type I error", "Type II error", "Sampling error", "Power loss"],
+      "correctIndex": 0,
+      "hint": "Consider which error involves wrongly rejecting something that was actually correct — the 'false alarm' kind of mistake.",
+      "explanation": "A Type I error is the false positive — rejecting a true null hypothesis. Its probability is exactly the significance level alpha we chose before the test.",
+      "concept": "Type I and Type II errors",
+      "difficulty": "easy"
+    },
+    {
+      "id": "q2",
+      "question": "A researcher uses alpha = 0.05. What does this value represent?",
+      "options": [
+        "The probability that the null hypothesis is true",
+        "The probability of rejecting the null when it is in fact true",
+        "The probability that the alternative hypothesis is true",
+        "The probability of accepting the null when it is in fact false"
+      ],
+      "correctIndex": 1,
+      "hint": "Alpha is set before any data is collected. It controls one specific kind of mistake — the one we want to commit at most 5% of the time.",
+      "explanation": "Alpha is the Type I error rate: the probability of rejecting H₀ given that H₀ is true. It is not a probability about whether the hypothesis itself is true — frequentist hypothesis testing does not assign probabilities to hypotheses.",
+      "concept": "Choosing a significance level",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q3",
+      "question": "Which of the following is the correct definition of a p-value?",
+      "options": [
+        "The probability that the null hypothesis is true given the data",
+        "The probability of obtaining data at least as extreme as observed, assuming the null hypothesis is true",
+        "The probability that the alternative hypothesis is true given the data",
+        "One minus the probability of a Type II error"
+      ],
+      "correctIndex": 1,
+      "hint": "The p-value is a conditional probability — note carefully what is being conditioned on. It is computed under an assumption, not as a property of that assumption.",
+      "explanation": "The p-value is P(data at least as extreme as observed | H₀ is true). It is a statement about the data given the hypothesis, not the other way around. Confusing these two directions is the most common error in interpreting p-values.",
+      "concept": "Interpreting p-values",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q4",
+      "question": "Why do we say we 'fail to reject' the null hypothesis rather than 'accept' it?",
+      "options": [
+        "It is just a matter of academic style; the two phrases mean the same thing",
+        "Because the test is designed to detect evidence against the null, not evidence for it",
+        "Because accepting a hypothesis is statistically illegal",
+        "Because the alternative hypothesis is always more likely"
+      ],
+      "correctIndex": 1,
+      "hint": "Think about the asymmetry mentioned in the lesson. What does absence of evidence allow us to conclude, versus presence of evidence?",
+      "explanation": "Hypothesis testing is structured asymmetrically. A non-significant result means we did not find enough evidence to reject H₀ — but absence of evidence is not evidence of absence. The null may still be false; we just could not detect it with this test.",
+      "concept": "Null vs alternative hypothesis",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q5",
+      "question": "The 'power' of a hypothesis test is defined as:",
+      "options": [
+        "1 minus alpha",
+        "1 minus the probability of a Type I error",
+        "1 minus beta, the probability of a Type II error",
+        "The probability that the test statistic is large"
+      ],
+      "correctIndex": 2,
+      "hint": "Power describes the test's ability to do something positive — to detect a real effect when one exists. Which kind of error are we avoiding when we do that?",
+      "explanation": "Power = 1 − β, where β is the probability of a Type II error (failing to reject a false null). High power means the test is good at detecting real effects. Power depends on sample size, effect size, alpha, and the variability of the data.",
+      "concept": "Type I and Type II errors",
+      "difficulty": "hard"
+    }
+  ],
+
+  "relatedVideos": [
+    {
+      "title": "StatQuest: Hypothesis Testing and The Null Hypothesis",
+      "url": "https://www.youtube.com/watch?v=0oc49DyA3hU",
+      "description": "Josh Starmer's clear, visual walkthrough of the core hypothesis testing logic — a good complement to the lecture's more formal treatment."
+    },
+    {
+      "title": "Khan Academy: P-values and significance tests",
+      "url": "https://www.youtube.com/watch?v=KS6KEWaoOOE",
+      "description": "Worked numerical examples for those who want to see p-value computation step by step on real data."
+    },
+    {
+      "title": "3Blue1Brown: Bayes' theorem, intuitively",
+      "url": "https://www.youtube.com/watch?v=HZGCoVF3YvM",
+      "description": "Not strictly about hypothesis testing, but essential for understanding why P(H | data) ≠ P(data | H) — the most common p-value misinterpretation."
+    }
+  ]
+}

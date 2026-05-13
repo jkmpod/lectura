@@ -1,0 +1,109 @@
+{
+  "id": "linear-regression-basics",
+  "title": "Linear Regression: The Idea",
+  "subtitle": "Fitting a line, the least-squares principle, and what residuals tell us",
+  "instructor": "Prof. Andrew Thangaraj",
+  "course": "Statistics II",
+  "youtubeId": "nk2CQITm_eo",
+  "thumbnailUrl": null,
+  "duration": 360,
+
+  "concepts": [
+    { "title": "What linear regression does", "timestamp": 8 },
+    { "title": "The least-squares principle", "timestamp": 95 },
+    { "title": "Slope and intercept", "timestamp": 180 },
+    { "title": "Residuals and what they mean", "timestamp": 260 }
+  ],
+
+  "annotations": [],
+
+  "transcript": {
+    "en": [
+      { "start": 0,   "end": 30,  "text": "Today we are going to look at one of the most useful tools in all of applied statistics — linear regression. The idea is deceptively simple, but it underlies a remarkable fraction of practical data analysis." },
+      { "start": 30,  "end": 70,  "text": "Suppose we have pairs of numbers — for each student, their hours studied and their exam score. We have a scatter of points, and we want to summarise the relationship." },
+      { "start": 70,  "end": 95,  "text": "Linear regression answers the question: what is the best straight line we can draw through this cloud of points?" },
+      { "start": 95,  "end": 140, "text": "The answer requires us to first agree on what 'best' means. The standard answer is the least-squares criterion. We find the line that minimises the sum of squared vertical distances from each point to the line." },
+      { "start": 140, "end": 180, "text": "Why squared distances? Because squaring penalises large errors more than small ones, and because the resulting mathematics is exceptionally clean — we get a closed-form solution rather than an iterative search." },
+      { "start": 180, "end": 220, "text": "Every line has two parameters: a slope and an intercept. The slope tells us how much the predicted y changes when x increases by one unit. The intercept is the predicted value of y when x equals zero." },
+      { "start": 220, "end": 260, "text": "Be careful with the intercept. It is only meaningful if x equals zero is actually in the range of your data. Otherwise you are extrapolating, and the intercept is a mathematical artifact, not a meaningful quantity." },
+      { "start": 260, "end": 310, "text": "After fitting the line, the most important quantity to inspect is the set of residuals — the actual data values minus the predicted values. Each residual measures how badly the line fit one particular observation." },
+      { "start": 310, "end": 360, "text": "If the residuals show a pattern — say, they are systematically positive for small x and negative for large x — then the linear model is wrong, and we should look for a curve or a transformation. Residuals are how a regression talks back to us." }
+    ]
+  },
+
+  "questions": [
+    {
+      "id": "q1",
+      "question": "In ordinary least-squares regression, what quantity is being minimised?",
+      "options": [
+        "The sum of absolute distances from each point to the line",
+        "The sum of squared vertical distances from each point to the line",
+        "The maximum distance from any single point to the line",
+        "The perpendicular distance from each point to the line"
+      ],
+      "correctIndex": 1,
+      "hint": "The lesson emphasised that the choice was made for a specific reason — both for how it weights large versus small errors, and for the mathematics that follows.",
+      "explanation": "OLS minimises the sum of squared vertical residuals. Squared (not absolute) gives clean closed-form solutions and penalises large errors more. Vertical (not perpendicular) because we treat y as the response and x as fixed.",
+      "concept": "The least-squares principle",
+      "difficulty": "easy"
+    },
+    {
+      "id": "q2",
+      "question": "If the slope of a fitted line is 2.5, what does this mean?",
+      "options": [
+        "The line crosses the y-axis at y = 2.5",
+        "When x increases by one unit, predicted y increases by 2.5 units",
+        "The correlation between x and y is 2.5",
+        "The line passes through the point (2.5, 2.5)"
+      ],
+      "correctIndex": 1,
+      "hint": "Slope describes a rate of change. Recall the standard interpretation: a one-unit change in x corresponds to what change in predicted y?",
+      "explanation": "Slope is the change in predicted y per one-unit change in x. Note: correlation is bounded between -1 and +1, so 2.5 cannot be a correlation. And the y-intercept (where the line crosses the y-axis) is a separate parameter from the slope.",
+      "concept": "Slope and intercept",
+      "difficulty": "easy"
+    },
+    {
+      "id": "q3",
+      "question": "After fitting a regression line, the residuals are systematically positive for small x values and systematically negative for large x values. What does this most likely indicate?",
+      "options": [
+        "The least-squares estimates were computed incorrectly",
+        "The data contains outliers",
+        "The relationship between x and y is not linear",
+        "The sample size is too small"
+      ],
+      "correctIndex": 2,
+      "hint": "Random residuals around zero would suggest a good fit. A clear pattern in the residuals is the data telling you something specific about the model.",
+      "explanation": "A systematic pattern in residuals (rather than random scatter around zero) indicates that the linear model is missing structure in the data. The most common cause is that the true relationship is curved — a quadratic, exponential, or other non-linear form would fit better.",
+      "concept": "Residuals and what they mean",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q4",
+      "question": "Why should we be cautious about interpreting the intercept of a regression line?",
+      "options": [
+        "Intercepts are always less reliable than slopes",
+        "The intercept may correspond to a value of x outside the range of the data",
+        "Intercepts cannot be negative",
+        "The intercept is only valid when the slope is zero"
+      ],
+      "correctIndex": 1,
+      "hint": "The intercept is the predicted value when x equals zero. The lesson warned that this might not even be a sensible thing to predict.",
+      "explanation": "If x = 0 is outside the observed range of x in your data, then the intercept represents an extrapolation — a prediction in territory the data never visited. For example, regressing weight on height in adults gives an intercept at height = 0, which is meaningless.",
+      "concept": "Slope and intercept",
+      "difficulty": "medium"
+    }
+  ],
+
+  "relatedVideos": [
+    {
+      "title": "StatQuest: Linear Regression, clearly explained",
+      "url": "https://www.youtube.com/watch?v=nk2CQITm_eo",
+      "description": "Josh Starmer's visual treatment of how the least-squares line is found, with explicit geometry."
+    },
+    {
+      "title": "3Blue1Brown: But what is least squares?",
+      "url": "https://www.youtube.com/watch?v=PaFPbb66DxQ",
+      "description": "A geometric and linear-algebraic view of why least squares works — illuminating once you've seen the basic version."
+    }
+  ]
+}
