@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { recommendForQuestion, momentToUrl } from "@/lib/recommender";
+import { track, trackOnce, EVENT_TYPES } from "@/lib/tracker";
 
 // ============================================================================
 // LECTURA — Assignment Page
@@ -68,6 +69,14 @@ export default function AssignmentPage() {
         if (!entry) throw new Error(`Assignment "${assignmentId}" not found`);
         const aFull = await fetch(`/assignments/${entry.file}`).then((r) => r.json());
         setAssignment(aFull);
+
+        // Track assignment opened (deduped — multiple opens of same assignment
+        // in this browser only get logged once)
+        trackOnce(
+          EVENT_TYPES.ASSIGNMENT_OPENED,
+          { assignmentId: aFull.id, questionsTotal: aFull.questions?.length || 0 },
+          aFull.id
+        );
 
         // Ontology
         const oIdx = await fetch("/ontology/index.json").then((r) => r.json());
@@ -135,21 +144,25 @@ export default function AssignmentPage() {
   // ---------- Answer submission ----------
   const submitAnswer = (questionId, origIdx) => {
     if (revealed) return; // can't change after reveal
+    const q = assignment.questions.find((qq) => qq.id === questionId);
     setAnswers((prev) => {
       const existing = prev[questionId] || {};
       return {
         ...prev,
         [questionId]: {
-          // Preserve the permutation if one exists, otherwise generate
           permutation:
             existing.permutation && existing.permutation.length > 0
               ? existing.permutation
-              : permutationFor(
-                  assignment.questions.find((q) => q.id === questionId)
-                ),
+              : permutationFor(q),
           selectedIdx: origIdx,
         },
       };
+    });
+    // Track the attempt (every attempt, including answer changes)
+    track(EVENT_TYPES.ASSIGNMENT_QUESTION_ATTEMPTED, {
+      assignmentId: assignment.id,
+      questionId,
+      conceptTags: q?.concept_tags || [],
     });
   };
 
@@ -169,6 +182,15 @@ export default function AssignmentPage() {
   const handleReveal = () => {
     if (window.confirm("Reveal correct answers and explanations? This simulates the due date passing.")) {
       setRevealed(true);
+      // Track the reveal with score
+      const correctCount = assignment.questions.filter(
+        (q) => answers[q.id]?.selectedIdx === q.correctIndex
+      ).length;
+      track(EVENT_TYPES.ASSIGNMENT_REVEALED, {
+        assignmentId: assignment.id,
+        correctCount,
+        questionsTotal: assignment.questions.length,
+      });
     }
   };
 
@@ -272,6 +294,7 @@ export default function AssignmentPage() {
               revealed={revealed}
               onAnswer={(origIdx) => submitAnswer(q.id, origIdx)}
               getRecsFor={getRecsFor}
+              assignmentId={assignment.id}
             />
           ))}
         </div>
@@ -316,6 +339,7 @@ function QuestionCard({
   revealed,
   onAnswer,
   getRecsFor,
+  assignmentId,
 }) {
   const selectedIdx = answerState.selectedIdx;
   const hasAttempted = selectedIdx !== undefined && selectedIdx !== null;
@@ -386,7 +410,11 @@ function QuestionCard({
 
       {/* Recommendations panel — shown after attempt, before reveal */}
       {hasAttempted && !revealed && recs && recs.length > 0 && (
-        <Recommendations moments={recs} />
+        <Recommendations
+          moments={recs}
+          assignmentId={assignmentId}
+          questionId={question.id}
+        />
       )}
 
       {/* Reveal-state feedback */}
@@ -409,8 +437,37 @@ function QuestionCard({
 // ============================================================================
 // Recommendations panel
 // ============================================================================
-function Recommendations({ moments }) {
+function Recommendations({ moments, assignmentId, questionId }) {
+  // Fire a recommendation_shown event once when this panel mounts
+  // (i.e., when the student first attempts the question and the recs appear).
+  // The dedupKey ensures we don't double-count if React remounts the component.
+  useEffect(() => {
+    if (!moments || moments.length === 0) return;
+    trackOnce(
+      EVENT_TYPES.RECOMMENDATION_SHOWN,
+      {
+        assignmentId,
+        questionId,
+        count: moments.length,
+        targetLessons: moments.map((m) => `${m.lessonId}@${m.timestamp}`),
+      },
+      `${assignmentId}:${questionId}`
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [questionId]);
+
   if (!moments || moments.length === 0) return null;
+
+  const handleClick = (m) => {
+    track(EVENT_TYPES.RECOMMENDATION_CLICKED, {
+      assignmentId,
+      questionId,
+      targetLessonId: m.lessonId,
+      targetTimestamp: m.timestamp,
+      score: m.score,
+    });
+  };
+
   return (
     <div style={styles.recsBlock}>
       <div style={styles.recsHeader}>
@@ -431,6 +488,7 @@ function Recommendations({ moments }) {
                 rel="noopener noreferrer"
                 style={styles.recLink}
                 className="rec-link"
+                onClick={() => handleClick(m)}
               >
                 <span style={styles.recTime}>{mm}:{ss}</span>
                 <span style={styles.recBody}>

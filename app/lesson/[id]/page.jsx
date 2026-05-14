@@ -3,6 +3,12 @@
 import React, { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
 import { useParams, useSearchParams } from "next/navigation";
+import {
+  track,
+  trackOnce,
+  trackProgress,
+  EVENT_TYPES,
+} from "@/lib/tracker";
 
 // ============================================================================
 // LECTURA — Lesson Player (JSON-driven, with timeline annotations)
@@ -116,6 +122,13 @@ function LessonPageInner() {
         if (!res.ok) throw new Error("Could not load lesson data");
         const data = await res.json();
         setLesson(data);
+
+        // Track lesson opened (once per browser per lesson)
+        trackOnce(
+          EVENT_TYPES.LESSON_OPENED,
+          { lessonId: data.id, duration: data.duration },
+          data.id
+        );
       } catch (e) {
         console.error("[Lectura]", e);
         setError(e.message);
@@ -201,6 +214,7 @@ function LessonPageInner() {
   }, [lesson?.youtubeId]);
 
   const startTimePolling = () => {
+    let lastProgressCheckAt = 0;  // wall clock ms
     const tick = () => {
       try {
         if (playerRef.current?.getCurrentTime) {
@@ -208,6 +222,23 @@ function LessonPageInner() {
           setCurrentTime(t);
           checkAnnotationCrossings(t);
           lastTimeRef.current = t;
+          // Throttled progress tracking: at most once every 5 seconds of
+          // wall-clock time. trackProgress itself only writes to localStorage
+          // if the new max position is at least 30s past the last recorded.
+          const now = Date.now();
+          if (now - lastProgressCheckAt > 5000 && lessonId) {
+            lastProgressCheckAt = now;
+            trackProgress(lessonId, Math.floor(t));
+            // Mark lesson complete when crossing 90% (only fires once because
+            // we use trackOnce with a stable payload)
+            if (lesson?.duration && t >= lesson.duration * 0.9) {
+              trackOnce(
+                EVENT_TYPES.LESSON_COMPLETED,
+                { lessonId },
+                lessonId
+              );
+            }
+          }
         }
       } catch (e) {}
       rafRef.current = requestAnimationFrame(tick);
@@ -232,6 +263,14 @@ function LessonPageInner() {
   };
 
   const triggerAnnotation = (ann) => {
+    // Track annotation triggering regardless of behavior
+    track(EVENT_TYPES.ANNOTATION_TRIGGERED, {
+      lessonId,
+      annotationId: ann.id,
+      annotationType: ann.type,
+      behavior: ann.behavior,
+    });
+
     if (ann.behavior === "marker") return;
     if (ann.behavior === "pause") {
       playerRef.current?.pauseVideo?.();
@@ -320,10 +359,36 @@ function LessonPageInner() {
       permutation: permutationFor(firstQ),
     });
   };
-  const submitAnswer = (idx) => setQuiz((q) => ({ ...q, userAnswer: idx }));
+  const submitAnswer = (idx) => {
+    setQuiz((q) => ({ ...q, userAnswer: idx }));
+    // Track with correctness. The currently-shown question is derived from
+    // quiz.queue[quiz.currentIdx]; pull it from the lesson for accuracy.
+    const qid = quiz.queue[quiz.currentIdx];
+    const qObj = lesson?.questions?.find((q) => q.id === qid);
+    if (qObj) {
+      track(EVENT_TYPES.PRACTICE_QUESTION_ATTEMPTED, {
+        lessonId,
+        questionId: qid,
+        correct: idx === qObj.correctIndex,
+        conceptTags: qObj.concept_tags || [],
+      });
+    }
+  };
 
   // ---------- Pause-modal quiz helpers ----------
-  const submitPauseAnswer = (idx) => setPauseModal((m) => ({ ...m, userAnswer: idx }));
+  const submitPauseAnswer = (idx) => {
+    setPauseModal((m) => ({ ...m, userAnswer: idx }));
+    // Track with correctness using the active pauseModal annotation
+    const ann = pauseModal?.annotation;
+    if (ann) {
+      track(EVENT_TYPES.PAUSE_QUIZ_ANSWERED, {
+        lessonId,
+        annotationId: ann.id,
+        correct: idx === ann.correctIndex,
+        conceptTags: ann.concept_tags || [],
+      });
+    }
+  };
   const dismissPauseModal = () => {
     setPauseModal(null);
     playerRef.current?.playVideo?.();

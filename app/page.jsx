@@ -65,6 +65,7 @@ export default function HomePage() {
           <span style={styles.brandName}>Lectura</span>
           <span style={styles.brandSub}>· a study companion</span>
         </div>
+        <Link href="/activity" style={styles.activityLink}>My activity →</Link>
       </header>
 
       <main style={styles.main}>
@@ -228,6 +229,14 @@ const styles = {
     background: colors.cream,
   },
   brand: { display: "flex", alignItems: "baseline", gap: 10 },
+  activityLink: {
+    fontFamily: fontBody,
+    fontSize: 13,
+    color: colors.inkSoft,
+    textDecoration: "none",
+    borderBottom: `1px solid ${colors.rule}`,
+    paddingBottom: 2,
+  },
   brandMark: { fontSize: 24, color: colors.ochre, fontFamily: fontDisplay },
   brandName: {
     fontFamily: fontDisplay,
