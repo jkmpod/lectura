@@ -1,0 +1,527 @@
+{
+  "id": "stats2-4-2-cdf",
+  "title": "Cumulative Distribution Function",
+  "subtitle": "Defining F_X(x) = P(X ≤ x), its properties, and how to read it as a step function for discrete random variables",
+  "instructor": "Prof. Andrew Thangaraj",
+  "course": "Statistics for Data Science II",
+  "youtubeId": "bjQmbMOIL4Q",
+  "thumbnailUrl": null,
+  "duration": 1434,
+  "concepts": [
+    {
+      "title": "Definition: F_X(x) = P(X ≤ x)",
+      "timestamp": 51
+    },
+    {
+      "title": "Interval probability formula F(b) − F(a)",
+      "timestamp": 181
+    },
+    {
+      "title": "Non-decreasing property",
+      "timestamp": 251
+    },
+    {
+      "title": "Limit properties at ±∞",
+      "timestamp": 287
+    },
+    {
+      "title": "Bernoulli example: CDF as a step function",
+      "timestamp": 382
+    },
+    {
+      "title": "Filled vs open circles (right-continuity)",
+      "timestamp": 599
+    },
+    {
+      "title": "Uniform on {1, ..., 6}: the staircase CDF",
+      "timestamp": 695
+    },
+    {
+      "title": "Recovering PMF from CDF: jumps = probabilities",
+      "timestamp": 825
+    },
+    {
+      "title": "General discrete CDF: same staircase structure",
+      "timestamp": 968
+    },
+    {
+      "title": "Uniform on {1, ..., 100} and interval probabilities",
+      "timestamp": 1103
+    }
+  ],
+  "annotations": [
+    {
+      "id": "a1",
+      "type": "context",
+      "behavior": "soft",
+      "timestamp": 60,
+      "title": "Notation: F_X(x) vs F(x)",
+      "body": "F_X(x) is the CDF of the random variable X, evaluated at the real number x. The subscript X identifies which random variable's CDF we mean (useful when several are floating around); the argument x is the point at which we evaluate it. Many books drop the subscript when context is clear and write F(x). Both are standard."
+    },
+    {
+      "id": "a2",
+      "type": "quiz",
+      "behavior": "pause",
+      "timestamp": 240,
+      "title": "Concept check: the interval formula",
+      "question": "Suppose F_X(5) = 0.7 and F_X(2) = 0.3. What is P(2 < X ≤ 5)?",
+      "options": [
+        "0.7",
+        "0.3",
+        "0.4",
+        "1.0"
+      ],
+      "correctIndex": 2,
+      "hint": "The lecture gives the formula P(a < X ≤ b) = F_X(b) − F_X(a). Plug in a = 2, b = 5.",
+      "explanation": "P(2 < X ≤ 5) = F_X(5) − F_X(2) = 0.7 − 0.3 = 0.4. Two things to internalize: (1) the difference of CDF values gives the probability of an interval, and (2) the left endpoint is excluded (strict inequality) while the right endpoint is included — this matches the definition F_X(x) = P(X ≤ x)."
+    },
+    {
+      "id": "a3",
+      "type": "context",
+      "behavior": "soft",
+      "timestamp": 640,
+      "title": "Why the filled/open circles matter",
+      "body": "The filled circle at the top of a jump and the open circle at the bottom encode an important convention: the CDF takes the upper value at the jump point. Formally, this is called right-continuity. It's a direct consequence of the definition F_X(x) = P(X ≤ x) — note the ≤, not <. At x = 0 for a Bernoulli RV, the event X ≤ 0 includes X = 0, so F_X(0) includes the probability mass at 0."
+    },
+    {
+      "id": "a4",
+      "type": "quiz",
+      "behavior": "pause",
+      "timestamp": 920,
+      "title": "Concept check: reading PMF from CDF",
+      "question": "A discrete random variable X has a CDF that jumps by 0.2 at x = 3, jumps by 0.5 at x = 7, and jumps by 0.3 at x = 10. What is P(X = 7)?",
+      "options": [
+        "0.2",
+        "0.5",
+        "0.7",
+        "0.3"
+      ],
+      "correctIndex": 1,
+      "hint": "The lecture's key insight: at each jump in the CDF, the size of the jump equals the probability of the random variable taking that value.",
+      "explanation": "The size of the jump at x = 7 is 0.5, so P(X = 7) = 0.5. This is the inverse operation to going from PMF to CDF: where the CDF has a jump of size p at value x, the random variable takes value x with probability p. Where the CDF is flat (no jump), the random variable takes those values with probability 0."
+    },
+    {
+      "id": "a5",
+      "type": "context",
+      "behavior": "soft",
+      "timestamp": 1200,
+      "title": "Setup for what's coming next",
+      "body": "The uniform-on-{1, ..., 100} example coming up is staged to make a key point: for the discrete uniform, F_X(3.2) and F_X(3) give the same value (3/100), because the CDF is flat between integer jumps. In lecture 4.3 we'll compare this to a continuous approximation where F(x) = x/100 — and you'll see the small but useful difference between the exact discrete CDF and its continuous approximation."
+    },
+    {
+      "id": "a6",
+      "type": "recap",
+      "behavior": "marker",
+      "timestamp": 1390,
+      "title": "What you should take away",
+      "body": "Three things. (1) The CDF is F_X(x) = P(X ≤ x), a function from ℝ to [0, 1]. (2) It is non-decreasing, starts at 0 at −∞, ends at 1 at +∞, and for discrete RVs it's a staircase with jumps at the values the RV can take. (3) Interval probabilities come from differences: P(a < X ≤ b) = F_X(b) − F_X(a). These three facts are the entire toolkit you need for the next lecture, where the CDF becomes the bridge to continuous random variables."
+    }
+  ],
+  "transcript": {
+    "en": [
+      {
+        "start": 12,
+        "end": 39,
+        "text": "Hello and welcome to this lecture. In this lecture we will talk about the cumulative distribution function or quite often this word cumulative is dropped, this word is dropped, many people will simply call it a distribution function which is also fine, I mean, so both of them are good enough, I think traditionally many people use cumulative distribution function, I will keep saying cumulative distribution function, but"
+      },
+      {
+        "start": 39,
+        "end": 64,
+        "text": "you will see in many books people will simply call this the distribution function. And it is not a bad name, distribution function is also a very good name one can use either of these. So, here is the definition for CDF. The reason why I like CDF is CDF sounds like a much better algorithm, acronym than df, so CDF is quite nice. So, the CDF of a random variable,"
+      },
+      {
+        "start": 64,
+        "end": 87,
+        "text": "any random variable x has a CDF and the CDF is defined in this fashion. So, it is a function from the real line to 0, 1, so Fx of x is a function, the input x small x comes from the real line, any real number can be its input, the output is a value between 0 and 1."
+      },
+      {
+        "start": 87,
+        "end": 115,
+        "text": "So, that is what is important to know what it is and how do we define it, how do we connect it to the random variable and notice that notation f sub capital x of small x, so sort of succinctly conveys everything, it is the CDF of the random variable x evaluated at small x and that simply defined as the probability that the random variable is less than or equal to small x, so this is the definition of the cumulative distribution function."
+      },
+      {
+        "start": 115,
+        "end": 141,
+        "text": "It seems simple enough, it is easy enough to do this, so given any random variable one should be able to, at least discrete random variables we know how to compute the CDF, but the CDF is a very important bridge between the discrete world and the continuous world. You will see it gives you that nice interconnect and I will convey that to you in this lecture or maybe the next one, but before that let us first understand what the CDF is."
+      },
+      {
+        "start": 141,
+        "end": 170,
+        "text": "Do some simple calculations with it, get used to the idea of how to work with the CDF because so far we have been working with the PMF, even with the discrete random variable we have only discrete random variables so far, we have been working with PMF and it is always probability that x equal to small x, so now we have the slightly unusual situation of probability of x being less than or equal to small x, but that should not really worry us too much because it is just it is less than or equal to small x. We know how to count and l that so that is what we"
+      },
+      {
+        "start": 170,
+        "end": 195,
+        "text": "have to get used to now first and then we will see how this nicely generalizes beyond discrete random variables also, so let us get started. A few quick properties, these properties are very easy to prove, the first one is, if you want probability that x falls between a and b, notice the way a and b are included here, a is not included, b is included probability that x falls"
+      },
+      {
+        "start": 195,
+        "end": 225,
+        "text": "between a and b, a not included b included that will simply be Fx of b minus Fx of a. So, the difference of two different values of the CDF is equal to the probability that the random variables falls within the two points, so it is an important thing to keep in mind, that is a very nice property, it is very easy to prove, so Fx of b is probability that x is less than or equal to p, Fx of a is probability that x is less than or equal to a, if you subtract these two,"
+      },
+      {
+        "start": 225,
+        "end": 255,
+        "text": "like these two are, so you will get all the values of x which are less than or equal to b but they are greater than a that is exactly the scale. So, it is a very easy derivation that is good to see. So, the next important property for Fx is it takes non-negative values, clearly it takes non-negative values, it takes values between 0 and 1, so we have already said that is the property of Fx and it is anyway a probability, it has to be between 0 and 1, it cannot do anything else, but it has to be a non-decreasing function. What is non-decreasing?"
+      },
+      {
+        "start": 255,
+        "end": 281,
+        "text": "It has to, it cannot slope down it has to be, it has to sort of keep increasing, why is that, because if x small x increases I am saying now probability that x is less than or equal to something larger, so that should be a bigger event, so once you look at a bigger event, the probability of it has to be bigger, so you go back to your basic axioms about probability, when you have a bigger event and there is a smaller event inside it,"
+      },
+      {
+        "start": 281,
+        "end": 307,
+        "text": "probability of the bigger event is bigger. So, because of that reason Fx is a non-decreasing function. So, now the last two properties are sort of limiting properties in the sense that I want to look at the case where small x becomes smaller and smaller and smaller and keeps on going in the minus infinity direction, so eventually whatever your random variable is, if your small x is going towards the left, eventually you will run out of all the possible values it can take, so your"
+      },
+      {
+        "start": 307,
+        "end": 335,
+        "text": "probability will go to 0, so Fx will go to 0. So, it starts at 0 at minus infinity and notice what happens at plus infinity, if you keep moving off to the right, you will, when you just by saying x is less than or equal to infinity you are including all the possible values that x can take, so that probability is simply 1, so immediately picture this random variable, this function, it starts at 0, it has to keep on increasing, cannot decrease it takes values between 0 and 1, at infinity it goes to 1."
+      },
+      {
+        "start": 335,
+        "end": 365,
+        "text": "So, it will have always a picture like that, so any CDF will be like that, it will start 0, maybe it will do some things and then eventually it will go to 1, we do not know what is going to happen in the middle, but eventually that is what will happen, starts at 0 goes to 1 and the important property like I said is difference between two values of the CDF is simply the probability that x lies in that range. There is some adjustments for the beginning end, etcetera, but that is what it is, simple definition, distribution function,"
+      },
+      {
+        "start": 365,
+        "end": 394,
+        "text": "cumulative distribution function is a very important definition, like I said it is a bridge quite often between the discrete world and the continuous world. Let us start with examples, so it is good to define things but only when we do simple examples do we really understand what it is, so here is the simplest random variable that we can think of, the Bernoulli random variable x taking 0 with probability 1 minus p and 1 with probability p,"
+      },
+      {
+        "start": 395,
+        "end": 425,
+        "text": "and here is a picture of the CDF, of this, so this is a picture of Fx of x, and so notice what I have done here, maybe the expression is easy to deal with also in this case. Now Fx of x will be 0 for x less than 0, so you can see that y, so maybe I will write it down, so if you say for instance Fx of minus 1, its probability that x is less than or equal to minus 1, and clearly this is 0, so because x"
+      },
+      {
+        "start": 425,
+        "end": 437,
+        "text": "takes values only 0 and 1, there is no question of this being less than or equal to minus 1, so for any x less than 0, Fx of x equals 0, probability that x is less than 0."
+      },
+      {
+        "start": 438,
+        "end": 445,
+        "text": "Now, if your x bit happens to be between 0 and 1, 0 inclusive, then you will get 1 minus p."
+      },
+      {
+        "start": 445,
+        "end": 469,
+        "text": "Why is that? So, if you have Fx of x and x is say between, x is, let us say point 1 or something, then that is probability that x is less than or equal to 0.1 and that is probability of x equal to 0, so you get 1 minus p, so this is true for any other value of x between"
+      },
+      {
+        "start": 471,
+        "end": 490,
+        "text": "any x such that 0 is less than or equal to x less than 1, so this less than 1 is important. You cannot make it 1. Why is that? So, once x becomes 1 the whole probability will be 1, why, because probability that x is less than or equal to 1, x includes everything, so that is 0 and 1 everything is included, so you get 1."
+      },
+      {
+        "start": 490,
+        "end": 515,
+        "text": "So, you see you can easily check these three properties and that is how it is. So, I have just showed you some illustration just to argue why this is true but you can hopefully see why this CDF comes out to be 0, 1 minus P and 1. So here we took a discrete random variable x and then we try to compute the CDF, a much better way to visualize this is through a graph. So,"
+      },
+      {
+        "start": 515,
+        "end": 544,
+        "text": "here is x and here is Fx of x, for x less than 0 the c d f is 0, you can see here 0 and I put this circle here without filling, which means at x equal to 0 the CDF is not 0, it is actually 1, so I put a solid circle here to show that it is actually, I am sorry, 1 minus p, which is, I do not know, some value 0.4. So, this is basically 1 minus p,"
+      },
+      {
+        "start": 548,
+        "end": 574,
+        "text": "and notice what happens between 0 and 1 f x of x stays there, it does not go up or it does not move anywhere, it just stays flat there, till it hits the next point 1 where x takes some value with some probability, there again at one you have a discontinuity, you have a jump at 1, the actual value of Fx of x becomes 1, and then after 1 it just simply stays at 1."
+      },
+      {
+        "start": 575,
+        "end": 603,
+        "text": "So, this is the plot of this Fx of x, I have just carried over the same plot for x less than 0 it is 0, x between 0 and 1 it is 1, x greater than 1 it is 1. I am sorry just I said that wrong, for x less than 0 it is 0. For x between 0 and 1 it is 1 minus p and that 1 minus p comes here, it is flat, between 0 and 1 is flat again and for x greater than 1 Fx of x becomes equal to 1 and that is a flat line there. Now you have this filled circle and open"
+      },
+      {
+        "start": 603,
+        "end": 629,
+        "text": "circle here think about why that happens, see at x equal to 0 there seems to be two values here, so I have to tell you which is the correct value for Fx of x and looking at this very closely you say at 0 Fx of x becomes 1 minus p, so you should put a solid circle on top and unfilled circle, open circle, sort of in the bottom, same thing at x equal to 1, when x is 1 Fx of x is equal to 1."
+      },
+      {
+        "start": 630,
+        "end": 656,
+        "text": "So, it is not 1 minus p, so at 1 minus p you put a open circle and at 1 you put a solid circle, so it is just a figure to illustrate how the function Fx of x looks, so this picture is very nice to keep in mind, if you forget about everything else somebody gave you this picture, you learn a lot about the random variable, if looking at this picture I know that the random variable is discrete, it takes two values, it takes a value 0, it takes a value 1."
+      },
+      {
+        "start": 657,
+        "end": 685,
+        "text": "At 0 it takes that value 0 with probability one minus p, it takes the value 1 with probability p, this distance is p, this distance is 1 minus p, the jump the amount of jump that you have in the step is equal to the probability with which x takes that value, is not it, so for discrete random variables the CDF sort of looks like a step and keeps going up,"
+      },
+      {
+        "start": 686,
+        "end": 711,
+        "text": "this does not happen just for the Bernoulli random variable, I showed you in detail for the Bernoulli random variable. How this plot comes? You can quickly generalize this to other random variables, so let us take throwing a die as the next random variable. Now, x is uniform now between 1 to 6, 1, 2, 3, 4, 5, 6, and if you do a CDF for this. Now, I have written down the whole formula here in gory detail, it is 0 for x less than 1,"
+      },
+      {
+        "start": 711,
+        "end": 727,
+        "text": "it is 1 for x greater than equal to 6, so that is seen, then between. Now if x is between 1 and 2 the probability that capital x is less than or equal to some value between 1 and 2 it is the same as the probability that x takes value 1 that is 1 by 6."
+      },
+      {
+        "start": 727,
+        "end": 755,
+        "text": "If x is between 2 and 3 then x could be 1 or 2, so that is 2 by 6, if x is between 3 and 4, x could be, if small x is between 3 and 4, then capital X, so capital X could be 0 momentum, so not 0, 1 or 2 or 3, and that is 3 by 5, so this gives you 3 by 6, it is easy to see how, so you go from small x to the possible values that x capital"
+      },
+      {
+        "start": 755,
+        "end": 778,
+        "text": "X could take so probability that capital X is less than or equal to small x is what you are doing you just go to the possible values there and you do it, so it is quite simple enough in that case. Now you can also sketch this Fx of x which is what I have done here and the sketch is very important I want you to take some time and make sure you understand how the sketch came, it is very easy at some level, but sometimes if you are seeing it for the first time it can be confusing, it"
+      },
+      {
+        "start": 778,
+        "end": 805,
+        "text": "is very easy, so on the x axis you go 0, 1, 2, 3, etcetera, for x less than 1, it is just flat at 0, for x between 1 and 2 it is flat at 1 by 6, so this value is 1 by 6, this value is 2 by 6, this value is 3 by 6, so on. So, that is what I have plotted here just steps and they all sort of like non-overlapping steps and you can go from one up,"
+      },
+      {
+        "start": 806,
+        "end": 823,
+        "text": "starts at 0 and goes through these steps and reaches 1, so this going from the PMF. The PMF was given to you, this discrete random variables PMF was given to you, you went from PMF to the CDF and this is the way you could do it."
+      },
+      {
+        "start": 825,
+        "end": 850,
+        "text": "So, supposing I give you the CDF, I want you to go back to the PMF, how will you do it, for a discrete random variable it is very easy, is not it? You go and identify where all the jumps happen, where all the steps happen and how much did you jump by, so you just have to say this PMF will take value 1 with probability 1 by 6, value 2 with probability 1 by 6,"
+      },
+      {
+        "start": 852,
+        "end": 874,
+        "text": "value 3 with probability 1 by 6, so on. Wherever the jump occurred, exactly where the jump occurred the probability of the random variable taking that value is 1 by 6. Now, notice when there is no jump, if you come here for instance, let us say it is 4.5, there is no jump here,"
+      },
+      {
+        "start": 877,
+        "end": 902,
+        "text": "no jump, so that implies probability that x equals 4.5 is actually 0, is not it? So, if there is no jump the random variable does not take that value as in some sense it is probability 0 of taking that value. So, nice simple plot, in some sense the cumulative distribution function is very nice, it is for the discrete random variable, but some of"
+      },
+      {
+        "start": 902,
+        "end": 920,
+        "text": "you may argue at this point the PMF is fine, PMF is good enough, why do you need the CDF, what did I gain from looking at the CDF. We will come to it, we will come to it slowly, but at least for now try to make sure you can go from PMF to CDF, CDF to PMF for a discrete random variable."
+      },
+      {
+        "start": 920,
+        "end": 949,
+        "text": "This is an important skill that you need to pick up when you deal with random variables. How do you go from PMF to CDF? How do you go from CDF to PMF for a discrete random variable? I have shown you two illustrations in simple cases, I will also show you something slightly more general, but hopefully you see the picture. So, here is a slightly more general PMF, general CDF, and let us see if we can draw some inferences from here, here is the picture,"
+      },
+      {
+        "start": 949,
+        "end": 968,
+        "text": "so suppose somebody tells you that this is the picture of Fx of x versus x and there is x1, x2, x3, x4, x5, p1, p2, p3, p4, p5, I have just drawn it like that, so maybe let us say, let us assume that this is an increasing order x1, x2, x3, x4, x5 so that is easier for us."
+      },
+      {
+        "start": 969,
+        "end": 993,
+        "text": "So, supposing you have to now label this axis, how would you go about doing it? If this is the CDF take here, let us put capital x, if this is the CDF how would we go about labeling this. So we know that it starts at 0 and we know it starts at, ends at 1 and the PMF takes the random variable takes value x1 with the probability p1. So, wherever the jump"
+      },
+      {
+        "start": 993,
+        "end": 1019,
+        "text": "occurs, it better be x1, this jump occurs here x1, this jump occurs here x3, this jump across here x4 and this jump occurs here it is x4. So, maybe I should draw dot here to show where that comes from, so that is easy enough to see, then what are these jumps, what will this jump be, this jump will have a magnitude of p1, this jump will have a magnitude of p2, this jump will have"
+      },
+      {
+        "start": 1019,
+        "end": 1047,
+        "text": "a magnitude of p3 and so on, so that is it, so CDF is very nice, I mean, it is easy enough to draw, some people may say it is a better looking picture than other things but anyway. So, you see this is the picture of the pdf, so this this kind of a picture is good to retain in your head, so you have a PMF for a discrete random variable, how will the CDF look, you start at 0, it will jump, wherever the random variable takes a value with positive probability"
+      },
+      {
+        "start": 1047,
+        "end": 1071,
+        "text": "it will keep jumping, wherever it does not take value it will be flat, so what is hidden in this is wherever it is flat, wherever the value does not have a jump, there is no jump, more than flat actually there is no jump at that point that is what is very important. Whenever there is a jump exactly at that point there is a probability of random variable taking that value, when there is no jump, it will not take that value, so its probability 0."
+      },
+      {
+        "start": 1071,
+        "end": 1090,
+        "text": "So, this is a good picture to keep in mind that hopefully nicely summarizes CDF for you. It is also seems simple. I have not really added anything of value beyond PMF here, at one level it is another representation of the PMF if you want, but there is nice pictures you can draw which will give you an impression of where we are going."
+      },
+      {
+        "start": 1091,
+        "end": 1109,
+        "text": "So, but before that let us do something slightly more non-trivial, so let us go to a large random variable, so far we have been dealing with 4 values, 5 values, 2 values, let us go to 100 values, so here is x which is a random variable which takes uniform but values from 1 to 100."
+      },
+      {
+        "start": 1110,
+        "end": 1139,
+        "text": "So, now trying to plot this we will come to plots soon enough, but let us look at the description of the CDF, it takes value 0, when x is less than or equal to 0. In fact, I think this is not 0 here, this is a mistake here, this should be 1 and x is, so I know what a mistake I made, this is wrong, so let me just cut this out and say"
+      },
+      {
+        "start": 1140,
+        "end": 1170,
+        "text": "if x is less than 1, that is correct, so if x is less than 1, then the CDF takes value 0, so that we can see easily and then after that that if x is, so if x is between 1 and 2 it takes value 1 by 100, when x is between 1 and 2, x takes value 2 by 100 and so on. And this is captured in this description"
+      },
+      {
+        "start": 1170,
+        "end": 1196,
+        "text": "if k is 1, 2 to 99 and x falls between k and k plus 1 inclusive of k, not including k plus 1, then you have k by 100 for the probability and if x is greater than or equal to 100, then you go to 1. So, that is the picture, so there is, it starts at 0, at 1 it jumps by 0.01, 2 it jumps by 0.01, 3 it jumps to 0.01, 100 times it jumps and gets to 100, so it is easy to picture this."
+      },
+      {
+        "start": 1198,
+        "end": 1228,
+        "text": "So, now let us start doing this calculation of probability of intervals, so there is a reason why I am doing probability of intervals here, we will quickly, in a few more slides we will do a different way of doing this calculation, but one can ask for probabilities of intervals, so uniform random variable like this it is easy to do the calculation, probability that x lies between 3 and 10. So, then this we know, given the way in which I have written down that interval it is Fx evaluated at 10 minus Fx evaluated at 3"
+      },
+      {
+        "start": 1228,
+        "end": 1258,
+        "text": "and you get 7 by 100, is easy enough to see. Now, what if I change this to 3.2 to 10.6, you might say why am I doing this, x does not take these values but you will see, it is illustrative, you again you can use the same formula nothing changes, you can put capital Fx of 10.6 minus Fx of 3.2, but 10.6 still comes down to 10 by 100, 3.2 still comes down to 3 by 100 that is what is very important. So, this is 10 by 100, this is 3 by 100,"
+      },
+      {
+        "start": 1258,
+        "end": 1286,
+        "text": "interestingly this is also 10 by 100, this is also 3 by 100, why is that, because this whole range is just k by 100. So, it does not matter whether you do 10.6, 10.2, 10.3, 10.8, you will always get 10 by 100, does not matter if you do 3.1, 3.2, 3.3, 3.7, you will always get 3 by 100, so you get the 7 by 100 again. You can also do other ranges, like if x is less than or equal to 17, if you do not put anything on this side you can take minus"
+      },
+      {
+        "start": 1286,
+        "end": 1307,
+        "text": "infinity there and that is just f x of 17, you get 17 by 100, so it is just the direct formula, you can also do x greater than 87, so notice what I have done here, greater than 87 is 1 minus f x of 87, so this is probability that x is greater than 87 is probability of x, no."
+      },
+      {
+        "start": 1307,
+        "end": 1337,
+        "text": "This is 1 minus probability of x greater than 87 complement, you remember the complement, what is complement of that that is x being less than or equal to 87, x greater than 87 complement is x less than or equal to 87 and now we are ready to write it as f x of 87, so any interval, even if it is not within two points, it is only x greater than 87 or x less than 17,"
+      },
+      {
+        "start": 1338,
+        "end": 1361,
+        "text": "you can compute all of those using the CDF. So, in PMF terms you would have added a bunch of probabilities sum over all the values of k, in CDF it is just the value of the CDF itself, so that is how the interval calculation is done. Once again I want to highlight 17 and 17.3 there is no difference, so given the CDF it does not change, 87 and 87.4 there is no difference,"
+      },
+      {
+        "start": 1362,
+        "end": 1391,
+        "text": "you get the same value for everything. So, this is computing probability of intervals using CDF. This is again a simple skill and you should develop this given a description of the CDF, how do you find probabilities of the intervals. There are different types of intervals, I may include something, I may exclude something, you should know how to move around between these two, maybe the intervals only go on the left side, only go on the side or between two values, maybe two different intervals how do you do all that, you use the basic rules of probability."
+      },
+      {
+        "start": 1391,
+        "end": 1414,
+        "text": "So the AND rule, OR rule all of that, just comes NOT rule, there is no, there is nothing new about it but how to use the CDF for this calculations is very important. We are going to revisit this calculations later on when we do some continuous look at this, but I want you to pick up the skill, this is important you may have some assignments in tutorials on how to do these kind of calculations."
+      },
+      {
+        "start": 1415,
+        "end": 1434,
+        "text": "So, this is a good point to stop this lecture. In the subsequent lecture we will start looking at this larger alphabet case more closely and start drawing pictures of the CDF and see if we can make something, make this jump into the continuous world in an interesting way. Thank you."
+      }
+    ]
+  },
+  "questions": [
+    {
+      "id": "q1",
+      "question": "Which of the following is the correct definition of the cumulative distribution function F_X(x)?",
+      "options": [
+        "F_X(x) = P(X = x)",
+        "F_X(x) = P(X ≤ x)",
+        "F_X(x) = P(X < x)",
+        "F_X(x) = P(X ≥ x)"
+      ],
+      "correctIndex": 1,
+      "hint": "Watch the inequality carefully. The 'cumulative' in CDF refers to accumulating probability from the left.",
+      "explanation": "F_X(x) = P(X ≤ x). The ≤ is important: it includes the value x itself, which is why the CDF takes the upper value at each jump (right-continuity). P(X = x) is the PMF (for discrete RVs), and P(X < x) and P(X ≥ x) are related but different quantities.",
+      "concept": "Definition: F_X(x) = P(X ≤ x)",
+      "difficulty": "easy"
+    },
+    {
+      "id": "q2",
+      "question": "A random variable X has F_X(4) = 0.6 and F_X(9) = 0.85. What is P(4 < X ≤ 9)?",
+      "options": [
+        "0.6",
+        "0.85",
+        "0.25",
+        "1.45"
+      ],
+      "correctIndex": 2,
+      "hint": "Use the interval formula P(a < X ≤ b) = F_X(b) − F_X(a).",
+      "explanation": "P(4 < X ≤ 9) = F_X(9) − F_X(4) = 0.85 − 0.6 = 0.25. This is the most common use of the CDF in practice: differences of CDF values give interval probabilities.",
+      "concept": "Interval probability formula F(b) − F(a)",
+      "difficulty": "easy"
+    },
+    {
+      "id": "q3",
+      "question": "Which of the following is NOT a property of every cumulative distribution function?",
+      "options": [
+        "F_X(x) is non-decreasing in x",
+        "lim_{x→−∞} F_X(x) = 0",
+        "lim_{x→+∞} F_X(x) = 1",
+        "F_X(x) is differentiable everywhere"
+      ],
+      "correctIndex": 3,
+      "hint": "Think about the CDF of a discrete random variable — it has jumps. Can a function with jumps be differentiable at those points?",
+      "explanation": "A CDF is non-decreasing, starts at 0 at −∞, and ends at 1 at +∞ — these are required properties. But it need not be differentiable: the CDF of a discrete random variable has jumps (discontinuities), and at jump points the derivative does not exist. Continuous random variables have differentiable CDFs (with the density as the derivative), but that is a feature of that specific class, not a universal property.",
+      "concept": "Non-decreasing property",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q4",
+      "question": "For a Bernoulli random variable X with P(X = 1) = 0.3, what is F_X(0)?",
+      "options": [
+        "0",
+        "0.3",
+        "0.7",
+        "1"
+      ],
+      "correctIndex": 2,
+      "hint": "F_X(0) = P(X ≤ 0). Which values of X satisfy X ≤ 0? Only X = 0 (since X is Bernoulli). What is P(X = 0)?",
+      "explanation": "F_X(0) = P(X ≤ 0) = P(X = 0) = 1 − P(X = 1) = 1 − 0.3 = 0.7. Note that F_X(0) takes the upper value at the jump — this is the right-continuity convention represented by the filled circle in the sketch.",
+      "concept": "Bernoulli example: CDF as a step function",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q5",
+      "question": "You are shown the CDF of an unknown discrete random variable. It has jumps of size 0.4 at x = 2, size 0.35 at x = 5, and size 0.25 at x = 8. Which of the following is correct?",
+      "options": [
+        "The random variable is continuous",
+        "P(X = 2) = 0.4, P(X = 5) = 0.35, P(X = 8) = 0.25, and P(X = k) = 0 for all other k",
+        "The random variable can take any value in [2, 8]",
+        "P(X = 2) = 0.4 and the other jumps don't correspond to probabilities"
+      ],
+      "correctIndex": 1,
+      "hint": "The size of each jump equals the probability of the random variable taking that value. The CDF is flat elsewhere.",
+      "explanation": "For a discrete random variable, the CDF is a step function. Each jump corresponds to a value the variable takes, with probability equal to the jump size. So P(X = 2) = 0.4, P(X = 5) = 0.35, P(X = 8) = 0.25 — and they sum to 1, as required. Where the CDF is flat (e.g., at x = 4.5), the probability of that value is 0.",
+      "concept": "Recovering PMF from CDF: jumps = probabilities",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q6",
+      "question": "Let X be uniform on {1, 2, ..., 100}. What is P(X > 87) using the CDF?",
+      "options": [
+        "87/100",
+        "13/100",
+        "1/100",
+        "12/100"
+      ],
+      "correctIndex": 1,
+      "hint": "Use the complement: P(X > 87) = 1 − P(X ≤ 87) = 1 − F_X(87). And F_X(87) = 87/100.",
+      "explanation": "P(X > 87) = 1 − P(X ≤ 87) = 1 − F_X(87) = 1 − 87/100 = 13/100. There are 13 values (88, 89, ..., 100) above 87, each with probability 1/100, giving 13/100 directly — and the CDF gives the same answer with one subtraction.",
+      "concept": "Uniform on {1, ..., 100} and interval probabilities",
+      "difficulty": "easy"
+    },
+    {
+      "id": "q7",
+      "question": "Consider two endpoints a = 3 and b = 7 for a discrete random variable X taking integer values. The lecture's formula P(a < X ≤ b) = F_X(b) − F_X(a) gives the probability that X is in {4, 5, 6, 7}. Suppose you instead want P(3 ≤ X ≤ 7) — the probability that X is in {3, 4, 5, 6, 7}. Which expression is correct?",
+      "options": [
+        "F_X(7) − F_X(3)",
+        "F_X(7) − F_X(2)",
+        "F_X(8) − F_X(3)",
+        "F_X(7) + F_X(3)"
+      ],
+      "correctIndex": 1,
+      "hint": "You want to include 3 in the event. The formula F_X(b) − F_X(a) excludes a. What value of a should you use so that a is excluded but 3 is included?",
+      "explanation": "P(3 ≤ X ≤ 7) = P(2 < X ≤ 7) = F_X(7) − F_X(2). The trick: for integer-valued X, '3 ≤ X' is the same as '2 < X'. Pick the left endpoint of the formula one step lower than the value you want to include. This kind of bookkeeping with open vs closed endpoints is a recurring source of off-by-one errors with discrete CDFs.",
+      "concept": "Interval probability formula F(b) − F(a)",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q8",
+      "question": "For a discrete random variable, where the CDF is flat (no jump) at some value x, what does this tell you about P(X = x)?",
+      "options": [
+        "P(X = x) is the height of the CDF at that point",
+        "P(X = x) is 0",
+        "P(X = x) is undefined",
+        "P(X = x) is 1 minus the height of the CDF"
+      ],
+      "correctIndex": 1,
+      "hint": "Jumps in the CDF correspond to probability mass. What does the absence of a jump mean?",
+      "explanation": "A flat region of the CDF means no probability mass is being accumulated there, so P(X = x) = 0 for all x in that region. This is consistent with the inverse operation: where the CDF has a jump of size p, P(X = x) = p; where it's flat, P(X = x) = 0.",
+      "concept": "Recovering PMF from CDF: jumps = probabilities",
+      "difficulty": "easy"
+    }
+  ],
+  "relatedVideos": []
+}

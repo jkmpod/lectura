@@ -1,0 +1,477 @@
+{
+  "id": "stats2-4-3-cdf-discrete-to-continuous",
+  "title": "From Discrete to Continuous CDFs",
+  "subtitle": "Watching the binomial CDF smooth out as n grows, and defining a CDF without reference to a random variable",
+  "instructor": "Prof. Andrew Thangaraj",
+  "course": "Statistics for Data Science II",
+  "youtubeId": "3vpKxQjm0l8",
+  "thumbnailUrl": null,
+  "duration": 1141,
+  "concepts": [
+    {
+      "title": "Binomial CDF as n grows: from steps to a smooth curve",
+      "timestamp": 47
+    },
+    {
+      "title": "Why keeping the scale fixed matters",
+      "timestamp": 129
+    },
+    {
+      "title": "Meteorite CDF: small steps look continuous",
+      "timestamp": 263
+    },
+    {
+      "title": "Definition: CDF without a random variable",
+      "timestamp": 333
+    },
+    {
+      "title": "Four defining properties",
+      "timestamp": 387
+    },
+    {
+      "title": "Right-continuity (technical requirement)",
+      "timestamp": 408
+    },
+    {
+      "title": "Valid CDF examples: discrete and continuous",
+      "timestamp": 547
+    },
+    {
+      "title": "Uniform discrete approximated by F(x) = x/100",
+      "timestamp": 817
+    },
+    {
+      "title": "Approximation error: 7/100 vs 7.4/100",
+      "timestamp": 854
+    },
+    {
+      "title": "Binomial approximated by a logistic-like CDF",
+      "timestamp": 964
+    }
+  ],
+  "annotations": [
+    {
+      "id": "a1",
+      "type": "context",
+      "behavior": "soft",
+      "timestamp": 125,
+      "title": "Why fixing the scale is the whole point",
+      "body": "If you re-scale the x-axis to fit each new n exactly, you'll always see the same stepped silhouette — you've just zoomed in. Keeping the scale fixed lets you see the steps shrink relative to the whole picture. This is the visual analog of the law-of-large-numbers intuition: the binomial concentrates around np, so as n grows, each step becomes a smaller fraction of the total range, and the staircase visually melts into a curve."
+    },
+    {
+      "id": "a2",
+      "type": "quiz",
+      "behavior": "pause",
+      "timestamp": 450,
+      "title": "Concept check: what makes a function a valid CDF?",
+      "question": "Which of the following functions F: ℝ → [0, 1] is a valid CDF?",
+      "options": [
+        "F(x) = 0.5 for all x",
+        "F(x) = 1 − x² for −1 ≤ x ≤ 1, else 0",
+        "F(x) = 0 for x < 0, F(x) = x for 0 ≤ x ≤ 1, F(x) = 1 for x > 1",
+        "F(x) = sin(x) clipped to [0, 1]"
+      ],
+      "correctIndex": 2,
+      "hint": "Run through the four properties: range in [0, 1]? Non-decreasing? Limit 0 at −∞? Limit 1 at +∞?",
+      "explanation": "Only option C satisfies all four: it lives in [0, 1], it's non-decreasing (zero, then linearly increasing, then constant), it approaches 0 as x → −∞ and 1 as x → +∞. Option A doesn't reach 1. Option B isn't non-decreasing — 1 − x² decreases as |x| increases from 0. Option D oscillates, so it's not non-decreasing. Option C is actually the CDF of the uniform distribution on [0, 1] — your first continuous CDF."
+    },
+    {
+      "id": "a3",
+      "type": "context",
+      "behavior": "soft",
+      "timestamp": 540,
+      "title": "Why this is a 'theoretical jump'",
+      "body": "Up to this point in the course, every CDF came from a random variable: you started with the variable, computed P(X ≤ x), and that was the CDF. The lecturer is doing the opposite: starting from a function with the right properties and saying 'this is a valid CDF, even before we name any random variable.' Why? Because some functions (like F(x) = x on [0, 1]) describe distributions that no discrete random variable could produce — but they're still legitimate probability distributions. This generalization is what lets continuous random variables exist."
+    },
+    {
+      "id": "a4",
+      "type": "quiz",
+      "behavior": "pause",
+      "timestamp": 895,
+      "title": "Concept check: approximation error",
+      "question": "X is uniform on {1, 2, ..., 100}. Using the exact discrete CDF, P(3.2 < X ≤ 10.6) = 7/100. Using the continuous approximation F(x) = x/100, the same probability is computed as F(10.6) − F(3.2). What value does the continuous approximation give?",
+      "options": [
+        "7/100",
+        "7.4/100",
+        "10.6/100",
+        "Cannot be computed"
+      ],
+      "correctIndex": 1,
+      "hint": "Just plug into F(x) = x/100: F(10.6) = 10.6/100 and F(3.2) = 3.2/100. Subtract.",
+      "explanation": "F(10.6) − F(3.2) = 10.6/100 − 3.2/100 = 7.4/100. The exact discrete answer is 7/100 because the discrete uniform doesn't take non-integer values — F is flat between integers. The continuous approximation 'doesn't know' about that flatness and gives a slightly different answer. The error here (0.4/100 = 0.004) is small enough to be tolerable; the gain is a clean formula F(x) = x/100 that works for any interval, no off-by-one bookkeeping required."
+    },
+    {
+      "id": "a5",
+      "type": "context",
+      "behavior": "soft",
+      "timestamp": 1025,
+      "title": "Where the logistic-like formula comes from",
+      "body": "The approximation F(x) ≈ 1 / (1 + exp(−(x − 60)/√24)) for binomial(100, 0.6) uses two specific numbers: 60 = np (the mean) and 24 = np(1−p) (the variance). The general form is a CDF parameterized by its mean and variance — and it's a smoothed sigmoid that closely tracks the staircase of the binomial CDF for large n. This is a glimpse of the Central Limit Theorem at work, which we'll meet properly later in the course. The Gaussian CDF will give an even better approximation; the logistic shown here is just the simplest sigmoid that does the job."
+    },
+    {
+      "id": "a6",
+      "type": "recap",
+      "behavior": "marker",
+      "timestamp": 1105,
+      "title": "The conceptual move that this lecture made",
+      "body": "Two big steps happened. First: by watching the binomial CDF as n grows, the staircase visibly smooths into a continuous curve — concrete motivation for continuous CDFs. Second: we redefined 'CDF' to mean any function F: ℝ → [0, 1] that is non-decreasing, starts at 0, ends at 1, and is right-continuous — no random variable required. This is the jump that lets continuous random variables exist. The next lecture introduces the partner concept: the probability density function, which is to continuous CDFs what the PMF is to discrete ones."
+    }
+  ],
+  "transcript": {
+    "en": [
+      {
+        "start": 12,
+        "end": 32,
+        "text": "Hello and welcome to this lecture. So far we have been looking at CDF of discrete random variables. How to plot them? How to go between PMF and CDF and how to compute probabilities of intervals of random the intervals within which random variables can fall using the CDF and all that? So, those are important skills to pick up."
+      },
+      {
+        "start": 32,
+        "end": 60,
+        "text": "Now let us start moving on to larger and larger alphabets. To me a picture like this sort of nicely conveys where we are heading. So, this is the plot of CDF of binomial random variable n comma 0.6, and I am increasing n but I am keeping the scale of the picture the same, so notice why I am doing that. You may think about why am I keeping the scale the same, so only then the picture will come out like this."
+      },
+      {
+        "start": 60,
+        "end": 86,
+        "text": "So if you keep increasing the scale you will not see this and continuous is always like that, you will keep the scale same and only then you will see the continuous line as opposed to, not discrete, anyway think about that, so here is n equals 10, n equals 20, n equals 50, n equals 100 and on the same scale notice how the CDFs start looking like a continuous line. I mean this is actually the CDF; I am actually drawing those steps."
+      },
+      {
+        "start": 87,
+        "end": 116,
+        "text": "See remember when n is 10 x takes value 0 to 10, at every point it jumps at 0 it jumps by a very small number. Why is it very small? Because the probability that x takes value 0 is 0.4 raised to the power 10, which is like very-very small, so you see a very tiny jump there and slowly as it comes close to 5 and 6 you start seeing the big jumps and then as it goes closer to 10 again you see very tiny jumps, but at least you can see the jumps."
+      },
+      {
+        "start": 116,
+        "end": 133,
+        "text": "When n is 10 you can see the jumps, you can see that there are the flat segments in the line segments. Now even when I move to n equals 20 you are already seeing that the intervals are shrinking, the flat intervals are shrinking, they are becoming smaller and smaller and smaller because I have kept the scale the same, I am sort of viewing this whole thing in the same scale."
+      },
+      {
+        "start": 135,
+        "end": 160,
+        "text": "When I go to n equals 50 already you are seeing you know when everything has become very tiny this flat parts where it is staying the same, the step length sort of has become very tiny, but you see the jump around 50, 60 there is a jump, the jump you can notice only there, everything is bunching up down below and there is some significant jump around 50, 60. It gives you a nice picture of how the binomial behaves and looks. When you go to n equals 100 you can see really,"
+      },
+      {
+        "start": 160,
+        "end": 182,
+        "text": "I mean, this is most people will say this is almost like a continuous curve, is not it, most people will sort of draw this, and it is much simpler description for it than thinking of it as discrete and thinking 100 point PMF, etcetera, I just draw a line that line is seems fine enough right for most practical purposes for calculations it should be good enough."
+      },
+      {
+        "start": 182,
+        "end": 205,
+        "text": "Remember from a CDF what am I calculating? When I want to find probability of an interval I am just subtracting the value of the CDF at 2 points. Supposing I want to do calculation of probability that x lies between 50 and I do not know what this point is maybe it is some 50, 60, 70, 60. So all I need is the difference of these two probabilities of the CDF. So this is probability"
+      },
+      {
+        "start": 205,
+        "end": 226,
+        "text": "that x takes values between 50 and 60 is not it. So, I do not need to really find I mean, I do not need to precisely know every value here it is enough if I have the continuous approximation, so you see the difference of the two points, even if I draw a continuous line and have some simple description for the continuous line the difference is good enough."
+      },
+      {
+        "start": 227,
+        "end": 252,
+        "text": "So, this kind of a picture in my mind at least it sort of conveys how the cdf is much more interesting and comes out in a very natural nice way and makes the, shifts the focus from individual values to intervals and all these small steps to maybe a continuous function or a plot connecting all of these things together and moving towards the continuous world. So, this is sort of"
+      },
+      {
+        "start": 253,
+        "end": 281,
+        "text": "makes it may be easy to picture how the continuous random variables are defined and they enter the picture. So, this is for the binomial. You can also do a similar plot for the meteorite data, you can convert this histogram into a PMF type thing and then draw the meteorite data and here again you see from minus 5 to 25, look at this nice smooth shape, this is actually a discrete PMF converted into a CDF. I am doing small steps,"
+      },
+      {
+        "start": 281,
+        "end": 307,
+        "text": "but since the steps have become so small they just look like one continuous nice line. How much easier is it to just describe a continuous line as opposed to all these small values in the bins, and as far as computing probabilities of intervals is concerned the continuous line is good enough, it is going to be good enough, so any range you want to calculate the difference in the probabilities should be okay. So you see this is very interesting when you"
+      },
+      {
+        "start": 307,
+        "end": 337,
+        "text": "look at the picture of the CDF and see literally how the continuous model becomes much more interesting in the large alphabet case than the discrete model that we have had so far. So this leads us to the definition of a cumulative distribution function, so far we have taken a random variable x and defined the CDF for that random variable x, so now I am going to forget about random variables, there is no random variables,"
+      },
+      {
+        "start": 337,
+        "end": 353,
+        "text": "let us forget about any random variable at all, there is no random variable, I do not care. I am only going to care about a function, this is a function that goes from the real line to 0, 1."
+      },
+      {
+        "start": 353,
+        "end": 380,
+        "text": "Once again I want to repeat this no random variable associated with it, I got rid of the of this x, I think this x should also go this, x should not be there, there is no reference to a random variable x it is just a function. I am going to define cumulative distribution functions without reference to random variables but keeping all the properties that I want for distribution functions."
+      },
+      {
+        "start": 380,
+        "end": 408,
+        "text": "So a function f from the real line to 0, 1 I will call it a cumulative distribution function or a distribution function if it satisfies the following four properties, so f needs to be a non-decreasing function taking values between 0 and 1, at minus infinity it should start at 0, at plus infinity it should sort of saturate at 1, so that is how the picture should be and there is this technical requirement here, I will not go into too much detail."
+      },
+      {
+        "start": 408,
+        "end": 437,
+        "text": "It needs to be continuous from the right, from the right it has to sort of close itself and stop, so let me not go into detail here, but the first three points are very important and that is how our cumulative distribution functions are defined, they have to be non-decreasing, start at 0, end at 1 and sort of jump, maybe they can jump, maybe they can do whatever else they want in the middle, Now I am not talking about discrete random variables or anything I am just talking about any function, starts at 0 ends at 1,"
+      },
+      {
+        "start": 437,
+        "end": 452,
+        "text": "it can do whatever it wants in the middle, I am calling but as it should be non-decreasing, that is all, as long as it is not decreasing I am going to call it a cumulative distribution function. So, these functions you can see they mirror the properties of the CDF of a random variable."
+      },
+      {
+        "start": 453,
+        "end": 479,
+        "text": "So, if you had a random variable and define the CDF as probability that x is less than or equal to small x then you will get definitely a proper valid CDF. But there can be other functions which satisfy this, so far we only had discrete random variables, so when we take a discrete random variable and computed CDF we thought, we saw that it had a very simple structure, it had this step stepwise structure. Now for my arbitrary CDF here,"
+      },
+      {
+        "start": 479,
+        "end": 505,
+        "text": "arbitrary cumulative distribution function I do not need the stepwise structure, it can be smooth and continuous also. So, this is sort of the theoretical jump that we are going to make, we defined CDFs, we looked at discrete random variables and say, saw that the CDF has a certain jump structure, but when we go to large alphabets it looked like the jump structure was sort of coming down to a continuous line. So, maybe in theory we want to throw away"
+      },
+      {
+        "start": 505,
+        "end": 528,
+        "text": "the discrete random variable, we want to define a distribution function which has all the properties of the distribution function that we want, it starts at 0 ends at 1 and it is non-decreasing and slowly gets to 1. What can we do with this discrete distribution function? We will see soon enough, but this is the important and crucial jump, so we forget about the stepwise structure."
+      },
+      {
+        "start": 528,
+        "end": 558,
+        "text": "We forget about all that jumps, etcetera, distribution function can be anything as long as it starts at 0 and ends at 1, it is non-decreasing there is that technical condition of being continuous from the right, as long as it is like that we are good. So, let us see some examples, shall we, let us look at some examples. So, here are 3 – 4, I mean, 4 different examples of valid cumulative distribution functions. So, you can of course, have any CDF of a discrete random variable and that would be a valid CDF, so that is how the"
+      },
+      {
+        "start": 558,
+        "end": 585,
+        "text": "whole definition came about, so but you can see all the properties are satisfied, it starts at 0 ends at 1, if you look at the first plot for instance the top left plot here, it starts at 0. That is a tick mark, it ends at 1, it is just a tick mark, it is sort of non-decreasing, yes, that is also tick mark, so it is a valid CDF, so it starts at 0 ends at 1 and it is non-decreasing."
+      },
+      {
+        "start": 589,
+        "end": 610,
+        "text": "So, both of these you can sort of see they come from the discrete world and here is a continuous cdf. So, it starts at 0, that is a tick mark, it ends at 1, that is a tick mark and you can see it is non-decreasing, but there are no steps, I do not have the step phenomenon."
+      },
+      {
+        "start": 612,
+        "end": 641,
+        "text": "It is a valid CDF, it is a cumulative distribution function, so here is another function, again starts at 0, ends at 1, it is non-decreasing, that is also true, no steps, but it is a valid continuous CDF, so we are generalizing the distribution function to an arbitrary shape, it can take any shape it wants, it can be continuous, it need not jump, but it has to go from 0 to 1, it has to be non-decreasing, that is it."
+      },
+      {
+        "start": 641,
+        "end": 670,
+        "text": "As long as you satisfy that you have a valid cumulative distribution function. So, this is an important step in theory when we jump from the discrete world to the continuous world. When we want to move towards continuous random variables we have to have a distribution function which is continuous. It does not have jumps, it just goes from 0 to 1, non-decreasing, and you can see the connection here and it seems like this continuous, the one on the left bottom here sort of mirrors"
+      },
+      {
+        "start": 670,
+        "end": 691,
+        "text": "the discrete picture very closely. You the discrete jump, but this guy, this continuous guy is very-very similar, is not it. These two are similar. Likewise here if you drew a picture like this and then you see these two so these two are very-very similar."
+      },
+      {
+        "start": 695,
+        "end": 721,
+        "text": "While the top picture needs all these jumps to be specified the bottom picture is just a line. How easy it is to specify a line. How easy it is to do a calculation with the line? Similarly on the right side also the top picture so many so many tiny jumps, the bottom picture is just one continuous curve, you can describe that continuous curve in so many interesting different ways. So notice how the calculations with probabilities of intervals"
+      },
+      {
+        "start": 721,
+        "end": 750,
+        "text": "can become much simpler if you have a continuous model. So, the theory that needs to develop here is how do we think of this distribution functions? What, how do we work with them etcetera, all of that will come in the theory. But hopefully you see the connection between the probability and the modeling in real life that you might have to do with continuous random variables and how easy it is to work with them in practice much more easier than discrete sometimes and sometimes when you have to do it you can use this picture."
+      },
+      {
+        "start": 752,
+        "end": 778,
+        "text": "So, let us come back to this problem of using continuous CDF and doing calculation for uniform discrete distributions. We saw this example before when x is uniform between 1 and 100 we saw the small steps are going to be there, you have this complicated looking CDF, one can try and approximate it, so if, so if you want a picture here, so if you want CDF picture here, so this one"
+      },
+      {
+        "start": 778,
+        "end": 808,
+        "text": "is going to be something like, it starts at 1. So, 0 it is going to go, reach, 1 at a 100, so it is just a picture here, this is this guy, now if I do a change of color, maybe blue, so this guy is simply going to be a straight line like this, this guy is this,"
+      },
+      {
+        "start": 810,
+        "end": 827,
+        "text": "so you see here how this discrete CDF for this uniform distribution between 1 to 100 and this continuous CDF that I had where I just had x by 100, a simple x by 100 that I am doing here is a nice approximation, they are very close, is not it?"
+      },
+      {
+        "start": 827,
+        "end": 854,
+        "text": "I mean, depending on the scale you look at they are really close here, so now let us see if we can do our wonderful calculation of interval probabilities with both these cases. So, I am going to ask the same question. Remember I did interval calculations with CDF, probability of x between 3 and 10, if I use the exact CDF I am going to get 7 by 100, if I use the approximate CDF here with just the continuous CDF F of 10 minus F of 3, I get the same value."
+      },
+      {
+        "start": 854,
+        "end": 883,
+        "text": "But notice what goes wrong here? If you go to 3.2 and 10.6, my exact CDF will give me the same exact 7 by 100, but notice what happens to my continuous CDF? My continuous CDF does not make all those kind of nuances between 73.2 and 10.6, it will simply do 10.6 by 100, minus 3.2 by 100, it will give you 7.4 by 100. So, it does not quite match, there is a small difference, but some people will say, the ease with which I can work with x by 100"
+      },
+      {
+        "start": 883,
+        "end": 911,
+        "text": "is so much better, so I will take it any day. It is, I know there is going to be errors, but there are errors all over the place, so maybe this is not too big and maybe instead of 100, if I were to maybe even zoom it down a little bit more maybe I will get better answers who knows, so the same thing carries over with x less than or equal to 17 by 0.3, if you do that exact calculation, the exact CDF, you will get 17 by 100, if you just do it with the approximation you will get 17.3 by 100, good enough. So, this is the sort of interesting"
+      },
+      {
+        "start": 911,
+        "end": 931,
+        "text": "comparison you can do with discrete world and if you do a continuous model for the same thing, what you lose, what you gain, hopefully you can see that in this picture. So, let us take a, yes, so clearly the calculation is simpler, but maybe in the uniform distribution you do not need it, it is easy enough calculation even with the exact PMF."
+      },
+      {
+        "start": 931,
+        "end": 948,
+        "text": "Let us go to binomial, so let me show you a simple approximation, this is actually a very simple approximation for this binomial CDF, there are more fancy approximations, but let us start with a very simple approximation here. So, this is a binomial distribution n equals 100, p equals 0.6."
+      },
+      {
+        "start": 948,
+        "end": 964,
+        "text": "If you have to do the CDF, the CDF sort of jumps whenever k is, let me go back to my black, so this is when k is 0, 1 till 100, in the other places it stays flat, so that is how the CDF works."
+      },
+      {
+        "start": 964,
+        "end": 994,
+        "text": "Now this guy is a nice function, I would urge you to plot it, this 1 by 1 plus exp of minus x, so of course, this is x minus 6 t by square root 24, do not ask me why, where all these things come from, these are all, we will look at this later on, but these are, this is an interesting numbers, these are related to, so for those of you are keen on it, this guy is n p, this 24 is n p into 1 minus p, so you might wonder where this comes from. So, the 60 is the mean, this is the variance,"
+      },
+      {
+        "start": 994,
+        "end": 1014,
+        "text": "etcetera, so look a look at this function, so this function is so much simpler than the CDF, so here you have 100 choose 50 and here you do not have any such thing, it is just exp, you just plug it into a calculator you will get the answer, so it turns out this is a reasonably good approximation for this, it is not very bad approximation. So, how do you test this approximation?"
+      },
+      {
+        "start": 1014,
+        "end": 1043,
+        "text": "You calculate probabilities of intervals, you calculate probability of interval using the exact CDF you are going to get you know 0.0271, 0.51, 0.44, 0.01, look at the answers here with this very simple approximation function and you get fairly close answers, you do lose something there is the symmetry that comes here on this side which does not come here etcetera, it is okay, you do not lose too much. In fact, better approximations are possible, even for this 100.6 you can do much better approximations than this one,"
+      },
+      {
+        "start": 1043,
+        "end": 1071,
+        "text": "so this continuous CDF seems to be a valuable tool in our hands, instead of modeling some discrete random variable particularly when it takes a lot of values using very many and discrete values of PMF and complicated CDFs and doing major summations and all that here you have a simple formula and it gives you approximate values. So you get a sense of where the value lies and it seems very-very interesting so this is the power of the continuous approximation. So, when"
+      },
+      {
+        "start": 1071,
+        "end": 1088,
+        "text": "you do binomials particularly uniform, you might say uniform is easy enough, why should I need anything more fancy, look at this for binomial, so this is really-really powerful and like I said this is a very simple approximation, I picked one very simple one just to show you one can complicate this, even very relatively good looking expressions."
+      },
+      {
+        "start": 1088,
+        "end": 1108,
+        "text": "Maybe a little bit longer and slightly more ugly than this you can get very good approximations for the binomial. So that hopefully is another way to convince you that this all the effort we are going to put into learning about continuous distributions, continuous distribution functions, continuous CDFs is worth it and when you really model you get much simpler models in the continuous world."
+      },
+      {
+        "start": 1110,
+        "end": 1125,
+        "text": "So, that is the end of this little lecture which showed you the connections between how to approximate in large cases, how to approximate a CDF with continuous and how to do calculations etcetera, from now on we will move on and start studying the general theory."
+      },
+      {
+        "start": 1125,
+        "end": 1141,
+        "text": "So, what is the notion of a general random variable? What is in general a random variable? What does… we already saw discrete random variables, which took discrete set of values and what are continuous random variables, we will see all that in the next lecture. Thank you very much."
+      }
+    ]
+  },
+  "questions": [
+    {
+      "id": "q1",
+      "question": "When the lecture shows the CDF of binomial(n, 0.6) for n = 10, 20, 50, 100 on the same axes, what observation is being made?",
+      "options": [
+        "The CDFs become identical for large n",
+        "As n grows (with the scale fixed), the staircase structure visibly smooths into what looks like a continuous curve",
+        "The CDFs become discontinuous for large n",
+        "Larger n produces narrower CDFs that vanish in the limit"
+      ],
+      "correctIndex": 1,
+      "hint": "Look at the four panels side by side: n = 10 is clearly stepped, n = 100 looks smooth. What's happening visually?",
+      "explanation": "With a fixed scale, the individual jumps shrink relative to the whole as n grows, and the staircase silhouette approaches a continuous curve. This is the visual motivation for defining continuous CDFs — they're the natural limit of these progressively smoother step functions.",
+      "concept": "Binomial CDF as n grows: from steps to a smooth curve",
+      "difficulty": "easy"
+    },
+    {
+      "id": "q2",
+      "question": "The lecture introduces a new definition: a CDF is any function F: ℝ → [0, 1] with four properties. Which set of properties is correct?",
+      "options": [
+        "Differentiable, bounded, increasing, finite",
+        "Non-decreasing; values in [0, 1]; lim_{x→−∞} F(x) = 0; lim_{x→+∞} F(x) = 1 (plus right-continuity as a technical requirement)",
+        "Continuous, strictly increasing, integrable, normalized",
+        "Discrete, piecewise constant, increasing, bounded"
+      ],
+      "correctIndex": 1,
+      "hint": "The defining properties don't require differentiability or strict monotonicity — they're more permissive than that.",
+      "explanation": "The defining properties are: range in [0, 1], non-decreasing, limit 0 at −∞, limit 1 at +∞, plus right-continuity. Crucially, no continuity, differentiability, or strict monotonicity is required — that's what lets the definition include both staircase (discrete) and smooth (continuous) CDFs.",
+      "concept": "Four defining properties",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q3",
+      "question": "Which of the following functions is NOT a valid CDF?",
+      "options": [
+        "F(x) = 0 for x < 0, F(x) = x for 0 ≤ x ≤ 1, F(x) = 1 for x > 1",
+        "F(x) = 1 − e^(−x) for x ≥ 0, F(x) = 0 for x < 0",
+        "F(x) = 0.5 + 0.5 sin(x), oscillating between 0 and 1",
+        "F(x) = 0 for x < 2, F(x) = 0.4 for 2 ≤ x < 5, F(x) = 1 for x ≥ 5"
+      ],
+      "correctIndex": 2,
+      "hint": "Check each candidate against the four properties — especially 'non-decreasing.'",
+      "explanation": "Option C oscillates, so it isn't non-decreasing — it goes up and down repeatedly, which disqualifies it. Option A is the CDF of Uniform[0, 1]. Option B is the CDF of an Exponential(1) random variable. Option D is the CDF of a discrete random variable that takes value 2 with probability 0.4 and value 5 with probability 0.6. All three are valid; only C fails the non-decreasing test.",
+      "concept": "Four defining properties",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q4",
+      "question": "X is uniform on {1, 2, ..., 100}. Using the continuous approximation F(x) = x/100, what is the approximate value of P(17.5 < X ≤ 42.3)?",
+      "options": [
+        "17.5/100",
+        "42.3/100",
+        "24.8/100",
+        "25/100"
+      ],
+      "correctIndex": 2,
+      "hint": "Use the interval formula F(b) − F(a) directly with the continuous approximation.",
+      "explanation": "F(42.3) − F(17.5) = 42.3/100 − 17.5/100 = 24.8/100. The exact discrete answer would round these to F(42) − F(17) = 25/100, since the discrete uniform CDF is flat between integers. The 0.2/100 = 0.002 discrepancy is the price you pay for the much simpler formula.",
+      "concept": "Uniform discrete approximated by F(x) = x/100",
+      "difficulty": "easy"
+    },
+    {
+      "id": "q5",
+      "question": "Why does the lecture care that we can define a CDF without reference to a random variable?",
+      "options": [
+        "It simplifies the notation by removing the subscript",
+        "It allows the existence of CDFs (like F(x) = x on [0, 1]) that no discrete random variable could produce — which is precisely what's needed to define continuous random variables",
+        "It makes the theory more abstract for its own sake",
+        "It eliminates the need for probability axioms"
+      ],
+      "correctIndex": 1,
+      "hint": "The lecture is setting up a theoretical jump. What new kinds of distributions does this jump make available?",
+      "explanation": "A smooth, non-stepped CDF like F(x) = x on [0, 1] cannot come from any discrete random variable (discrete CDFs always have jumps). By defining CDFs as functions with the right properties — without requiring them to come from a random variable — we allow smooth CDFs into the framework, and these are exactly the CDFs of continuous random variables. The new definition is what makes continuous probability possible.",
+      "concept": "Definition: CDF without a random variable",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q6",
+      "question": "The continuous approximation F(x) ≈ 1 / (1 + exp(−(x − 60)/√24)) is used for binomial(100, 0.6). What do the numbers 60 and 24 represent?",
+      "options": [
+        "Arbitrary fitting constants with no meaning",
+        "60 is the mean np and 24 is the variance np(1−p) of the binomial",
+        "60 is n − 40 and 24 is just 24",
+        "60 is the median and 24 is the interquartile range"
+      ],
+      "correctIndex": 1,
+      "hint": "The lecture mentions these are 'related to' specific properties of the binomial. Recall: mean of binomial(n, p) = np, variance = np(1−p).",
+      "explanation": "For binomial(n = 100, p = 0.6): mean = np = 60, variance = np(1−p) = 100 × 0.6 × 0.4 = 24. The continuous approximation centers a sigmoid at the mean and uses the variance to set its width. This is a foreshadowing of the Central Limit Theorem: large-n binomial distributions are well-approximated by smooth bell-shaped distributions characterized by their mean and variance.",
+      "concept": "Binomial approximated by a logistic-like CDF",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q7",
+      "question": "For X uniform on {1, ..., 100}, the discrete CDF gives P(3.2 < X ≤ 10.6) = 7/100 while the continuous approximation gives 7.4/100. Why does this discrepancy arise?",
+      "options": [
+        "The continuous approximation is incorrect",
+        "The discrete CDF is flat between integer jumps, so it 'ignores' non-integer endpoints; the continuous F(x) = x/100 treats every value of x as meaningful",
+        "Both answers are wrong; the true value is 0.04",
+        "The discrepancy is due to rounding error in the calculator"
+      ],
+      "correctIndex": 1,
+      "hint": "Think about what F_X(3.2) means for the discrete uniform vs. for the continuous approximation.",
+      "explanation": "For the discrete uniform, F_X(3.2) = F_X(3) = 3/100 because there's no probability mass between 3 and 4 — the CDF is flat there. The continuous approximation, by contrast, evaluates F(3.2) = 3.2/100, picking up 'imaginary' mass between integers. Neither is wrong; they describe different objects. The continuous version is a useful approximation that loses a bit of precision in exchange for a clean formula.",
+      "concept": "Approximation error: 7/100 vs 7.4/100",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q8",
+      "question": "Across lectures 4.1, 4.2, and 4.3, the conceptual arc moves through three stages. Which ordering best captures it?",
+      "options": [
+        "Continuous CDFs → discrete PMFs → histograms",
+        "Histograms motivate continuous models → CDFs are defined for discrete RVs → CDFs are generalized to functions without random variables, enabling continuous RVs",
+        "Random variables → expectations → variances",
+        "Bernoulli → binomial → uniform"
+      ],
+      "correctIndex": 1,
+      "hint": "Trace the arc from lecture 4.1 (data motivation) through 4.2 (CDF definition) to 4.3 (the theoretical jump).",
+      "explanation": "Lecture 4.1 motivates the need for continuous models using real data (meteorites) and histograms. Lecture 4.2 introduces the CDF as F_X(x) = P(X ≤ x) and works out its properties for discrete random variables. Lecture 4.3 makes the theoretical jump: CDFs are functions with certain properties, and this broader definition admits continuous CDFs that no discrete random variable could produce. This sets up the continuous random variable formally in the next lecture.",
+      "concept": "Definition: CDF without a random variable",
+      "difficulty": "medium"
+    }
+  ],
+  "relatedVideos": []
+}

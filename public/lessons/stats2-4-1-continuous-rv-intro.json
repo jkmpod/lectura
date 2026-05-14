@@ -1,0 +1,453 @@
+{
+  "id": "stats2-4-1-continuous-rv-intro",
+  "title": "Continuous Random Variables: Introduction",
+  "subtitle": "Why we need a continuous view of data — meteorite weights, histograms, and the move from values to intervals",
+  "instructor": "Prof. Andrew Thangaraj",
+  "course": "Statistics for Data Science II",
+  "youtubeId": "VfmiCE67QrE",
+  "thumbnailUrl": null,
+  "duration": 1144,
+  "concepts": [
+    {
+      "title": "Why discrete becomes unwieldy at scale",
+      "timestamp": 65
+    },
+    {
+      "title": "Binomial with large n: a first hint of the problem",
+      "timestamp": 147
+    },
+    {
+      "title": "Meteorite weights: a motivating dataset",
+      "timestamp": 201
+    },
+    {
+      "title": "Binomial revisited: combinatorial intractability",
+      "timestamp": 344
+    },
+    {
+      "title": "The precision-tractability trade-off",
+      "timestamp": 506
+    },
+    {
+      "title": "Log transformation of wide-ranging data",
+      "timestamp": 586
+    },
+    {
+      "title": "From individual values to intervals (the key idea)",
+      "timestamp": 677
+    },
+    {
+      "title": "Histograms: binning and counting",
+      "timestamp": 769
+    },
+    {
+      "title": "Binomial PMF shape: motivation for continuous",
+      "timestamp": 1046
+    }
+  ],
+  "annotations": [
+    {
+      "id": "a1",
+      "type": "context",
+      "behavior": "soft",
+      "timestamp": 45,
+      "title": "Quick refresher: PMF",
+      "body": "A probability mass function (PMF) gives P(X = x) for each value a discrete random variable can take. For a fair die, P(X = k) = 1/6 for k = 1, 2, ..., 6. The PMF is a row in a table for every value the variable can take — fine when there are 6 values, a problem when there are 45,000."
+    },
+    {
+      "id": "a2",
+      "type": "context",
+      "behavior": "soft",
+      "timestamp": 615,
+      "title": "Why log transformation helps here",
+      "body": "Logs compress multiplicative scales into additive ones. The meteorite weight range from 0.01 g to 60,000,000 g spans about 10 orders of magnitude — impossible to plot meaningfully on a linear axis. Taking log₂ maps the same range to roughly −6.6 to 25.8, which fits naturally on a chart. The data hasn't changed; only the coordinate system has."
+    },
+    {
+      "id": "a3",
+      "type": "quiz",
+      "behavior": "pause",
+      "timestamp": 750,
+      "title": "Concept check: the shift from values to intervals",
+      "question": "The lecture argues we should move from focusing on individual values to focusing on intervals. What is the main reason for this shift?",
+      "options": [
+        "Intervals are mathematically more elegant than individual values",
+        "Computer programs cannot store individual real numbers accurately",
+        "Listing every value with its probability becomes intractable when the number of possible values is very large",
+        "Discrete random variables do not exist in the real world"
+      ],
+      "correctIndex": 2,
+      "hint": "Think about the meteorite dataset: 45,000+ distinct values. What's the practical problem with a PMF table that has 45,000 rows?",
+      "explanation": "When a random variable can take a huge number of values — meteorite weights, person heights, sensor readings — the PMF either becomes a table too large to be useful, or each individual probability becomes vanishingly small. Switching focus to intervals (\"how often does the weight fall between A and B?\") gives us a tractable description. The trade-off is precision: we give up exact per-value probabilities, but the per-value probabilities weren't telling us much anyway."
+    },
+    {
+      "id": "a4",
+      "type": "quiz",
+      "behavior": "pause",
+      "timestamp": 905,
+      "title": "Concept check: reading a histogram",
+      "question": "In the meteorite-weight histogram (after log transformation), suppose the bin around log₂(weight) = 5 has a count of about 1,800 out of 45,000 total observations. Approximately what is the empirical probability that log₂(weight) falls in that bin?",
+      "options": [
+        "0.018",
+        "0.04",
+        "0.4",
+        "1800"
+      ],
+      "correctIndex": 1,
+      "hint": "Empirical probability = count in the bin divided by total count. The lecture shows roughly 1,800 of 45,000+ observations near log₂(weight) ≈ 5.",
+      "explanation": "1800 / 45000 = 0.04, or 4%. This is the empirical estimate of P(log₂(weight) is in this bin). The histogram with its bin counts is the bridge: each bin's count, normalized by the total, gives the probability mass for that interval. As bins get narrower, the shape of the histogram approaches a continuous density curve."
+    },
+    {
+      "id": "a5",
+      "type": "context",
+      "behavior": "soft",
+      "timestamp": 1080,
+      "title": "Setting up the next lecture",
+      "body": "The question Prof. Thangaraj is about to pose — what's P(50 ≤ X ≤ 60) for binomial(100, 0.6)? — has an exact answer that's nearly impossible to compute by hand. The continuous approximation he's hinting at is exactly what the CDF (next lecture) and the eventual continuous models will provide. This question is the bridge between this lecture's motivation and the technical machinery to come."
+    },
+    {
+      "id": "a6",
+      "type": "recap",
+      "behavior": "marker",
+      "timestamp": 1130,
+      "title": "What this lecture set up",
+      "body": "Discrete PMFs work cleanly when the alphabet is small. When the alphabet grows large — many distinct values, possibly over a wide range — three things break down: tables become unmanageable, individual probabilities become uninformative, and combinatorial expressions become impossible to evaluate by hand. The continuous view sidesteps all three by shifting from per-value probabilities to interval probabilities. The cost is some precision; the gain is a much simpler description. The next lecture introduces the tool that makes this work: the cumulative distribution function."
+    }
+  ],
+  "transcript": {
+    "en": [
+      {
+        "start": 13,
+        "end": 27,
+        "text": "Hello and welcome to this lecture. We are going to talk about continuous random variables. So, this is the first step we are taking to a new subject, new topic in this study of statistics that we are doing right now."
+      },
+      {
+        "start": 28,
+        "end": 57,
+        "text": "So far, we have looked at discrete random variables and this simple description using what is called the probability mass function, so x usually takes values like you know 1, 2, 3, et cetera and then you have the PMF probability mass function, probability, that a random variable capital x equals small x is something. And then we work with it, we understand something about the probability calculations, etcetera, all of that we have looked at, we have looked at multiple random variables, we have looked at so many different ideas. So now"
+      },
+      {
+        "start": 57,
+        "end": 85,
+        "text": "we are going to start slowly moving towards what is this notion of a continuous random variable. And this is very important because you will see quickly the numbers can become very unwieldy and become very large if you want to stick to the discrete domain and then this continuous random variable domain, this gives you very easy ways to deal with these kinds of situations. So, let us get started. I will give you a description of why all this is needed and then describe the"
+      },
+      {
+        "start": 85,
+        "end": 115,
+        "text": "main tools that are needed for doing computations with continuous random variables. Let us begin with an introduction. In the introduction, I am going to sort of motivate why one requires this kind of continuous random variables and where does it show up usually when we look at data. So, of course, in theory one can build it in a very different way, but I would like to start with some data and show how this kind of a continuous view of node random variables helps us in computations and dealing with data, summarizing it,"
+      },
+      {
+        "start": 115,
+        "end": 142,
+        "text": "working with it, et cetera. So, let us let us think of our usual discrete random variables and let us say the alphabet in which it takes values is the script X, so this other X, and when this alphabet grows very large one sees immediately that it becomes a little bit difficult to work with the discrete random variable. See remember, how did we deal with discrete random variables, we wrote down a big table of all possible values"
+      },
+      {
+        "start": 142,
+        "end": 170,
+        "text": "that the random variable could take and the probability with which it took the values. Now, when the number of values goes larger and larger and larger, we saw even the binomial distribution for instance, so if you have a binomial with n equals 1000 and p equals point 6, you are already getting to a point where you cannot make tables, you are starting to write down expressions but then the expressions are also, this is 1000 choose 500, p to the power 500, this is really difficult to sort of"
+      },
+      {
+        "start": 170,
+        "end": 198,
+        "text": "understand what these numbers are, where the probability is etcetera and everything becomes very unwieldy to deal with particularly when the alphabet grows large. Let me give you two examples of situations that can happen, the one situation I will show is meteorite weights, I think there is a spelling mistake here, so let me see if I can fix that, you will see me making this mistake quite often o and e replaced with e and o, so I will do it here,"
+      },
+      {
+        "start": 198,
+        "end": 222,
+        "text": "maybe I will not do it in every slide, you can treat both of them as the same. So, let us look at meteorite weight. So, what are meteorites? Meteorites are objects that enter the earth and they are moving around in space and they hit the earth's atmosphere and they enter the earth, they are drawn by earth's gravity to come inside earth's atmosphere, eventually some of them even hit the ground and some of them completely sort of disintegrate in the atmosphere because of heat etcetera. So, there is this calculation of,"
+      },
+      {
+        "start": 224,
+        "end": 250,
+        "text": "not calculation, there is this data on what is the weight of the different meteorites that have actually landed on earth and maybe hit the earth at some point in time or the various stages of how much damage they caused, et cetera. And this distribution is spread over a wide range of weights; there is this point 01 grams, little tiny things that make their way in and then there"
+      },
+      {
+        "start": 250,
+        "end": 279,
+        "text": "is also on the other side 60 tons. So, the large weight ones are very rare, if you actually look at the data there is 45,000 plus meteorites, you can go to many websites and download this data. And if you look at their weights most of the weights are around a few kilograms, maybe even less than that, 100 grams to 800 grams like that and a few of them will go into the tons and there is one or two which are in the tens of tons and very large, but out of this 45,000"
+      },
+      {
+        "start": 280,
+        "end": 304,
+        "text": "very few are in that range. Now, if the meteorite hitting the earth is sort of like a random like phenomenon and if you want to think of doing statistical study of this phenomenon and you start looking at the data, maybe starting to fit a model and the distribution to it, so you notice now that the data is really vast, the alphabet is very large, so you want to think of the meteorite weight as your random variable."
+      },
+      {
+        "start": 305,
+        "end": 333,
+        "text": "Then you have this big set of data to contend with 45,000 plus and look at the range, point 01 grams to 60 tons, maybe the range is not too scary, we have other methods to deal with that, I will tell you how to deal with, when you have a large range how to simplify that, but still 45,000 entries in that and so many different values. Do you really gain any insight from it, did you understand which weights are more likely, which weights are less likely?"
+      },
+      {
+        "start": 333,
+        "end": 355,
+        "text": "I mean, it looks really difficult to make anything meaningful out of a statistical study of something like this if you are going to stick with discrete random variables, maybe there is something simpler we can do. Something very similar happens even with the binomial distribution, so look at binomial n comma p, if n is growing very large and p is a constant, so this can happen a lot."
+      },
+      {
+        "start": 355,
+        "end": 381,
+        "text": "So, if you look at Bernoulli trials, like incidence of a disease in a population or something, the population is very large and p is going to be a constant and let us say maybe there is something like that, then you have to really worry about how to do these big calculations with combinatorics, combinatorial calculations, so the n choose k, p power k, 1 minus p by n minus k when n is of the order of thousands and ten thousands and k is of the order of 5000, 500."
+      },
+      {
+        "start": 384,
+        "end": 405,
+        "text": "What do you gain by that? I mean everything is going to be this big number and you do not even get a sense of where the probability is, is not it? So, maybe for the binomial, I know, a little bit more but still it will be nice to be able to do calculations with the binomial distribution when n goes large also. So, how do you, is there a better way to do it, is there a simpler way to do it that is one of the interesting questions to ask."
+      },
+      {
+        "start": 405,
+        "end": 435,
+        "text": "So, these are the kind of situations where the notions of continuous random variables sort of directly, in an easy way, enter the picture. So, when you expect the variable you are analyzing, the phenomenon you are analyzing, to take a lot of values, maybe in a small range, maybe in a large range, the range really does not matter. When you take a lot of values and each of those values have different probabilities and you have to keep track of all of them, etcetera, you are better off thinking about continuous modeling, so instead of modeling them as discrete"
+      },
+      {
+        "start": 435,
+        "end": 464,
+        "text": "model them as continuous and then there are tools from the world of continuous random variables which you will need and you can use them and you can do simpler calculations with that model. So, this is the core idea of when you have a lot of data and lot of different values that the data takes within the same range. For instance, you might want to think of weight of an adult person, if you think of weight of an adult person again the value can range in kilograms,"
+      },
+      {
+        "start": 464,
+        "end": 480,
+        "text": "it can range maybe from 45 kgs to 120 kgs or something like that and all the values, if you look at a large enough population, there is going to be so many weights. Depending on the precision with which you measure, you can really get a whole bunch of values which are all different."
+      },
+      {
+        "start": 480,
+        "end": 506,
+        "text": "And listing them out as discrete and keeping track of them, I do not know if you really gain any insights from it or you can do any calculations from it. Is there a simpler way to describe that phenomenon of weight of an adult person, meteorite weight that is hitting the planet earth, binomial distributions and growths large, is there a simpler way to do calculations in those kind of statistical situations and that is where continuous random variables enter the picture."
+      },
+      {
+        "start": 506,
+        "end": 536,
+        "text": "Do you give up something? Yes, you do give up something, you give up some precision, if you keep track of everything you have a lot of precision, but the calculation is really painful, so maybe this trade-off is worth it. So, this is sort of background, I want you to remember this in mind as we develop the theory. So, when we start developing the theory and writing down those equations for distribution functions, density functions and calculations and integrations and all of that later, the picture it is sometimes possible to lose track of these"
+      },
+      {
+        "start": 536,
+        "end": 563,
+        "text": "kind of ideas, but these kind of ideas are very useful in the modeling. How do you go from data to a continuous model? This is the motivation, so you have a much simpler description in the continuous one. So, let me give a little bit more data on this meteorite situation, this illustrates a few things which I thought were very interesting at this point to get to know. So, if you actually look at the data, I will make the data available"
+      },
+      {
+        "start": 563,
+        "end": 582,
+        "text": "to you in a suitable format, it is 45,000 plus rows of an excel file, there is lots of data on the meteorites. One of the data is the weight in grams and the range of the data is from point 01 to 60 tons, I think that is six followed by how many ever 0s to make 60 tons."
+      },
+      {
+        "start": 582,
+        "end": 598,
+        "text": "So when you have a wide range like this, one of the very interesting and simple transformations you can do which you have learnt in your Mathematics I course is taking logarithms, so if you take logarithms even to base 2 for instance here like I have done, you will get a different range and that range will suddenly start looking very small."
+      },
+      {
+        "start": 599,
+        "end": 625,
+        "text": "And not that you reduce the amount of data, you still have the 45,000 plus data, but at least the numbers you are dealing with are small, from minus 6 point 6 to 25 point 8, instead of point 01 to 60 tons, it is difficult to plot that, it is just too confusing, but if you just look at minus 6 point 6 to 24 point 8 you are already feeling better. So, this kind, this trick of transforming the data to make it fall into a certain range or a certain type of values that you like"
+      },
+      {
+        "start": 626,
+        "end": 648,
+        "text": "is a very useful trick when you model data. You might want to keep that somewhere in the back of your mind as you go through your other courses in data science. So, that is minus 6 point 6 to 25 point 8, so this is one trick, it has got nothing to do with the continuous random variable stuff we want to talk about, but I think it is a useful trick to remember, so in this data it makes sense to take log, so we will take log and look at everything in the log domain."
+      },
+      {
+        "start": 649,
+        "end": 677,
+        "text": "So, here is the main idea that moves from discrete to continuous, it is sort of a bit counterintuitive, it is bit confusing, people always lose track of these kind of ideas but this is how continuous enters the picture, this is the simplification or this is how you go from large amounts of data to a short description of it in the continuous domain. The main idea is to move away from focusing on individual values that your data is taking, individual values that the random"
+      },
+      {
+        "start": 677,
+        "end": 706,
+        "text": "variable is taking but focus on intervals. So, here is what I would do, here for instance minus 6 point 6 to 25 point 8, maybe I want to divide it into 100 intervals, so maybe you will roughly get minus 6 point 6 to minus 6 point 3, 6 point 3 to minus 6, so on till 25 point 5 to 25 point 8. Now this hundred is something in my hand, I can change this hundred, I can make a 1000 if I want, I can make it 500, I can make it 25, I can make it whatever else I like. You can imagine in the continuous world"
+      },
+      {
+        "start": 706,
+        "end": 727,
+        "text": "in the theory, you want to make that as large as possible and make these interval widths as small as possible, but you never get out of the interval stuff, I mean it is always an interval, it is always a bunch of intervals as opposed to individual values. So, that move from individual values to intervals is very crucial when you go from discrete to the continuous world."
+      },
+      {
+        "start": 728,
+        "end": 757,
+        "text": "So, that is something, so you have got to remember this when we, the main idea and moving towards the continuous world to have a model in the continuous world is to start thinking of intervals and when you think of intervals everything becomes very-very easy, so that is the first trick, and the important trick and the main idea here. So, once you put bins or intervals, you can simply count how many times my variable of interest fell in that bin. How many times"
+      },
+      {
+        "start": 757,
+        "end": 787,
+        "text": "the log of the weight of the meteorite fell between minus 6 point 6 to minus 6 point 3? How many times did it fall between 25 point 5 to 25 point 8? I will now keep track of these counts. So, this is called histogram, if you do this, the term that people use is histogram, and these histograms are hopefully much better for you to describe and think about and visualize and picture and do calculations with than the individual values."
+      },
+      {
+        "start": 787,
+        "end": 810,
+        "text": "And anyway, I can make these intervals quite small, I mean this is compared to the overall weight and these intervals are quite small and they do give me enough precision to work with this data, so this move from discrete individual values to bins and counts of the values in the bins is a crucial idea that moves into the modeling in the continuous world."
+      },
+      {
+        "start": 810,
+        "end": 840,
+        "text": "So, once I do this notice what happens. So, this is called the histogram of any data that you look at, so I am going to look at histogram of log of weights and this is a picture I can draw. So this picture, many computer programs will let you draw histograms in a very nice way, we will see as part of our diploma course, we will see a clear way to plot histograms, plot things like this, this is a part of another course. But here I have plotted a histogram"
+      },
+      {
+        "start": 840,
+        "end": 870,
+        "text": "and these are the bins. So, on the y axis here, you have the count of number of values, so this is the count, so number of this is the count that shows up here and these are the bins, the x axis, so for instance you look at look at a bin, like something around 4, so you see around 5 is where the maximum number of count seems to appear, about 1800, 1700 of them are around 5."
+      },
+      {
+        "start": 870,
+        "end": 894,
+        "text": "And as you go towards the right above 15 and all is very less count, 100 and below, and in fact, very less also, I mean, if you go to minus 5 also the count is really less, and it goes all the way to 25, but the counts there are going to be really tiny compared to the 1800 and look at this picture, so you already see some sort of easy picture to remember in your mind, I mean somebody gives you 45,000 values spread out over a large range, it is very difficult."
+      },
+      {
+        "start": 894,
+        "end": 920,
+        "text": "You take log and then you bin, you get this very nice and simple picture and it is something nice to describe. So, instead of focusing on individual values, maybe it is simpler to build a continuous model where you focus simply on the shape of the histogram, put some modeling on the shape, maybe some function of the continuous variable x and then you do that and then start doing calculations with that. So, remember we went from individual values to"
+      },
+      {
+        "start": 920,
+        "end": 945,
+        "text": "intervals, so we will have to be stuck with intervals, once you come to the interval you cannot go back to the individual value again, so you have lost that precision of the individual value. So, we will focus on intervals and we will try to find probabilities that our variables fall inside intervals and these intervals are small enough that they sort of are close enough to the, maybe the individual values or maybe, that is enough for us."
+      },
+      {
+        "start": 945,
+        "end": 970,
+        "text": "So, I mean, what do you really gain by knowing the exact weight of the meteorite and I do not know, that is a different sort of study. For most people it is important that the meteorite is very big or very small, so intervals are good enough in some sense, so anyway many of our measurements, even weight if you measure, our ability to measure has a precision, so you can go up to say milligrams, micrograms, I do not know, whatever grams, very-very small precision but"
+      },
+      {
+        "start": 970,
+        "end": 1000,
+        "text": "you cannot really make the precision infinite. You cannot measure a weight up to as precise as you want, there are fundamental limits, so you can only have a precision. So, any weight you measure, even though somebody gives you point 01 grams, it is actually within a certain interval only, so everything in the physical world is only within intervals, so doing intervals is fine, I mean that is good enough, you do not need anything more. So yes, we do give up precision, but you know, precision is never there beyond a certain point, so as long as you can make"
+      },
+      {
+        "start": 1000,
+        "end": 1023,
+        "text": "your intervals very small, as long as you can increase your number of intervals we do not really lose much. So, that is the important thing. All right, so this was motivation, introduction and I want you to sort of carry these thoughts into the theory, so once we start building the theory, this will seem very remote because the theory itself is a little bit more involved, you will have integration, you will have to do calculations which are a bit painful."
+      },
+      {
+        "start": 1023,
+        "end": 1040,
+        "text": "You may feel scared about it, you may feel uncomfortable around it but the modeling is more crucial, so when you identify data, which kind of data do you want to quickly do a continuous model for, for what you do not want to do a continuous model, things like that should easily be assimilated when you look at data."
+      },
+      {
+        "start": 1041,
+        "end": 1060,
+        "text": "So, having with that introduction, so it is one final piece of introduction also. So, here is the PMF of binomial distribution n equals 100, this is a PMF. So even here when you plot the PMF even though we cannot do the calculations that easily."
+      },
+      {
+        "start": 1060,
+        "end": 1089,
+        "text": "You see that there is a nice shape, you see this nice shape, so maybe if you give up the precision of the individual values and just focus on the shape and come up with some other model even for the binomial, maybe we will gain a lot. So, that is something, that is very interesting and binomial, like I said, shows up quite often in Bernoulli trials and all that, so these kind of calculations ability to do easy calculations with binomial distribution. So, for instance, suppose I asked you, in this PMF what is the probability that the binomial random variable falls between 50 and 60?"
+      },
+      {
+        "start": 1090,
+        "end": 1115,
+        "text": "So, if you have to do accurate calculation, you have to do 100 choose 50 times p power 50, 1 minus p power 100 minus 50 plus 100 choose 51, look at the calculation, it is just so unwieldy. I just need to know what is the probability that the binomial random variables falls between 50 and 60. Is there a easier calculation? Can I do something easy? I am willing to give a precision, I do not want the exact answer, within something is good enough for me."
+      },
+      {
+        "start": 1115,
+        "end": 1134,
+        "text": "And is there a simpler method? So, can we do something easier here? All of that comes because of continuous random variables; this is very nice theory out there which gives you these tools. So, calculations with PMF in the binomial case is very tough and maybe there are simple alternatives."
+      },
+      {
+        "start": 1135,
+        "end": 1144,
+        "text": "So, let us keep this introduction in mind as we jump into the next section which will talk about a very important thing called the cumulative distribution function."
+      }
+    ]
+  },
+  "questions": [
+    {
+      "id": "q1",
+      "question": "Which of the following best describes the central motivation for introducing continuous random variables?",
+      "options": [
+        "Discrete random variables are mathematically incorrect for real-world data",
+        "Continuous random variables are easier to teach to beginners",
+        "When a discrete random variable's alphabet is very large, the PMF description becomes computationally and conceptually unwieldy",
+        "Probability theory requires continuous models for axiomatic consistency"
+      ],
+      "correctIndex": 2,
+      "hint": "The lecture's motivation is practical, not foundational. Look for the issue with describing data using PMFs when there are thousands of distinct values.",
+      "explanation": "The lecture is clear that continuous random variables exist because discrete descriptions break down at scale — 45,000 meteorite weights or a binomial(1000, 0.6) cannot be usefully described with a PMF table. Continuous models trade some precision for a tractable description.",
+      "concept": "Why discrete becomes unwieldy at scale",
+      "difficulty": "easy"
+    },
+    {
+      "id": "q2",
+      "question": "Suppose you are modeling the weight of adult elephants in a population, and you have 50,000 measurements ranging from 2,200 kg to 6,800 kg. Which approach is most consistent with the lecture's argument?",
+      "options": [
+        "Build a PMF with one row per distinct weight value observed",
+        "Bin the data into intervals (e.g., 100 bins) and describe it with a histogram, then think of it as a continuous random variable",
+        "Round all weights to the nearest 1,000 kg and use a discrete random variable",
+        "Discard outliers and use only the central 50% of the data"
+      ],
+      "correctIndex": 1,
+      "hint": "The lecture's core move is from individual values to intervals via binning.",
+      "explanation": "Binning the continuous-valued data into intervals and treating the variable as continuous is exactly the move the lecture advocates. A 50,000-row PMF is unwieldy; aggressive rounding throws away real information; discarding outliers changes the question being asked.",
+      "concept": "From individual values to intervals (the key idea)",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q3",
+      "question": "Why does the lecture apply a logarithm to the meteorite weights before plotting the histogram?",
+      "options": [
+        "Logarithms make the data more random",
+        "The original range spans many orders of magnitude, and the log transformation compresses it into a range that plots and bins sensibly",
+        "Logarithms convert continuous data into discrete data",
+        "Probability theory requires log-transformed inputs for binomial-like data"
+      ],
+      "correctIndex": 1,
+      "hint": "The original range is 0.01 grams to 60 tons. What is the practical problem with plotting that on a linear x-axis?",
+      "explanation": "The log transform compresses the multiplicative scale into an additive one. 0.01 g to 60 tons spans about 10 orders of magnitude, which cannot be visualized linearly. log₂ maps the same range to about −6.6 to 25.8, which fits on a normal axis. The data is unchanged — only the representation is.",
+      "concept": "Log transformation of wide-ranging data",
+      "difficulty": "easy"
+    },
+    {
+      "id": "q4",
+      "question": "The lecture argues that moving to a continuous model involves a trade-off. What is given up, and what is gained?",
+      "options": [
+        "Given up: nothing. Gained: mathematical elegance.",
+        "Given up: precision about individual values. Gained: a tractable, simpler description of the distribution.",
+        "Given up: the ability to compute any probabilities. Gained: cleaner notation.",
+        "Given up: the random variable itself. Gained: a deterministic model."
+      ],
+      "correctIndex": 1,
+      "hint": "The lecture explicitly names the trade-off: you lose access to individual values, but you can now actually work with the distribution.",
+      "explanation": "Once you bin into intervals, you cannot recover the exact value an observation took — that precision is gone. In exchange, you can describe a distribution with a single curve (a density) instead of thousands of individual probabilities, and you can do calculations on it. The lecture argues this trade-off is almost always worth it when the alphabet is large.",
+      "concept": "The precision-tractability trade-off",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q5",
+      "question": "The lecture argues that even in the physical world, individual real-valued measurements are 'really intervals.' Which statement best captures this argument?",
+      "options": [
+        "Real numbers don't exist in physical reality",
+        "Any physical measurement has finite precision, so a reported value of 0.01 g really represents 'somewhere in a small interval around 0.01 g' — intervals are the natural representation anyway",
+        "Measurement devices introduce random noise that must be modeled as a continuous random variable",
+        "Statistical theory requires us to round all measurements"
+      ],
+      "correctIndex": 1,
+      "hint": "Think about what your scale actually tells you when it reads '0.01 g' — is that the exact weight, or a value within the scale's resolution?",
+      "explanation": "The lecture makes a physical-realism argument for intervals: no measurement device has infinite precision, so reported values are already intervals in disguise. Modeling with continuous distributions on intervals is therefore not a loss of physical fidelity — it matches how measurement actually works.",
+      "concept": "The precision-tractability trade-off",
+      "difficulty": "medium"
+    },
+    {
+      "id": "q6",
+      "question": "For a binomial(100, 0.6) random variable, computing P(50 ≤ X ≤ 60) exactly requires summing ¹⁰⁰Cₖ p^k (1−p)^(100−k) for k = 50 to 60. Why does the lecture call this 'unwieldy' and suggest a continuous approximation?",
+      "options": [
+        "The sum is mathematically incorrect",
+        "Each individual term involves combinatorial numbers and powers that are difficult to compute and interpret, even though the final answer is well-defined",
+        "Binomial random variables cannot be summed",
+        "The probability is always exactly 0.5"
+      ],
+      "correctIndex": 1,
+      "hint": "Think about computing ¹⁰⁰C₅₀ by hand — what's the practical issue?",
+      "explanation": "The sum is correct in principle, but each term involves enormous combinatorial numbers (¹⁰⁰C₅₀ is about 10²⁹) multiplied by tiny powers of probabilities. The result is well-defined, but it gives you no intuition about where the mass is. A continuous approximation — which we will see in lecture 4.3 — gives a simple formula that produces nearly the same answer with much less effort.",
+      "concept": "Binomial PMF shape: motivation for continuous",
+      "difficulty": "hard"
+    },
+    {
+      "id": "q7",
+      "question": "Suppose you take the meteorite log-weight histogram and double the number of bins, then double it again, and again. What does the lecture suggest happens in the limit?",
+      "options": [
+        "The histogram becomes useless because each bin has too few data points",
+        "The histogram shape converges to a smooth curve — a continuous probability density",
+        "The histogram becomes equivalent to the original PMF",
+        "The histogram disappears entirely"
+      ],
+      "correctIndex": 1,
+      "hint": "The lecture suggests intervals can be made arbitrarily small. What kind of object does a histogram with very small bins start to look like?",
+      "explanation": "As bins shrink (with enough data to fill them), the histogram's stepped silhouette smooths into a continuous curve — the probability density. This is the conceptual bridge to continuous random variables: a continuous model is what the histogram is trying to be in the limit of infinitely many, infinitely narrow bins.",
+      "concept": "Histograms: binning and counting",
+      "difficulty": "medium"
+    }
+  ],
+  "relatedVideos": []
+}
