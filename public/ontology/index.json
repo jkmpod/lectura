@@ -1,0 +1,5 @@
+{
+  "ontologies": [
+    { "id": "statistics-crv", "title": "Continuous Random Variables & CDF", "file": "statistics-crv.json" }
+  ]
+}

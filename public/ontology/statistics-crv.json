@@ -1,0 +1,724 @@
+{
+  "metadata": {
+    "domain": "Statistics for Data Science",
+    "module": "Continuous Random Variables and CDF",
+    "source_lectures": [
+      "Lecture 4.1 - Continuous Random Variables",
+      "Lecture 4.2 - Cumulative Distribution Function",
+      "Lecture 4.3 - Approximation of CDF from Discrete to Continuous"
+    ],
+    "kind_definitions": {
+      "concept": "A general idea or object (e.g., 'Continuous Random Variable')",
+      "property": "An attribute of another concept (e.g., 'CDF Range' is a property of CDF)",
+      "principle": "A general rule or theorem (e.g., 'Complement Rule')",
+      "structural_element": "A part of another concept (e.g., 'CDF Jump' is part of 'Stepwise CDF')",
+      "application": "A specific use of a concept (e.g., 'Approximate Interval Computation')",
+      "visualization": "A graphical representation method",
+      "relation": "A connection between concepts"
+    }
+  },
+  "concepts": [
+    {
+      "id": "CRV_001",
+      "label": "Discrete Random Variable",
+      "description": "A random variable that takes values from a countable set, typically represented using a probability mass function (PMF)."
+    },
+    {
+      "id": "CRV_002",
+      "label": "Probability Mass Function",
+      "description": "A function that assigns probabilities to each value of a discrete random variable. The PMF satisfies that probabilities are non-negative and sum to 1."
+    },
+    {
+      "id": "CRV_003",
+      "label": "Alphabet of a Random Variable",
+      "description": "The set of all possible values that a random variable can take. Large alphabets motivate continuous approximations."
+    },
+    {
+      "id": "CRV_004",
+      "label": "Large Alphabet Problem",
+      "description": "The computational and representational difficulty that arises when a random variable takes a very large number of values, making PMF-based calculations unwieldy."
+    },
+    {
+      "id": "CRV_005",
+      "kind": "concept",
+      "parent_id": "CRV_049",
+      "label": "Continuous Approximation",
+      "description": "A modeling approach where a discrete random variable with many possible values is approximated using continuous methods to simplify analysis and computation."
+    },
+    {
+      "id": "CRV_006",
+      "label": "Continuous Random Variable",
+      "description": "A random variable modeled using continuous distributions, where probabilities are associated with intervals rather than individual values."
+    },
+    {
+      "id": "CRV_007",
+      "label": "Interval-Based Modeling",
+      "description": "The shift from focusing on individual values of a random variable to focusing on intervals or ranges of values."
+    },
+    {
+      "id": "CRV_008",
+      "label": "Histogram",
+      "description": "A graphical representation of data created by dividing values into intervals (bins) and counting the number of observations in each interval."
+    },
+    {
+      "id": "CRV_009",
+      "label": "Bin",
+      "description": "An interval used in a histogram to group nearby values together for counting and visualization."
+    },
+    {
+      "id": "CRV_010",
+      "label": "Count Frequency",
+      "description": "The number of observations that fall within a specified interval or bin."
+    },
+    {
+      "id": "CRV_011",
+      "label": "Data Transformation",
+      "description": "A mathematical modification of data values to improve interpretability, visualization, or modeling performance."
+    },
+    {
+      "id": "CRV_012",
+      "label": "Logarithmic Transformation",
+      "description": "A transformation that applies the logarithm function to data values, often used to compress wide numeric ranges into manageable scales."
+    },
+    {
+      "id": "CRV_013",
+      "label": "Meteorite Weight Dataset",
+      "description": "An example dataset used to motivate continuous modeling, involving meteorite weights spanning a very large numerical range."
+    },
+    {
+      "id": "CRV_014",
+      "label": "Binomial Distribution",
+      "description": "A discrete probability distribution describing the number of successes in a fixed number of independent Bernoulli trials."
+    },
+    {
+      "id": "CRV_015",
+      "kind": "concept",
+      "label": "Bernoulli Trial",
+      "description": "A binary random experiment with two outcomes, success and failure. Included primarily as prerequisite background for understanding Bernoulli and Binomial random variables rather than as a primary lecture concept."
+    },
+    {
+      "id": "CRV_016",
+      "label": "Bernoulli Random Variable",
+      "description": "A discrete random variable taking values 0 and 1 with probabilities p and 1-p respectively."
+    },
+    {
+      "id": "CRV_017",
+      "label": "Uniform Discrete Distribution",
+      "description": "A discrete distribution where all possible values occur with equal probability."
+    },
+    {
+      "id": "CRV_018",
+      "kind": "concept",
+      "parent_id": "CRV_005",
+      "label": "Approximation Error",
+      "description": "The difference between the exact value obtained from a discrete model and the approximate value obtained from a continuous model."
+    },
+    {
+      "id": "CRV_019",
+      "kind": "principle",
+      "related_to": [
+        "CRV_005",
+        "CRV_049"
+      ],
+      "label": "Precision vs Simplicity Trade-off",
+      "description": "The balance between exact discrete modeling and simpler approximate continuous modeling."
+    },
+    {
+      "id": "CRV_020",
+      "kind": "concept",
+      "label": "Cumulative Distribution Function",
+      "aliases": [
+        "Distribution Function",
+        "CDF"
+      ],
+      "description": "A function F(x) = P(X \u00e2\u2030\u00a4 x) that gives the probability that a random variable takes a value less than or equal to x."
+    },
+    {
+      "id": "CRV_022",
+      "kind": "property",
+      "parent_id": "CRV_020",
+      "label": "CDF Range",
+      "description": "The property that the values of a cumulative distribution function always lie between 0 and 1."
+    },
+    {
+      "id": "CRV_023",
+      "kind": "property",
+      "parent_id": "CRV_020",
+      "label": "Non-Decreasing Function",
+      "description": "A function whose value never decreases as the input increases. Every valid CDF must satisfy this property."
+    },
+    {
+      "id": "CRV_024",
+      "kind": "property",
+      "parent_id": "CRV_020",
+      "label": "CDF Limit at Negative Infinity",
+      "description": "The property that the CDF approaches 0 as x approaches negative infinity."
+    },
+    {
+      "id": "CRV_025",
+      "kind": "property",
+      "parent_id": "CRV_020",
+      "label": "CDF Limit at Positive Infinity",
+      "description": "The property that the CDF approaches 1 as x approaches positive infinity."
+    },
+    {
+      "id": "CRV_026",
+      "kind": "property",
+      "parent_id": "CRV_020",
+      "label": "Right Continuity",
+      "description": "The property that a cumulative distribution function must be continuous from the right at every point."
+    },
+    {
+      "id": "CRV_027",
+      "label": "Interval Probability",
+      "description": "The probability that a random variable lies within a specified interval, commonly computed using differences of CDF values."
+    },
+    {
+      "id": "CRV_028",
+      "kind": "relation",
+      "parent_id": "CRV_027",
+      "label": "CDF Difference Rule",
+      "description": "The rule P(a < X \u00e2\u2030\u00a4 b) = F(b) - F(a), used to compute interval probabilities from a CDF."
+    },
+    {
+      "id": "CRV_029",
+      "kind": "concept",
+      "parent_id": "CRV_020",
+      "label": "Stepwise CDF",
+      "description": "A cumulative distribution function associated with discrete random variables, characterized by jumps at discrete values."
+    },
+    {
+      "id": "CRV_030",
+      "kind": "structural_element",
+      "parent_id": "CRV_029",
+      "label": "CDF Jump",
+      "description": "A discontinuity in a discrete CDF whose magnitude equals the probability assigned to that value."
+    },
+    {
+      "id": "CRV_031",
+      "kind": "structural_element",
+      "parent_id": "CRV_029",
+      "label": "Flat Region in CDF",
+      "description": "A portion of a CDF where the function remains constant, indicating zero probability mass in that interval."
+    },
+    {
+      "id": "CRV_032",
+      "kind": "concept",
+      "parent_id": "CRV_005",
+      "label": "Discrete-to-Continuous Transition",
+      "description": "The conceptual shift where discrete distributions with many small jumps begin to resemble smooth continuous curves."
+    },
+    {
+      "id": "CRV_033",
+      "label": "Scaling",
+      "description": "Maintaining a fixed visualization scale while increasing the number of possible values to observe convergence toward continuity."
+    },
+    {
+      "id": "CRV_034",
+      "kind": "concept",
+      "parent_id": "CRV_020",
+      "label": "Continuous Distribution Function",
+      "aliases": [
+        "Smooth CDF",
+        "Continuous CDF"
+      ],
+      "description": "A cumulative distribution function that changes smoothly over intervals instead of through jumps."
+    },
+    {
+      "id": "CRV_036",
+      "label": "Probability of an Event",
+      "description": "A numerical measure between 0 and 1 representing the likelihood that an event occurs."
+    },
+    {
+      "id": "CRV_037",
+      "kind": "relation",
+      "label": "Complement Rule",
+      "description": "A probability rule stating that P(A^c) = 1 - P(A), often used with CDF calculations."
+    },
+    {
+      "id": "CRV_038",
+      "label": "Interval Inclusion Convention",
+      "description": "The specification of whether interval endpoints are included or excluded when defining probabilities."
+    },
+    {
+      "id": "CRV_039",
+      "label": "Probability Distribution Visualization",
+      "aliases": [
+        "Discrete Probability Visualization",
+        "Continuous Probability Visualization"
+      ],
+      "description": "Graphical representation of probability distributions using steps, bars, jumps, or smooth curves to summarize probability behavior."
+    },
+    {
+      "id": "CRV_041",
+      "kind": "application",
+      "parent_id": "CRV_005",
+      "label": "Approximate Interval Computation",
+      "description": "Estimating interval probabilities using a continuous approximation instead of exact discrete summation."
+    },
+    {
+      "id": "CRV_042",
+      "label": "Computational Complexity in PMF Calculations",
+      "description": "The difficulty of evaluating probabilities directly from PMFs when the number of terms or combinatorial factors becomes very large."
+    },
+    {
+      "id": "CRV_043",
+      "label": "Visualization-Based Modeling",
+      "description": "Using graphical structures such as histograms and CDF plots to motivate and construct probabilistic models."
+    },
+    {
+      "id": "CRV_044",
+      "label": "Empirical Data Modeling",
+      "description": "The process of constructing probability models from observed real-world data."
+    },
+    {
+      "id": "CRV_045",
+      "kind": "visualization",
+      "parent_id": "CRV_005",
+      "label": "Continuous Curve Approximation",
+      "description": "Representing many small discrete probability jumps using a single smooth curve for analytical convenience."
+    },
+    {
+      "id": "CRV_046",
+      "label": "Random Variable Support",
+      "description": "The subset of values where a random variable has non-zero probability or density."
+    },
+    {
+      "id": "CRV_047",
+      "label": "Probability Aggregation",
+      "description": "Combining probabilities across multiple values or intervals to compute event probabilities."
+    },
+    {
+      "id": "CRV_048",
+      "label": "Discrete Summation",
+      "description": "The exact addition of PMF values across discrete outcomes to compute probabilities."
+    },
+    {
+      "id": "CRV_049",
+      "kind": "principle",
+      "label": "Model Simplification",
+      "description": "The process of replacing a complex probabilistic representation with a simpler approximation that preserves useful behavior."
+    },
+    {
+      "id": "CRV_050",
+      "label": "Continuous Modeling Motivation",
+      "description": "The practical need for simpler, scalable, and computationally efficient probability models when analyzing large datasets or large alphabets."
+    }
+  ],
+  "lesson_mappings": [
+    {
+      "lesson_id": "stats2-4-1-continuous-rv-intro",
+      "title": "Continuous Random Variables: Introduction",
+      "concepts": [
+        {
+          "source_title": "Why discrete becomes unwieldy at scale",
+          "ontology_refs": [
+            "CRV_001",
+            "CRV_003",
+            "CRV_004",
+            "CRV_042",
+            "CRV_050"
+          ]
+        },
+        {
+          "source_title": "Binomial with large n: a first hint of the problem",
+          "ontology_refs": [
+            "CRV_014",
+            "CRV_004",
+            "CRV_042",
+            "CRV_049"
+          ]
+        },
+        {
+          "source_title": "Meteorite weights: a motivating dataset",
+          "ontology_refs": [
+            "CRV_013",
+            "CRV_043",
+            "CRV_044",
+            "CRV_050"
+          ]
+        },
+        {
+          "source_title": "Binomial revisited: combinatorial intractability",
+          "ontology_refs": [
+            "CRV_014",
+            "CRV_042",
+            "CRV_048"
+          ]
+        },
+        {
+          "source_title": "The precision-tractability trade-off",
+          "ontology_refs": [
+            "CRV_018",
+            "CRV_019",
+            "CRV_049"
+          ]
+        },
+        {
+          "source_title": "Log transformation of wide-ranging data",
+          "ontology_refs": [
+            "CRV_011",
+            "CRV_012",
+            "CRV_043"
+          ]
+        },
+        {
+          "source_title": "From individual values to intervals (the key idea)",
+          "ontology_refs": [
+            "CRV_007",
+            "CRV_006",
+            "CRV_032"
+          ]
+        },
+        {
+          "source_title": "Histograms: binning and counting",
+          "ontology_refs": [
+            "CRV_008",
+            "CRV_009",
+            "CRV_010",
+            "CRV_043"
+          ]
+        },
+        {
+          "source_title": "Binomial PMF shape: motivation for continuous",
+          "ontology_refs": [
+            "CRV_002",
+            "CRV_014",
+            "CRV_045",
+            "CRV_050"
+          ]
+        }
+      ],
+      "annotations": [
+        {
+          "annotation_id": "a1",
+          "ontology_refs": [
+            "CRV_001",
+            "CRV_002",
+            "CRV_004"
+          ]
+        },
+        {
+          "annotation_id": "a2",
+          "ontology_refs": [
+            "CRV_011",
+            "CRV_012",
+            "CRV_013"
+          ]
+        },
+        {
+          "annotation_id": "a3",
+          "ontology_refs": [
+            "CRV_007",
+            "CRV_004",
+            "CRV_019"
+          ]
+        },
+        {
+          "annotation_id": "a4",
+          "ontology_refs": [
+            "CRV_008",
+            "CRV_009",
+            "CRV_010",
+            "CRV_036"
+          ]
+        },
+        {
+          "annotation_id": "a5",
+          "ontology_refs": [
+            "CRV_014",
+            "CRV_020",
+            "CRV_041"
+          ]
+        },
+        {
+          "annotation_id": "a6",
+          "ontology_refs": [
+            "CRV_004",
+            "CRV_006",
+            "CRV_007",
+            "CRV_019",
+            "CRV_050"
+          ]
+        }
+      ]
+    },
+    {
+      "lesson_id": "stats2-4-2-cdf",
+      "title": "Cumulative Distribution Function",
+      "concepts": [
+        {
+          "source_title": "Definition: F_X(x) = P(X \u00e2\u2030\u00a4 x)",
+          "ontology_refs": [
+            "CRV_020",
+            "CRV_022",
+            "CRV_036"
+          ]
+        },
+        {
+          "source_title": "Interval probability formula F(b) \u00e2\u02c6\u2019 F(a)",
+          "ontology_refs": [
+            "CRV_027",
+            "CRV_028",
+            "CRV_047"
+          ]
+        },
+        {
+          "source_title": "Non-decreasing property",
+          "ontology_refs": [
+            "CRV_023",
+            "CRV_022"
+          ]
+        },
+        {
+          "source_title": "Limit properties at \u00c2\u00b1\u00e2\u02c6\u017e",
+          "ontology_refs": [
+            "CRV_024",
+            "CRV_025"
+          ]
+        },
+        {
+          "source_title": "Bernoulli example: CDF as a step function",
+          "ontology_refs": [
+            "CRV_016",
+            "CRV_020",
+            "CRV_029",
+            "CRV_030"
+          ]
+        },
+        {
+          "source_title": "Filled vs open circles (right-continuity)",
+          "ontology_refs": [
+            "CRV_026",
+            "CRV_038"
+          ]
+        },
+        {
+          "source_title": "Uniform on {1, ..., 6}: the staircase CDF",
+          "ontology_refs": [
+            "CRV_017",
+            "CRV_029",
+            "CRV_039"
+          ]
+        },
+        {
+          "source_title": "Recovering PMF from CDF: jumps = probabilities",
+          "ontology_refs": [
+            "CRV_002",
+            "CRV_020",
+            "CRV_030",
+            "CRV_031"
+          ]
+        },
+        {
+          "source_title": "General discrete CDF: same staircase structure",
+          "ontology_refs": [
+            "CRV_029",
+            "CRV_039",
+            "CRV_046"
+          ]
+        },
+        {
+          "source_title": "Uniform on {1, ..., 100} and interval probabilities",
+          "ontology_refs": [
+            "CRV_017",
+            "CRV_027",
+            "CRV_028",
+            "CRV_037",
+            "CRV_041"
+          ]
+        }
+      ],
+      "annotations": [
+        {
+          "annotation_id": "a1",
+          "ontology_refs": [
+            "CRV_020"
+          ]
+        },
+        {
+          "annotation_id": "a2",
+          "ontology_refs": [
+            "CRV_027",
+            "CRV_028"
+          ]
+        },
+        {
+          "annotation_id": "a3",
+          "ontology_refs": [
+            "CRV_026",
+            "CRV_029",
+            "CRV_030"
+          ]
+        },
+        {
+          "annotation_id": "a4",
+          "ontology_refs": [
+            "CRV_002",
+            "CRV_020",
+            "CRV_030"
+          ]
+        },
+        {
+          "annotation_id": "a5",
+          "ontology_refs": [
+            "CRV_017",
+            "CRV_018",
+            "CRV_041"
+          ]
+        },
+        {
+          "annotation_id": "a6",
+          "ontology_refs": [
+            "CRV_020",
+            "CRV_023",
+            "CRV_024",
+            "CRV_025",
+            "CRV_028",
+            "CRV_037"
+          ]
+        }
+      ]
+    },
+    {
+      "lesson_id": "stats2-4-3-cdf-discrete-to-continuous",
+      "title": "From Discrete to Continuous CDFs",
+      "concepts": [
+        {
+          "source_title": "Binomial CDF as n grows: from steps to a smooth curve",
+          "ontology_refs": [
+            "CRV_014",
+            "CRV_029",
+            "CRV_032",
+            "CRV_045"
+          ]
+        },
+        {
+          "source_title": "Why keeping the scale fixed matters",
+          "ontology_refs": [
+            "CRV_033",
+            "CRV_039"
+          ]
+        },
+        {
+          "source_title": "Meteorite CDF: small steps look continuous",
+          "ontology_refs": [
+            "CRV_013",
+            "CRV_032",
+            "CRV_034",
+            "CRV_045"
+          ]
+        },
+        {
+          "source_title": "Definition: CDF without a random variable",
+          "ontology_refs": [
+            "CRV_020",
+            "CRV_034"
+          ]
+        },
+        {
+          "source_title": "Four defining properties",
+          "ontology_refs": [
+            "CRV_022",
+            "CRV_023",
+            "CRV_024",
+            "CRV_025"
+          ]
+        },
+        {
+          "source_title": "Right-continuity (technical requirement)",
+          "ontology_refs": [
+            "CRV_026"
+          ]
+        },
+        {
+          "source_title": "Valid CDF examples: discrete and continuous",
+          "ontology_refs": [
+            "CRV_020",
+            "CRV_029",
+            "CRV_034"
+          ]
+        },
+        {
+          "source_title": "Uniform discrete approximated by F(x) = x/100",
+          "ontology_refs": [
+            "CRV_005",
+            "CRV_017",
+            "CRV_041",
+            "CRV_045"
+          ]
+        },
+        {
+          "source_title": "Approximation error: 7/100 vs 7.4/100",
+          "ontology_refs": [
+            "CRV_018",
+            "CRV_019",
+            "CRV_041"
+          ]
+        },
+        {
+          "source_title": "Binomial approximated by a logistic-like CDF",
+          "ontology_refs": [
+            "CRV_005",
+            "CRV_014",
+            "CRV_034",
+            "CRV_049"
+          ]
+        }
+      ],
+      "annotations": [
+        {
+          "annotation_id": "a1",
+          "ontology_refs": [
+            "CRV_014",
+            "CRV_032",
+            "CRV_033"
+          ]
+        },
+        {
+          "annotation_id": "a2",
+          "ontology_refs": [
+            "CRV_022",
+            "CRV_023",
+            "CRV_024",
+            "CRV_025",
+            "CRV_034"
+          ]
+        },
+        {
+          "annotation_id": "a3",
+          "ontology_refs": [
+            "CRV_020",
+            "CRV_034",
+            "CRV_032"
+          ]
+        },
+        {
+          "annotation_id": "a4",
+          "ontology_refs": [
+            "CRV_017",
+            "CRV_018",
+            "CRV_041"
+          ]
+        },
+        {
+          "annotation_id": "a5",
+          "ontology_refs": [
+            "CRV_005",
+            "CRV_014",
+            "CRV_034",
+            "CRV_045"
+          ]
+        },
+        {
+          "annotation_id": "a6",
+          "ontology_refs": [
+            "CRV_005",
+            "CRV_032",
+            "CRV_034"
+          ]
+        }
+      ]
+    }
+  ]
+}
