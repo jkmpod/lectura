@@ -49,9 +49,17 @@ function formatTime(seconds) {
   return `${m}:${String(sec).padStart(2, "0")}`;
 }
 
+// Returns a shuffled permutation of [0, 1, ..., n-1] for displaying quiz options
+// in a random order without mutating the underlying data. Each entry in the
+// returned array is an ORIGINAL index; the array position is the DISPLAY position.
+function permutationFor(question) {
+  if (!question?.options) return [];
+  return shuffle(question.options.map((_, i) => i));
+}
+
 export default function LessonPage() {
   const params = useParams();
-  const lessonId = params.id;
+  const lessonId = params?.id;
 
   const [lesson, setLesson] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -77,13 +85,22 @@ export default function LessonPage() {
     currentIdx: -1,
     showHint: false,
     userAnswer: null,
+    permutation: [],
   });
 
   // ---------- Load lesson ----------
   useEffect(() => {
+    // Wait for the route param to be ready before fetching.
+    // params.id is undefined on the very first render in some Next.js
+    // configurations; we just skip the fetch until it's defined.
+    if (!lessonId) {
+      console.warn("[Lectura] No lesson id from useParams() yet; params=", params);
+      return;
+    }
     async function loadLesson() {
       try {
         const indexRes = await fetch("/lessons/index.json");
+        if (!indexRes.ok) throw new Error("Could not load lesson index");
         const index = await indexRes.json();
         const entry = index.lessons.find((l) => l.id === lessonId);
         if (!entry) throw new Error(`Lesson "${lessonId}" not found`);
@@ -93,7 +110,7 @@ export default function LessonPage() {
         const data = await res.json();
         setLesson(data);
       } catch (e) {
-        console.error(e);
+        console.error("[Lectura]", e);
         setError(e.message);
       } finally {
         setLoading(false);
@@ -110,6 +127,7 @@ export default function LessonPage() {
         currentIdx: -1,
         showHint: false,
         userAnswer: null,
+        permutation: [],
       });
     }
   }, [lesson]);
@@ -185,7 +203,7 @@ export default function LessonPage() {
     if (ann.behavior === "marker") return;
     if (ann.behavior === "pause") {
       playerRef.current?.pauseVideo?.();
-      setPauseModal({ annotation: ann, userAnswer: null, showHint: false });
+      setPauseModal({ annotation: ann, userAnswer: null, showHint: false, permutation: permutationFor(ann) });
       return;
     }
     setSoftToast({ annotation: ann });
@@ -249,16 +267,27 @@ export default function LessonPage() {
   })();
 
   const startQuiz = () =>
-    setQuiz((q) => ({ ...q, currentIdx: 0, showHint: false, userAnswer: null }));
+    setQuiz((q) => {
+      const firstQ = lesson.questions.find((quest) => quest.id === q.queue[0]);
+      return { ...q, currentIdx: 0, showHint: false, userAnswer: null, permutation: permutationFor(firstQ) };
+    });
   const nextQuestion = () =>
-    setQuiz((q) => ({ ...q, currentIdx: q.currentIdx + 1, showHint: false, userAnswer: null }));
-  const reshuffleAndRestart = () =>
+    setQuiz((q) => {
+      const nextIdx = q.currentIdx + 1;
+      const nextQ = lesson.questions.find((quest) => quest.id === q.queue[nextIdx]);
+      return { ...q, currentIdx: nextIdx, showHint: false, userAnswer: null, permutation: permutationFor(nextQ) };
+    });
+  const reshuffleAndRestart = () => {
+    const newQueue = shuffle(lesson.questions.map((qq) => qq.id));
+    const firstQ = lesson.questions.find((qq) => qq.id === newQueue[0]);
     setQuiz({
-      queue: shuffle(lesson.questions.map((q) => q.id)),
+      queue: newQueue,
       currentIdx: 0,
       showHint: false,
       userAnswer: null,
+      permutation: permutationFor(firstQ),
     });
+  };
   const submitAnswer = (idx) => setQuiz((q) => ({ ...q, userAnswer: idx }));
 
   // ---------- Pause-modal quiz helpers ----------
@@ -274,7 +303,7 @@ export default function LessonPage() {
   if (loading) {
     return (
       <div style={styles.loadingPage}>
-        <style>{globalCSS}</style>
+        <style suppressHydrationWarning>{globalCSS}</style>
         <div style={styles.loadingDot} />
         <p style={styles.loadingMsg}>Opening the lesson…</p>
       </div>
@@ -284,7 +313,7 @@ export default function LessonPage() {
   if (error || !lesson) {
     return (
       <div style={styles.loadingPage}>
-        <style>{globalCSS}</style>
+        <style suppressHydrationWarning>{globalCSS}</style>
         <p style={styles.loadingMsg}>{error || "Lesson not found"}</p>
         <Link href="/" style={styles.backLink}>← Back to library</Link>
       </div>
@@ -315,7 +344,7 @@ export default function LessonPage() {
 
   return (
     <div style={styles.app}>
-      <style>{globalCSS}</style>
+      <style suppressHydrationWarning>{globalCSS}</style>
 
       <header style={styles.header}>
         <div style={styles.brand}>
@@ -491,10 +520,14 @@ export default function LessonPage() {
                     </div>
                     <h3 style={styles.questionText}>{currentQuestion.question}</h3>
                     <div style={styles.optionsList}>
-                      {currentQuestion.options.map((opt, i) => {
+                      {(quiz.permutation.length === currentQuestion.options.length
+                        ? quiz.permutation
+                        : currentQuestion.options.map((_, i) => i)
+                      ).map((origIdx, displayPos) => {
+                        const opt = currentQuestion.options[origIdx];
                         const answered = quiz.userAnswer !== null;
-                        const isCorrect = i === currentQuestion.correctIndex;
-                        const isSelected = i === quiz.userAnswer;
+                        const isCorrect = origIdx === currentQuestion.correctIndex;
+                        const isSelected = origIdx === quiz.userAnswer;
                         let optStyle = { ...styles.option };
                         if (answered) {
                           if (isCorrect) optStyle = { ...optStyle, ...styles.optionCorrect };
@@ -503,12 +536,12 @@ export default function LessonPage() {
                         }
                         return (
                           <button
-                            key={i}
-                            onClick={() => !answered && submitAnswer(i)}
+                            key={origIdx}
+                            onClick={() => !answered && submitAnswer(origIdx)}
                             disabled={answered}
                             style={optStyle}
                           >
-                            <span style={styles.optionLetter}>{String.fromCharCode(65 + i)}</span>
+                            <span style={styles.optionLetter}>{String.fromCharCode(65 + displayPos)}</span>
                             <span>{opt}</span>
                           </button>
                         );
@@ -735,9 +768,13 @@ function SoftToast({ annotation, onClose }) {
 // PAUSE MODAL
 // ============================================================================
 function PauseModal({ state, onAnswer, onToggleHint, onContinue }) {
-  const { annotation: a, userAnswer, showHint } = state;
+  const { annotation: a, userAnswer, showHint, permutation } = state;
   const answered = userAnswer !== null;
   const isCorrect = answered && userAnswer === a.correctIndex;
+  const displayOrder =
+    permutation && permutation.length === a.options.length
+      ? permutation
+      : a.options.map((_, i) => i);
 
   return (
     <div style={modalStyles.scrim}>
@@ -749,9 +786,10 @@ function PauseModal({ state, onAnswer, onToggleHint, onContinue }) {
         {a.title && <div style={modalStyles.title}>{a.title}</div>}
         <h3 style={modalStyles.question}>{a.question}</h3>
         <div style={modalStyles.options}>
-          {a.options.map((opt, i) => {
-            const isCorrectOpt = i === a.correctIndex;
-            const isSelected = i === userAnswer;
+          {displayOrder.map((origIdx, displayPos) => {
+            const opt = a.options[origIdx];
+            const isCorrectOpt = origIdx === a.correctIndex;
+            const isSelected = origIdx === userAnswer;
             let s = { ...modalStyles.option };
             if (answered) {
               if (isCorrectOpt) s = { ...s, ...modalStyles.optionCorrect };
@@ -760,12 +798,12 @@ function PauseModal({ state, onAnswer, onToggleHint, onContinue }) {
             }
             return (
               <button
-                key={i}
+                key={origIdx}
                 disabled={answered}
-                onClick={() => !answered && onAnswer(i)}
+                onClick={() => !answered && onAnswer(origIdx)}
                 style={s}
               >
-                <span style={modalStyles.letter}>{String.fromCharCode(65 + i)}</span>
+                <span style={modalStyles.letter}>{String.fromCharCode(65 + displayPos)}</span>
                 <span>{opt}</span>
               </button>
             );
@@ -830,7 +868,7 @@ const fontBody = `'Inter', -apple-system, BlinkMacSystemFont, sans-serif`;
 const fontMono = `'JetBrains Mono', 'Courier New', monospace`;
 
 const globalCSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+  @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap");
   * { box-sizing: border-box; }
   body { margin: 0; background: ${colors.paper}; }
   @keyframes pulse { 0%, 100% { opacity: 0.3; transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.1); } }
