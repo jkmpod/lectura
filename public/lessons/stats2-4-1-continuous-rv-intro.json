@@ -82,7 +82,11 @@
         "0": "Aesthetic answer that misses the practical pressure behind the move",
         "2": "Conflates representation with computation; the lecture's point isn't about floating-point but about table size",
         "3": "Inverts the situation: discrete RVs are fine, they just become unwieldy"
-      }
+      },
+      "concept_tags": [
+        "CRV_007",
+        "CRV_004"
+      ]
     },
     {
       "id": "a4",
@@ -104,7 +108,12 @@
         "0": "Decimal-shift error: divided 1800 by an order of magnitude too large (450,000 not 45,000)",
         "2": "Decimal-shift error in the other direction: divided 1800 by 4,500 (counting just the central bin region)",
         "3": "Forgot to normalize at all — reported the raw count as the probability"
-      }
+      },
+      "concept_tags": [
+        "CRV_010",
+        "CRV_008",
+        "CRV_036"
+      ]
     },
     {
       "id": "a5",
@@ -371,7 +380,12 @@
         "0": "Conflates the motivation with foundational rigor; the lecture explicitly motivates from practical intractability, not mathematical formalism",
         "2": "A common but wrong physical-realism argument; the lecture notes physical quantities are also intervals in disguise but this isn't the primary motivation",
         "3": "Pedagogical-difficulty framing; the lecture in fact treats continuous as MORE technically involved than discrete"
-      }
+      },
+      "concept_tags": [
+        "CRV_004",
+        "CRV_050",
+        "CRV_049"
+      ]
     },
     {
       "id": "q2",
@@ -391,7 +405,12 @@
         "0": "Reproduces the very problem the lecture is solving — a giant unwieldy PMF",
         "2": "A 'compromise' that loses precision and still gives a clunky 47-bin discrete model; the lecture argues binning is the right move but to continuous, not to coarser discrete",
         "3": "Conflates outlier handling with model choice; outliers are a separate concern and discarding them isn't a modeling decision"
-      }
+      },
+      "concept_tags": [
+        "CRV_007",
+        "CRV_008",
+        "CRV_050"
+      ]
     },
     {
       "id": "q3",
@@ -411,7 +430,12 @@
         "0": "A common confusion: thinking transformations change the data's randomness rather than its presentation",
         "2": "Conflates the log transform with the binning step; they're independent operations that the lecture happens to apply together",
         "3": "Invents a non-existent theoretical requirement; logs are a useful trick, not a prerequisite of any distribution"
-      }
+      },
+      "concept_tags": [
+        "CRV_012",
+        "CRV_011",
+        "CRV_013"
+      ]
     },
     {
       "id": "q4",
@@ -431,7 +455,12 @@
         "0": "Denies that any trade-off occurs; misses that the lecture is explicit about giving up per-value precision",
         "2": "Half-right: precision goes, but it's not 'the ability to compute exact probabilities of intervals' — interval probabilities are exactly what the continuous model gives you",
         "3": "Misunderstands the continuous-RV framework; the random variable concept is retained, only its description changes"
-      }
+      },
+      "concept_tags": [
+        "CRV_019",
+        "CRV_018",
+        "CRV_005"
+      ]
     },
     {
       "id": "q5",
@@ -451,7 +480,10 @@
         "0": "Philosophical overreach: the lecture doesn't claim real numbers don't exist, just that measurement is finite-precision",
         "2": "Confuses measurement precision with measurement noise — two different things; noise is a separate modeling concern",
         "3": "Inverts the argument; the lecture observes that measurement is intrinsically discretized, not that probability theory imposes it"
-      }
+      },
+      "concept_tags": [
+        "CRV_007"
+      ]
     },
     {
       "id": "q6",
@@ -471,7 +503,12 @@
         "0": "Misunderstands approximation; the exact discrete answer is correct, just hard to compute. The continuous form is the approximation, not the truth",
         "2": "Random plausible-sounding wrong answer to test reading comprehension",
         "3": "Confuses 'summing terms of a single distribution' with some other operation; binomials are perfectly summable across their support"
-      }
+      },
+      "concept_tags": [
+        "CRV_042",
+        "CRV_014",
+        "CRV_048"
+      ]
     },
     {
       "id": "q7",
@@ -491,7 +528,12 @@
         "0": "True at any finite dataset but misses the conceptual point — the lecture is making an idealized limiting argument, not a practical-sample-size one",
         "2": "Inverts the direction: the histogram approaches the continuous limit, not the original PMF",
         "3": "Confuses limit-of-binning with concentration; a histogram doesn't collapse to a point under refinement"
-      }
+      },
+      "concept_tags": [
+        "CRV_045",
+        "CRV_032",
+        "CRV_008"
+      ]
     }
   ],
   "relatedVideos": []

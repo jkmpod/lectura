@@ -78,7 +78,11 @@
         "0": "Forgot to subtract the lower CDF value; took just F_X(5)",
         "2": "Read off the wrong endpoint, F_X(2), as if the lower value were the answer",
         "3": "Added instead of subtracted (then awkwardly clipped to 1) — sign error revealing impossible probabilities"
-      }
+      },
+      "concept_tags": [
+        "CRV_028",
+        "CRV_027"
+      ]
     },
     {
       "id": "a3",
@@ -108,7 +112,11 @@
         "0": "Read the wrong jump — picked the first one (at x = 3) without matching to the asked value",
         "2": "Reported the CDF height after the jump (0.2 + 0.5 = 0.7) instead of the jump size itself",
         "3": "Read the wrong jump — picked the last one (at x = 10) without matching to the asked value"
-      }
+      },
+      "concept_tags": [
+        "CRV_030",
+        "CRV_002"
+      ]
     },
     {
       "id": "a5",
@@ -430,7 +438,10 @@
         "0": "Conflates PMF with CDF — a foundational confusion this lecture is explicitly addressing",
         "2": "Off-by-one inequality error: strict less-than instead of less-than-or-equal; produces left-continuity instead of right-continuity",
         "3": "Confuses CDF with survival function S(x) = 1 − F_X(x), a related but distinct object"
-      }
+      },
+      "concept_tags": [
+        "CRV_020"
+      ]
     },
     {
       "id": "q2",
@@ -450,7 +461,11 @@
         "0": "Forgot to subtract the lower endpoint; treated F_X(9) alone as the answer",
         "2": "Sign error — added instead of subtracted; produces values that can exceed 1, which should immediately flag the mistake",
         "3": "Misapplied a 'midpoint' or 'average' intuition; CDFs don't combine that way"
-      }
+      },
+      "concept_tags": [
+        "CRV_028",
+        "CRV_027"
+      ]
     },
     {
       "id": "q3",
@@ -470,7 +485,13 @@
         "0": "Genuinely required, not the exception — but a student who confused 'non-decreasing' with 'strictly increasing' might wrongly think this is the loose property",
         "2": "Genuinely required and unambiguous; a student picking this might be guessing the question is a trick about boundary behavior",
         "3": "Genuinely required; a student picking this is confusing 'takes values in [0,1]' (probability axiom) with 'must equal 0 or 1' (which is false)"
-      }
+      },
+      "concept_tags": [
+        "CRV_022",
+        "CRV_023",
+        "CRV_024",
+        "CRV_025"
+      ]
     },
     {
       "id": "q4",
@@ -490,7 +511,12 @@
         "0": "Inequality error: treats F_X(0) as if the inequality were strict (< 0), missing the right-continuity convention",
         "2": "Reads off P(X = 1) by mistake — perhaps confused the question about Bernoulli's two values",
         "3": "Confuses 'discrete CDF' with 'instantly saturating'; only true for x ≥ the largest value (1, not 0)"
-      }
+      },
+      "concept_tags": [
+        "CRV_016",
+        "CRV_029",
+        "CRV_026"
+      ]
     },
     {
       "id": "q5",
@@ -510,7 +536,12 @@
         "0": "PMF/CDF confusion: reads the jump heights as CDF values, not as jump-step probabilities",
         "2": "Cumulative confusion: adds jumps progressively, reporting the CDF height at each step instead of the individual jump size",
         "3": "Reversed assignment: maps jump sizes to values in reverse order (0.25 to x=2 instead of x=8)"
-      }
+      },
+      "concept_tags": [
+        "CRV_030",
+        "CRV_002",
+        "CRV_029"
+      ]
     },
     {
       "id": "q6",
@@ -530,7 +561,12 @@
         "0": "Forgot to take the complement — reports F_X(87) directly when the question asks about the right tail",
         "2": "Confuses 'P(X > 87)' with 'P(X = 88)' or 'the probability of the next single value', getting 1/100",
         "3": "Correct arithmetic but wrong setup; subtracts from F_X(0) = 0 instead of taking the complement"
-      }
+      },
+      "concept_tags": [
+        "CRV_037",
+        "CRV_017",
+        "CRV_020"
+      ]
     },
     {
       "id": "q7",
@@ -550,7 +586,11 @@
         "0": "Direct application of the formula without adjusting for the lower-endpoint exclusion; off-by-one — drops X = 3",
         "2": "Shifts the wrong endpoint; the upper end is already included in the formula, no adjustment needed there",
         "3": "Forgot that interval probabilities are differences of CDF values, not sums — produces a value possibly exceeding 1"
-      }
+      },
+      "concept_tags": [
+        "CRV_038",
+        "CRV_028"
+      ]
     },
     {
       "id": "q8",
@@ -570,7 +610,12 @@
         "0": "Conflates the CDF value F_X(x) with the PMF value P(X = x); a common foundational confusion",
         "2": "Treats the absence-of-jump as a definitional gap rather than as zero probability; the CDF is still well-defined and equals zero-step at flat points",
         "3": "Confuses CDF complement with PMF; survival 1 − F_X(x) is not the same as point mass P(X = x)"
-      }
+      },
+      "concept_tags": [
+        "CRV_031",
+        "CRV_029",
+        "CRV_002"
+      ]
     }
   ],
   "relatedVideos": []

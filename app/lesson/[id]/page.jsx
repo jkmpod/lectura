@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
 // ============================================================================
 // LECTURA — Lesson Player (JSON-driven, with timeline annotations)
@@ -57,9 +57,16 @@ function permutationFor(question) {
   return shuffle(question.options.map((_, i) => i));
 }
 
-export default function LessonPage() {
+// The inner component uses useSearchParams (for ?t=), which Next.js requires
+// to be wrapped in a Suspense boundary in production builds. The default
+// export below provides that boundary.
+function LessonPageInner() {
   const params = useParams();
+  const searchParams = useSearchParams();
   const lessonId = params?.id;
+  // Optional deep-link: /lesson/<id>?t=<seconds> seeks to that timestamp on load
+  const initialSeekParam = searchParams?.get("t");
+  const initialSeek = initialSeekParam ? parseFloat(initialSeekParam) : null;
 
   const [lesson, setLesson] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -141,7 +148,32 @@ export default function LessonPage() {
       playerRef.current = new window.YT.Player("yt-player", {
         videoId: lesson.youtubeId,
         playerVars: { rel: 0, modestbranding: 1 },
-        events: { onReady: startTimePolling },
+        events: {
+          onReady: () => {
+            // If a `?t=<seconds>` query param was provided, seek there before
+            // starting the polling loop. We deliberately do NOT autoplay —
+            // browsers often block autoplay-with-sound on first load, and a
+            // silent jump is a less surprising UX than a partial-state seek.
+            if (initialSeek !== null && initialSeek > 0 && playerRef.current?.seekTo) {
+              try {
+                playerRef.current.seekTo(initialSeek, true);
+                lastTimeRef.current = initialSeek;
+                // Mark annotations strictly before the seek as already fired,
+                // so they don't pile up on the user when polling starts.
+                if (lesson?.annotations) {
+                  for (const ann of lesson.annotations) {
+                    if (ann.timestamp < initialSeek) {
+                      firedAnnotationsRef.current.add(ann.id);
+                    }
+                  }
+                }
+              } catch (e) {
+                console.warn("[Lectura] initial seek failed", e);
+              }
+            }
+            startTimePolling();
+          },
+        },
       });
     };
 
@@ -1023,3 +1055,19 @@ const modalStyles = {
   explLabel: { fontSize: 10, textTransform: "uppercase", letterSpacing: "0.15em", color: colors.inkMute, fontFamily: fontBody, fontWeight: 500 },
   continueRow: { display: "flex", justifyContent: "flex-end", paddingTop: 14, borderTop: `1px solid ${colors.rule}` },
 };
+
+// Default export wraps the inner component in a Suspense boundary, which
+// Next.js requires for any client component using useSearchParams.
+export default function LessonPage() {
+  return (
+    <Suspense fallback={
+      <div style={styles.loadingPage}>
+        <style suppressHydrationWarning>{globalCSS}</style>
+        <div style={styles.loadingDot} />
+        <p style={styles.loadingMsg}>Opening the lesson…</p>
+      </div>
+    }>
+      <LessonPageInner />
+    </Suspense>
+  );
+}

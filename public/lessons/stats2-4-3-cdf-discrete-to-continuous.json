@@ -78,7 +78,11 @@
         "0": "Constant value never reaches 1 (no limit at +∞); also never reaches 0 at −∞. Fails two of the four limit properties at once",
         "2": "1 − x² is not non-decreasing — it decreases from x = 0 outward; also doesn't approach 0 at −∞ (it just becomes 0 at x = ±1)",
         "3": "Oscillates with sin; not non-decreasing. Clipping to [0,1] doesn't fix the non-monotonic shape"
-      }
+      },
+      "concept_tags": [
+        "CRV_023",
+        "CRV_034"
+      ]
     },
     {
       "id": "a3",
@@ -108,7 +112,12 @@
         "0": "Assumes the approximation matches the exact answer at non-integer endpoints — but that's precisely where the two diverge",
         "2": "Forgot to subtract the lower endpoint; reported F(10.6) alone",
         "3": "Treats the approximation as needing additional inputs; in fact, F(x) = x/100 is self-contained and can be applied directly"
-      }
+      },
+      "concept_tags": [
+        "CRV_041",
+        "CRV_017",
+        "CRV_005"
+      ]
     },
     {
       "id": "a5",
@@ -380,7 +389,12 @@
         "0": "Inverts 'similar in shape' with 'identical'; the CDFs converge in shape but not in absolute values (mean shifts with n)",
         "2": "Confuses 'shifts' with 'concentrates'; the binomial CDF does concentrate around np but doesn't 'exit the range' on the same axes",
         "3": "Inverts the direction of the observation; jumps become smaller and more numerous, but visually smoother, not 'more jumpy'"
-      }
+      },
+      "concept_tags": [
+        "CRV_032",
+        "CRV_033",
+        "CRV_014"
+      ]
     },
     {
       "id": "q2",
@@ -400,7 +414,14 @@
         "0": "Confuses density-function properties (integrating to 1) with CDF properties (limiting to 1); also wrongly requires continuity and strict increase",
         "2": "Imposes too many requirements: differentiability and left-continuity are both incorrect (CDFs are right-continuous and can have jumps)",
         "3": "Restricts to discrete-only CDFs; this set of properties would exclude all continuous CDFs from the definition"
-      }
+      },
+      "concept_tags": [
+        "CRV_022",
+        "CRV_023",
+        "CRV_024",
+        "CRV_025",
+        "CRV_034"
+      ]
     },
     {
       "id": "q3",
@@ -420,7 +441,12 @@
         "0": "A genuinely valid continuous CDF (uniform on [0,1]); a student picking this may not recognize the linear ramp as a legitimate CDF shape",
         "2": "A genuinely valid continuous CDF (exponential); a student picking this may be uncomfortable with the e^(−x) form or not see it approaches 1 at infinity",
         "3": "A genuinely valid discrete CDF; a student picking this may think 'CDFs must be smooth' and reject the staircase form"
-      }
+      },
+      "concept_tags": [
+        "CRV_023",
+        "CRV_034",
+        "CRV_029"
+      ]
     },
     {
       "id": "q4",
@@ -440,7 +466,12 @@
         "0": "Forgot to subtract; reported F at the lower endpoint",
         "2": "Forgot to subtract; reported F at the upper endpoint",
         "3": "Sign error — added rather than subtracted, producing an impossibly large probability"
-      }
+      },
+      "concept_tags": [
+        "CRV_041",
+        "CRV_017",
+        "CRV_005"
+      ]
     },
     {
       "id": "q5",
@@ -460,7 +491,12 @@
         "0": "Notation-level answer that misses the substantive theoretical move; subscript convention is unaffected",
         "2": "Overshoots into abstraction-for-its-own-sake; the lecture has a specific concrete purpose, not a 'theory is good' motive",
         "3": "Misunderstands the role of measure theory; this redefinition coexists with, doesn't replace, the foundational framework"
-      }
+      },
+      "concept_tags": [
+        "CRV_034",
+        "CRV_020",
+        "CRV_032"
+      ]
     },
     {
       "id": "q6",
@@ -480,7 +516,12 @@
         "0": "Plausible confusion — median and IQR are real summary statistics but don't appear in this approximation form",
         "2": "Misreads the formula as bounding the support; the binomial's support is 0 to n, not 24 to 60",
         "3": "'Empirical fitting' framing that misses the principled connection to mean and variance"
-      }
+      },
+      "concept_tags": [
+        "CRV_014",
+        "CRV_005",
+        "CRV_045"
+      ]
     },
     {
       "id": "q7",
@@ -500,7 +541,12 @@
         "0": "Treats the discrepancy as an error rather than as a meaningful approximation effect — misses the lecture's point",
         "2": "Attributes the discrepancy to numerical noise; the 0.4/100 gap is exact arithmetic on the approximation, not floating-point",
         "3": "Invents a third 'true' answer that doesn't exist; the question is about comparing two valid models, not finding a hidden truth"
-      }
+      },
+      "concept_tags": [
+        "CRV_018",
+        "CRV_041",
+        "CRV_031"
+      ]
     },
     {
       "id": "q8",
@@ -520,7 +566,12 @@
         "0": "Reverses the logical order; the discrete case is the foundation, not the derivation from continuous",
         "2": "Lists topics from a different part of the course (expectation/variance theory) that aren't covered in 4.1–4.3",
         "3": "Lists specific distribution families rather than the conceptual arc; the lectures aren't structured as a distribution tour"
-      }
+      },
+      "concept_tags": [
+        "CRV_050",
+        "CRV_020",
+        "CRV_032"
+      ]
     }
   ],
   "relatedVideos": []

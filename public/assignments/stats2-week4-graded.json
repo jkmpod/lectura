@@ -1,0 +1,82 @@
+{
+  "id": "stats2-week4-graded",
+  "title": "Week 4 Graded Assignment",
+  "subtitle": "Continuous Random Variables, CDF, and Approximation",
+  "course": "Statistics for Data Science II",
+  "module": "Continuous Random Variables and CDF",
+  "instructor": "Prof. Andrew Thangaraj",
+  "dueDate": "2026-05-21",
+  "instructions": "Attempt all five questions. After submitting an answer, you will see relevant lesson moments that may help you refine your response. You can change your answer at any time before the due date. Correct answers and explanations will be revealed when you click 'Reveal answers' (or, in production, at the due date).",
+  "questions": [
+    {
+      "id": "aq1",
+      "prompt": "A meteorological station records hourly rainfall in millimeters at a single location for 365 days, giving 8,760 measurements ranging from 0.0 mm (most hours) to about 38.2 mm (heaviest hour). You want to summarize this data probabilistically. Which approach is most consistent with the modeling principles from this module?",
+      "options": [
+        "Treat the data as a discrete random variable and tabulate the PMF over all 8,760 distinct values",
+        "Bin the rainfall values into intervals, treat as continuous, and describe the distribution via the resulting histogram",
+        "Round all measurements to the nearest 1 mm and use a 39-value discrete random variable",
+        "Discard the zero-rainfall hours and model only the non-zero values as a continuous random variable"
+      ],
+      "correctIndex": 1,
+      "concept_tags": ["CRV_007", "CRV_008", "CRV_050"],
+      "hint": "The module's central move is from individual values to intervals via binning, especially when the alphabet is large.",
+      "explanation": "Binning into intervals and treating the variable as continuous is the modeling pattern established across all three lectures. The 8,760-row PMF reproduces the unwieldiness problem; rounding to 1 mm loses real precision; discarding zeros changes the question being asked. For environmental data with this range, a histogram-based continuous treatment is standard."
+    },
+    {
+      "id": "aq2",
+      "prompt": "Let X be a random variable whose CDF F_X is shown to have jumps of size 0.15 at x = 2, size 0.35 at x = 5, and size 0.50 at x = 9, and is constant elsewhere. Compute P(2 < X ≤ 5).",
+      "options": [
+        "0.35, the size of the jump at x = 5",
+        "0.50, equal to the size of the largest single jump",
+        "0.85, since F_X(5) = 0.50 and F_X(2) = 0.15 add to 0.65 plus a correction term",
+        "0.15, the size of the jump at x = 2 which sits at the lower endpoint"
+      ],
+      "correctIndex": 0,
+      "concept_tags": ["CRV_028", "CRV_027", "CRV_030"],
+      "hint": "Use the interval formula P(a < X ≤ b) = F_X(b) − F_X(a). What are F_X(5) and F_X(2)?",
+      "explanation": "F_X(2) = 0.15 (the cumulative through x = 2). F_X(5) = 0.15 + 0.35 = 0.50. So P(2 < X ≤ 5) = F_X(5) − F_X(2) = 0.50 − 0.15 = 0.35. Equivalently, since the only mass in (2, 5] is the jump at x = 5 itself, the probability equals that jump size. Both routes give the same answer — that's the consistency between the PMF and CDF views."
+    },
+    {
+      "id": "aq3",
+      "prompt": "A student claims: 'A function F: ℝ → [0, 1] is a valid CDF if and only if it is continuous, strictly increasing on its support, and tends to 0 at minus infinity and 1 at plus infinity.' Evaluate this claim.",
+      "options": [
+        "Correct: these are exactly the four properties needed to define a CDF",
+        "Wrong: F need not be continuous (it can have jumps), and it need not be strictly increasing (flat regions are allowed)",
+        "Wrong: F must be differentiable everywhere on its support, which the student missed",
+        "Wrong: F must approach 0 at plus infinity and 1 at minus infinity, the student has the limits backwards"
+      ],
+      "correctIndex": 1,
+      "concept_tags": ["CRV_022", "CRV_023", "CRV_024", "CRV_025", "CRV_029", "CRV_034"],
+      "hint": "Think about the CDF of a Bernoulli RV — does it satisfy 'continuous' and 'strictly increasing'? Yet it's a valid CDF.",
+      "explanation": "The student's claim is over-restrictive. The actual properties: non-decreasing (NOT strictly increasing — flat regions OK), values in [0, 1], limit 0 at −∞, limit 1 at +∞, plus right-continuity (NOT full continuity — jumps allowed). The student's definition would exclude every discrete CDF — Bernoulli, binomial, uniform on {1,...,n} — which the module spends substantial time showing are valid CDFs. The permissive definition is what makes the discrete-and-continuous unification work."
+    },
+    {
+      "id": "aq4",
+      "prompt": "X is uniform on {1, 2, ..., 50}. Using the continuous approximation F(x) = x/50, compute the approximate value of P(12.7 < X ≤ 34.2). Using the exact discrete CDF, what is the exact value of the same probability?",
+      "options": [
+        "Approximate: 0.430; exact: 0.440 — both methods agree to within 1 percentage point",
+        "Approximate: 0.430; exact: 0.430 — the two methods give the same answer because the endpoints aren't integers",
+        "Approximate: 0.940; exact: 0.430 — the continuous approximation is wrong because it doesn't account for the support",
+        "Approximate: 0.430; exact: 0.440 — the methods diverge because the discrete CDF treats non-integer endpoints differently"
+      ],
+      "correctIndex": 3,
+      "concept_tags": ["CRV_018", "CRV_041", "CRV_017", "CRV_031"],
+      "hint": "For the continuous approximation, plug into F(x) = x/50 directly. For the exact, remember that F_X(12.7) = F_X(12) for the discrete uniform — the CDF is flat between integers.",
+      "explanation": "Approximate: F(34.2) − F(12.7) = 34.2/50 − 12.7/50 = 21.5/50 = 0.430. Exact: F_X(34.2) = F_X(34) = 34/50, and F_X(12.7) = F_X(12) = 12/50. So 34/50 − 12/50 = 22/50 = 0.440. The 0.010 discrepancy is the price of the continuous approximation's simpler formula at non-integer endpoints. The two answers happen to agree only when both endpoints are integers (or both fall in the same flat region of the discrete CDF)."
+    },
+    {
+      "id": "aq5",
+      "prompt": "The module redefines a CDF as 'any function from ℝ to [0, 1] satisfying four properties' rather than requiring the CDF to come from a specific random variable. Why does this redefinition matter for the overall theory?",
+      "options": [
+        "It is a purely notational convenience that lets us drop the X subscript from F_X(x)",
+        "It admits smooth, non-stepped CDFs (like F(x) = x on [0, 1]) which no discrete random variable can produce, enabling the definition of continuous random variables",
+        "It eliminates the need for the probability mass function as a separate concept",
+        "It allows random variables to be defined directly from CDFs, removing the need for sample spaces"
+      ],
+      "correctIndex": 1,
+      "concept_tags": ["CRV_034", "CRV_020", "CRV_032", "CRV_050"],
+      "hint": "Think about a function F(x) = x on [0, 1]. Could this be the CDF of any discrete random variable? Why does it matter that we now accept it as a valid CDF?",
+      "explanation": "Every discrete CDF is a step function — necessarily, because mass concentrates at points. A function like F(x) = x on [0, 1] has no jumps, so no discrete RV can have this CDF. By redefining CDFs as functions with the right properties (non-decreasing, bounded in [0,1], proper limits, right-continuous) — independent of any underlying random variable — we admit smooth CDFs into the framework. These smooth CDFs are precisely the CDFs of continuous random variables. The redefinition is the move that makes continuous probability possible at all."
+    }
+  ]
+}
