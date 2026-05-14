@@ -1,10 +1,5 @@
 {
   "lessons": [
-  
-    {
-      "id": "linear-regression-basics",
-      "file": "linear-regression-basics.json"
-    },
     {
       "id": "stats2-4-1-continuous-rv-intro",
       "file": "stats2-4-1-continuous-rv-intro.json"

@@ -64,16 +64,21 @@
       "behavior": "pause",
       "timestamp": 240,
       "title": "Concept check: the interval formula",
-      "question": "Suppose F_X(5) = 0.7 and F_X(2) = 0.3. What is P(2 < X ≤ 5)?",
+      "question": "Suppose F_X(5) = 0.7 and F_X(2) = 0.3 for some random variable X. What is P(2 < X ≤ 5)?",
       "options": [
-        "0.7",
-        "0.3",
-        "0.4",
-        "1.0"
+        "0.7, taking the CDF value at the upper endpoint",
+        "0.4, taking the difference F_X(5) − F_X(2) of the two CDF values",
+        "0.3, taking the CDF value at the lower endpoint",
+        "1.0, taking the sum F_X(5) + F_X(2) which exceeds 1 (clipped)"
       ],
-      "correctIndex": 2,
-      "hint": "The lecture gives the formula P(a < X ≤ b) = F_X(b) − F_X(a). Plug in a = 2, b = 5.",
-      "explanation": "P(2 < X ≤ 5) = F_X(5) − F_X(2) = 0.7 − 0.3 = 0.4. Two things to internalize: (1) the difference of CDF values gives the probability of an interval, and (2) the left endpoint is excluded (strict inequality) while the right endpoint is included — this matches the definition F_X(x) = P(X ≤ x)."
+      "correctIndex": 1,
+      "hint": "Apply the formula P(a < X ≤ b) = F_X(b) − F_X(a) with a = 2 and b = 5.",
+      "explanation": "P(2 < X ≤ 5) = F_X(5) − F_X(2) = 0.7 − 0.3 = 0.4. Two things to internalize: differences of CDF values give interval probabilities, and the left endpoint is excluded (strict inequality) while the right is included.",
+      "distractorRationale": {
+        "0": "Forgot to subtract the lower CDF value; took just F_X(5)",
+        "2": "Read off the wrong endpoint, F_X(2), as if the lower value were the answer",
+        "3": "Added instead of subtracted (then awkwardly clipped to 1) — sign error revealing impossible probabilities"
+      }
     },
     {
       "id": "a3",
@@ -89,16 +94,21 @@
       "behavior": "pause",
       "timestamp": 920,
       "title": "Concept check: reading PMF from CDF",
-      "question": "A discrete random variable X has a CDF that jumps by 0.2 at x = 3, jumps by 0.5 at x = 7, and jumps by 0.3 at x = 10. What is P(X = 7)?",
+      "question": "A discrete random variable X has CDF that jumps by 0.2 at x = 3, by 0.5 at x = 7, and by 0.3 at x = 10. What is P(X = 7)?",
       "options": [
-        "0.2",
-        "0.5",
-        "0.7",
-        "0.3"
+        "0.2, the size of the jump at x = 3 (the lowest value in the support)",
+        "0.5, the size of the jump at x = 7 (the value asked about)",
+        "0.7, the cumulative height of the CDF just after x = 7",
+        "0.3, the size of the jump at x = 10 (the highest value in the support)"
       ],
       "correctIndex": 1,
-      "hint": "The lecture's key insight: at each jump in the CDF, the size of the jump equals the probability of the random variable taking that value.",
-      "explanation": "The size of the jump at x = 7 is 0.5, so P(X = 7) = 0.5. This is the inverse operation to going from PMF to CDF: where the CDF has a jump of size p at value x, the random variable takes value x with probability p. Where the CDF is flat (no jump), the random variable takes those values with probability 0."
+      "hint": "Each jump's height equals the probability of the variable taking that value.",
+      "explanation": "P(X = 7) = 0.5, the size of the jump at x = 7. The PMF is recovered from a discrete CDF by reading off jump heights: where the CDF jumps by p at value x, the random variable takes that value with probability p. Flat regions correspond to P(X = x) = 0.",
+      "distractorRationale": {
+        "0": "Read the wrong jump — picked the first one (at x = 3) without matching to the asked value",
+        "2": "Reported the CDF height after the jump (0.2 + 0.5 = 0.7) instead of the jump size itself",
+        "3": "Read the wrong jump — picked the last one (at x = 10) without matching to the asked value"
+      }
     },
     {
       "id": "a5",
@@ -404,123 +414,163 @@
   "questions": [
     {
       "id": "q1",
-      "question": "Which of the following is the correct definition of the cumulative distribution function F_X(x)?",
+      "question": "What is the correct definition of the cumulative distribution function F_X(x)?",
       "options": [
-        "F_X(x) = P(X = x)",
-        "F_X(x) = P(X ≤ x)",
-        "F_X(x) = P(X < x)",
-        "F_X(x) = P(X ≥ x)"
+        "F_X(x) = P(X = x), the probability of taking exactly the value x",
+        "F_X(x) = P(X ≤ x), the probability of taking any value up to and including x",
+        "F_X(x) = P(X < x), the probability of taking any value strictly below x",
+        "F_X(x) = P(X ≥ x), the probability of taking any value at or above x"
       ],
       "correctIndex": 1,
-      "hint": "Watch the inequality carefully. The 'cumulative' in CDF refers to accumulating probability from the left.",
-      "explanation": "F_X(x) = P(X ≤ x). The ≤ is important: it includes the value x itself, which is why the CDF takes the upper value at each jump (right-continuity). P(X = x) is the PMF (for discrete RVs), and P(X < x) and P(X ≥ x) are related but different quantities.",
+      "hint": "Watch the inequality carefully. The 'cumulative' in CDF refers to accumulating probability from the left, and includes the endpoint.",
+      "explanation": "F_X(x) = P(X ≤ x). The ≤ is essential: it includes the value x itself, which is what produces right-continuity (the filled circle at jumps). P(X = x) is the PMF; P(X < x) gives the left-continuous version; P(X ≥ x) is the survival function. The standard CDF uses ≤.",
       "concept": "Definition: F_X(x) = P(X ≤ x)",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "distractorRationale": {
+        "0": "Conflates PMF with CDF — a foundational confusion this lecture is explicitly addressing",
+        "2": "Off-by-one inequality error: strict less-than instead of less-than-or-equal; produces left-continuity instead of right-continuity",
+        "3": "Confuses CDF with survival function S(x) = 1 − F_X(x), a related but distinct object"
+      }
     },
     {
       "id": "q2",
       "question": "A random variable X has F_X(4) = 0.6 and F_X(9) = 0.85. What is P(4 < X ≤ 9)?",
       "options": [
-        "0.6",
-        "0.85",
-        "0.25",
-        "1.45"
+        "0.85 − 0 = 0.85 (the value at the upper endpoint)",
+        "0.85 − 0.6 = 0.25 (difference of CDF values at the endpoints)",
+        "0.85 + 0.6 = 1.45 (sum of CDF values at the endpoints)",
+        "(0.85 + 0.6) / 2 = 0.725 (midpoint of the two CDF values)"
       ],
-      "correctIndex": 2,
-      "hint": "Use the interval formula P(a < X ≤ b) = F_X(b) − F_X(a).",
-      "explanation": "P(4 < X ≤ 9) = F_X(9) − F_X(4) = 0.85 − 0.6 = 0.25. This is the most common use of the CDF in practice: differences of CDF values give interval probabilities.",
+      "correctIndex": 1,
+      "hint": "Apply the interval formula P(a < X ≤ b) = F_X(b) − F_X(a) directly with a = 4 and b = 9.",
+      "explanation": "P(4 < X ≤ 9) = F_X(9) − F_X(4) = 0.85 − 0.6 = 0.25. The difference of CDF values gives the probability of the interval. Differences are the workhorse computation with CDFs.",
       "concept": "Interval probability formula F(b) − F(a)",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "distractorRationale": {
+        "0": "Forgot to subtract the lower endpoint; treated F_X(9) alone as the answer",
+        "2": "Sign error — added instead of subtracted; produces values that can exceed 1, which should immediately flag the mistake",
+        "3": "Misapplied a 'midpoint' or 'average' intuition; CDFs don't combine that way"
+      }
     },
     {
       "id": "q3",
-      "question": "Which of the following is NOT a property of every cumulative distribution function?",
+      "question": "Which of the following is NOT a required property of every cumulative distribution function?",
       "options": [
-        "F_X(x) is non-decreasing in x",
-        "lim_{x→−∞} F_X(x) = 0",
-        "lim_{x→+∞} F_X(x) = 1",
-        "F_X(x) is differentiable everywhere"
+        "F_X(x) is non-decreasing in x throughout the entire real line",
+        "F_X(x) is differentiable at every point in its domain, including jumps",
+        "F_X(x) tends to 0 at minus infinity and tends to 1 at plus infinity",
+        "F_X(x) takes values in the closed interval [0, 1] for every x"
       ],
-      "correctIndex": 3,
-      "hint": "Think about the CDF of a discrete random variable — it has jumps. Can a function with jumps be differentiable at those points?",
-      "explanation": "A CDF is non-decreasing, starts at 0 at −∞, and ends at 1 at +∞ — these are required properties. But it need not be differentiable: the CDF of a discrete random variable has jumps (discontinuities), and at jump points the derivative does not exist. Continuous random variables have differentiable CDFs (with the density as the derivative), but that is a feature of that specific class, not a universal property.",
+      "correctIndex": 1,
+      "hint": "Think about the CDF of a discrete random variable — does it have jumps? Can a function with jumps be differentiable at those points?",
+      "explanation": "A CDF must be non-decreasing, bounded in [0, 1], and have limits 0 at −∞ and 1 at +∞. But it need not be differentiable: discrete CDFs have jumps, where the derivative doesn't exist. Differentiability is a feature of continuous CDFs specifically, not a universal requirement.",
       "concept": "Non-decreasing property",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "distractorRationale": {
+        "0": "Genuinely required, not the exception — but a student who confused 'non-decreasing' with 'strictly increasing' might wrongly think this is the loose property",
+        "2": "Genuinely required and unambiguous; a student picking this might be guessing the question is a trick about boundary behavior",
+        "3": "Genuinely required; a student picking this is confusing 'takes values in [0,1]' (probability axiom) with 'must equal 0 or 1' (which is false)"
+      }
     },
     {
       "id": "q4",
       "question": "For a Bernoulli random variable X with P(X = 1) = 0.3, what is F_X(0)?",
       "options": [
-        "0",
-        "0.3",
-        "0.7",
-        "1"
+        "0, because no values below 0 are possible for a Bernoulli random variable",
+        "0.7, because F_X(0) = P(X ≤ 0) = P(X = 0) = 1 − 0.3",
+        "0.3, because that is the probability of the other value the variable takes",
+        "1, because the CDF saturates immediately for a discrete random variable"
       ],
-      "correctIndex": 2,
-      "hint": "F_X(0) = P(X ≤ 0). Which values of X satisfy X ≤ 0? Only X = 0 (since X is Bernoulli). What is P(X = 0)?",
-      "explanation": "F_X(0) = P(X ≤ 0) = P(X = 0) = 1 − P(X = 1) = 1 − 0.3 = 0.7. Note that F_X(0) takes the upper value at the jump — this is the right-continuity convention represented by the filled circle in the sketch.",
+      "correctIndex": 1,
+      "hint": "F_X(0) = P(X ≤ 0). Which Bernoulli values satisfy X ≤ 0? Compute P of those.",
+      "explanation": "F_X(0) = P(X ≤ 0). For a Bernoulli RV taking 0 or 1, X ≤ 0 means X = 0, and P(X = 0) = 1 − 0.3 = 0.7. The ≤ in the CDF definition is the key: at x = 0, the CDF value includes the probability mass at 0 (right-continuity, represented as a filled circle in the sketch).",
       "concept": "Bernoulli example: CDF as a step function",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "distractorRationale": {
+        "0": "Inequality error: treats F_X(0) as if the inequality were strict (< 0), missing the right-continuity convention",
+        "2": "Reads off P(X = 1) by mistake — perhaps confused the question about Bernoulli's two values",
+        "3": "Confuses 'discrete CDF' with 'instantly saturating'; only true for x ≥ the largest value (1, not 0)"
+      }
     },
     {
       "id": "q5",
-      "question": "You are shown the CDF of an unknown discrete random variable. It has jumps of size 0.4 at x = 2, size 0.35 at x = 5, and size 0.25 at x = 8. Which of the following is correct?",
+      "question": "You are shown the CDF of an unknown discrete random variable. It has jumps of size 0.4 at x = 2, size 0.35 at x = 5, and size 0.25 at x = 8. Which of the following best describes the PMF?",
       "options": [
-        "The random variable is continuous",
-        "P(X = 2) = 0.4, P(X = 5) = 0.35, P(X = 8) = 0.25, and P(X = k) = 0 for all other k",
-        "The random variable can take any value in [2, 8]",
-        "P(X = 2) = 0.4 and the other jumps don't correspond to probabilities"
+        "P(X ≤ 2) = 0.4, P(X ≤ 5) = 0.35, P(X ≤ 8) = 0.25",
+        "P(X = 2) = 0.4, P(X = 5) = 0.35, P(X = 8) = 0.25",
+        "P(X = 2) = 0.4, P(X = 5) = 0.75, P(X = 8) = 1.0",
+        "P(X = 2) = 0.25, P(X = 5) = 0.35, P(X = 8) = 0.4"
       ],
       "correctIndex": 1,
-      "hint": "The size of each jump equals the probability of the random variable taking that value. The CDF is flat elsewhere.",
-      "explanation": "For a discrete random variable, the CDF is a step function. Each jump corresponds to a value the variable takes, with probability equal to the jump size. So P(X = 2) = 0.4, P(X = 5) = 0.35, P(X = 8) = 0.25 — and they sum to 1, as required. Where the CDF is flat (e.g., at x = 4.5), the probability of that value is 0.",
+      "hint": "Each jump in a discrete CDF corresponds to a probability mass at that value; the jump's height equals P(X = that value).",
+      "explanation": "The PMF is recovered from the CDF by reading off jump heights: where the CDF jumps by p at value x, the random variable takes value x with probability p. So P(X = 2) = 0.4, P(X = 5) = 0.35, P(X = 8) = 0.25, and these sum to 1 as required.",
       "concept": "Recovering PMF from CDF: jumps = probabilities",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "distractorRationale": {
+        "0": "PMF/CDF confusion: reads the jump heights as CDF values, not as jump-step probabilities",
+        "2": "Cumulative confusion: adds jumps progressively, reporting the CDF height at each step instead of the individual jump size",
+        "3": "Reversed assignment: maps jump sizes to values in reverse order (0.25 to x=2 instead of x=8)"
+      }
     },
     {
       "id": "q6",
-      "question": "Let X be uniform on {1, 2, ..., 100}. What is P(X > 87) using the CDF?",
+      "question": "Let X be uniform on {1, 2, …, 100}. Using the CDF, what is P(X > 87)?",
       "options": [
-        "87/100",
-        "13/100",
-        "1/100",
-        "12/100"
+        "F_X(87) = 87/100, since 87 is the threshold being asked about",
+        "1 − F_X(87) = 13/100, using the complement of the CDF at 87",
+        "1/100, since exactly one integer value sits at the boundary",
+        "F_X(87) − F_X(0) = 87/100, taking the difference from zero"
       ],
       "correctIndex": 1,
-      "hint": "Use the complement: P(X > 87) = 1 − P(X ≤ 87) = 1 − F_X(87). And F_X(87) = 87/100.",
-      "explanation": "P(X > 87) = 1 − P(X ≤ 87) = 1 − F_X(87) = 1 − 87/100 = 13/100. There are 13 values (88, 89, ..., 100) above 87, each with probability 1/100, giving 13/100 directly — and the CDF gives the same answer with one subtraction.",
+      "hint": "P(X > 87) is the complement of P(X ≤ 87). Use F_X(87) and subtract from 1.",
+      "explanation": "P(X > 87) = 1 − P(X ≤ 87) = 1 − F_X(87) = 1 − 87/100 = 13/100. There are 13 values (88, 89, …, 100), each with probability 1/100, totaling 13/100. The complement rule via the CDF is the cleanest way.",
       "concept": "Uniform on {1, ..., 100} and interval probabilities",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "distractorRationale": {
+        "0": "Forgot to take the complement — reports F_X(87) directly when the question asks about the right tail",
+        "2": "Confuses 'P(X > 87)' with 'P(X = 88)' or 'the probability of the next single value', getting 1/100",
+        "3": "Correct arithmetic but wrong setup; subtracts from F_X(0) = 0 instead of taking the complement"
+      }
     },
     {
       "id": "q7",
-      "question": "Consider two endpoints a = 3 and b = 7 for a discrete random variable X taking integer values. The lecture's formula P(a < X ≤ b) = F_X(b) − F_X(a) gives the probability that X is in {4, 5, 6, 7}. Suppose you instead want P(3 ≤ X ≤ 7) — the probability that X is in {3, 4, 5, 6, 7}. Which expression is correct?",
+      "question": "Consider integer-valued X with the formula P(a < X ≤ b) = F_X(b) − F_X(a) giving P(X ∈ {a+1, …, b}). You instead want P(3 ≤ X ≤ 7) = P(X ∈ {3, 4, 5, 6, 7}). Which expression is correct?",
       "options": [
-        "F_X(7) − F_X(3)",
-        "F_X(7) − F_X(2)",
-        "F_X(8) − F_X(3)",
-        "F_X(7) + F_X(3)"
+        "F_X(7) − F_X(3), since both endpoints should be inclusive in the interval",
+        "F_X(7) − F_X(2), shifting the lower endpoint down by one to include the value 3",
+        "F_X(8) − F_X(3), shifting the upper endpoint up by one to include the value 7",
+        "F_X(7) + F_X(3), adding because both endpoints contribute mass to the interval"
       ],
       "correctIndex": 1,
-      "hint": "You want to include 3 in the event. The formula F_X(b) − F_X(a) excludes a. What value of a should you use so that a is excluded but 3 is included?",
-      "explanation": "P(3 ≤ X ≤ 7) = P(2 < X ≤ 7) = F_X(7) − F_X(2). The trick: for integer-valued X, '3 ≤ X' is the same as '2 < X'. Pick the left endpoint of the formula one step lower than the value you want to include. This kind of bookkeeping with open vs closed endpoints is a recurring source of off-by-one errors with discrete CDFs.",
+      "hint": "The formula excludes the lower endpoint. To include 3, pick a lower bound that excludes 2 (so 3 stays in).",
+      "explanation": "P(3 ≤ X ≤ 7) = P(2 < X ≤ 7) for integer X, so this equals F_X(7) − F_X(2). The rule: to include a value at the lower endpoint, shift it down by one (for integer X). This open-vs-closed-endpoint bookkeeping is one of the most common sources of off-by-one errors with CDFs.",
       "concept": "Interval probability formula F(b) − F(a)",
-      "difficulty": "hard"
+      "difficulty": "hard",
+      "distractorRationale": {
+        "0": "Direct application of the formula without adjusting for the lower-endpoint exclusion; off-by-one — drops X = 3",
+        "2": "Shifts the wrong endpoint; the upper end is already included in the formula, no adjustment needed there",
+        "3": "Forgot that interval probabilities are differences of CDF values, not sums — produces a value possibly exceeding 1"
+      }
     },
     {
       "id": "q8",
-      "question": "For a discrete random variable, where the CDF is flat (no jump) at some value x, what does this tell you about P(X = x)?",
+      "question": "For a discrete random variable, the CDF is flat (no jump) at some value x. What does this tell you about P(X = x)?",
       "options": [
-        "P(X = x) is the height of the CDF at that point",
-        "P(X = x) is 0",
-        "P(X = x) is undefined",
-        "P(X = x) is 1 minus the height of the CDF"
+        "P(X = x) equals the height of the CDF curve at the point x where the flat region occurs",
+        "P(X = x) = 0, because jumps in the CDF are what encode probability mass",
+        "P(X = x) is undefined when the CDF has no jump there",
+        "P(X = x) = 1 − F_X(x), the complement of the CDF height"
       ],
       "correctIndex": 1,
-      "hint": "Jumps in the CDF correspond to probability mass. What does the absence of a jump mean?",
-      "explanation": "A flat region of the CDF means no probability mass is being accumulated there, so P(X = x) = 0 for all x in that region. This is consistent with the inverse operation: where the CDF has a jump of size p, P(X = x) = p; where it's flat, P(X = x) = 0.",
+      "hint": "Jumps in the CDF encode probability mass. What does the absence of a jump mean?",
+      "explanation": "A flat region means no new probability mass accumulates there, so P(X = x) = 0 for all x in that region. The CDF still has a value (the running cumulative), but the random variable doesn't 'land on' those points. Where the CDF jumps by p, P(X = that point) = p.",
       "concept": "Recovering PMF from CDF: jumps = probabilities",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "distractorRationale": {
+        "0": "Conflates the CDF value F_X(x) with the PMF value P(X = x); a common foundational confusion",
+        "2": "Treats the absence-of-jump as a definitional gap rather than as zero probability; the CDF is still well-defined and equals zero-step at flat points",
+        "3": "Confuses CDF complement with PMF; survival 1 − F_X(x) is not the same as point mass P(X = x)"
+      }
     }
   ],
   "relatedVideos": []

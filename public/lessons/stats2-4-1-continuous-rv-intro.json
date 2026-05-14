@@ -68,16 +68,21 @@
       "behavior": "pause",
       "timestamp": 750,
       "title": "Concept check: the shift from values to intervals",
-      "question": "The lecture argues we should move from focusing on individual values to focusing on intervals. What is the main reason for this shift?",
+      "question": "The lecture argues we should move from focusing on individual values to focusing on intervals. What is the main reason?",
       "options": [
-        "Intervals are mathematically more elegant than individual values",
-        "Computer programs cannot store individual real numbers accurately",
-        "Listing every value with its probability becomes intractable when the number of possible values is very large",
-        "Discrete random variables do not exist in the real world"
+        "Intervals are mathematically more elegant than individual values in probability theory",
+        "Listing every value's probability becomes intractable when the alphabet is very large",
+        "Computer floating-point arithmetic cannot represent individual real numbers accurately",
+        "Discrete random variables are not theoretically well-defined for very large alphabets"
       ],
-      "correctIndex": 2,
-      "hint": "Think about the meteorite dataset: 45,000+ distinct values. What's the practical problem with a PMF table that has 45,000 rows?",
-      "explanation": "When a random variable can take a huge number of values — meteorite weights, person heights, sensor readings — the PMF either becomes a table too large to be useful, or each individual probability becomes vanishingly small. Switching focus to intervals (\"how often does the weight fall between A and B?\") gives us a tractable description. The trade-off is precision: we give up exact per-value probabilities, but the per-value probabilities weren't telling us much anyway."
+      "correctIndex": 1,
+      "hint": "Think about the meteorite dataset — 45,000+ distinct values. What's the practical problem with a PMF that has 45,000 rows?",
+      "explanation": "When a random variable can take a huge number of values, the PMF table either becomes too large to use or each individual probability becomes so small it's uninformative. Switching focus to intervals (\"how often does the weight fall in [A, B]?\") gives a tractable description. The trade-off is precision: per-value probabilities go, but they weren't useful anyway.",
+      "distractorRationale": {
+        "0": "Aesthetic answer that misses the practical pressure behind the move",
+        "2": "Conflates representation with computation; the lecture's point isn't about floating-point but about table size",
+        "3": "Inverts the situation: discrete RVs are fine, they just become unwieldy"
+      }
     },
     {
       "id": "a4",
@@ -85,7 +90,7 @@
       "behavior": "pause",
       "timestamp": 905,
       "title": "Concept check: reading a histogram",
-      "question": "In the meteorite-weight histogram (after log transformation), suppose the bin around log₂(weight) = 5 has a count of about 1,800 out of 45,000 total observations. Approximately what is the empirical probability that log₂(weight) falls in that bin?",
+      "question": "In the meteorite-weight histogram (after log transformation), the bin around log₂(weight) = 5 has a count of about 1,800 out of 45,000 total observations. What is the empirical probability that log₂(weight) falls in that bin?",
       "options": [
         "0.018",
         "0.04",
@@ -93,8 +98,13 @@
         "1800"
       ],
       "correctIndex": 1,
-      "hint": "Empirical probability = count in the bin divided by total count. The lecture shows roughly 1,800 of 45,000+ observations near log₂(weight) ≈ 5.",
-      "explanation": "1800 / 45000 = 0.04, or 4%. This is the empirical estimate of P(log₂(weight) is in this bin). The histogram with its bin counts is the bridge: each bin's count, normalized by the total, gives the probability mass for that interval. As bins get narrower, the shape of the histogram approaches a continuous density curve."
+      "hint": "Empirical probability is count-in-bin divided by total count. Compute 1800 / 45000.",
+      "explanation": "1800 / 45000 = 0.04, or 4%. This is the empirical estimate of P(log₂(weight) is in this bin). Each bin's normalized count gives a probability mass for that interval; as bins shrink, the shape of these normalized counts approaches a continuous density curve.",
+      "distractorRationale": {
+        "0": "Decimal-shift error: divided 1800 by an order of magnitude too large (450,000 not 45,000)",
+        "2": "Decimal-shift error in the other direction: divided 1800 by 4,500 (counting just the central bin region)",
+        "3": "Forgot to normalize at all — reported the raw count as the probability"
+      }
     },
     {
       "id": "a5",
@@ -345,108 +355,143 @@
   "questions": [
     {
       "id": "q1",
-      "question": "Which of the following best describes the central motivation for introducing continuous random variables?",
+      "question": "What is the central motivation in the lecture for introducing continuous random variables?",
       "options": [
-        "Discrete random variables are mathematically incorrect for real-world data",
-        "Continuous random variables are easier to teach to beginners",
-        "When a discrete random variable's alphabet is very large, the PMF description becomes computationally and conceptually unwieldy",
-        "Probability theory requires continuous models for axiomatic consistency"
+        "Continuous RVs are mathematically more rigorous than discrete RVs for serious analysis",
+        "Discrete PMFs become intractable to describe at large alphabet sizes",
+        "Real-world quantities like weight are inherently non-discrete and demand a continuous treatment",
+        "Continuous models are simpler to teach to students new to probability theory"
       ],
-      "correctIndex": 2,
-      "hint": "The lecture's motivation is practical, not foundational. Look for the issue with describing data using PMFs when there are thousands of distinct values.",
-      "explanation": "The lecture is clear that continuous random variables exist because discrete descriptions break down at scale — 45,000 meteorite weights or a binomial(1000, 0.6) cannot be usefully described with a PMF table. Continuous models trade some precision for a tractable description.",
+      "correctIndex": 1,
+      "hint": "The lecture's motivation is practical, not foundational. What happens to a PMF table when the alphabet has 45,000 values?",
+      "explanation": "The lecture is clear that continuous random variables exist because discrete descriptions break down at scale — 45,000 meteorite weights or a binomial(1000, 0.6) cannot be usefully described with a PMF table. The motivation is computational tractability, not mathematical rigor or physical reality.",
       "concept": "Why discrete becomes unwieldy at scale",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "distractorRationale": {
+        "0": "Conflates the motivation with foundational rigor; the lecture explicitly motivates from practical intractability, not mathematical formalism",
+        "2": "A common but wrong physical-realism argument; the lecture notes physical quantities are also intervals in disguise but this isn't the primary motivation",
+        "3": "Pedagogical-difficulty framing; the lecture in fact treats continuous as MORE technically involved than discrete"
+      }
     },
     {
       "id": "q2",
-      "question": "Suppose you are modeling the weight of adult elephants in a population, and you have 50,000 measurements ranging from 2,200 kg to 6,800 kg. Which approach is most consistent with the lecture's argument?",
+      "question": "You have 50,000 measurements of adult elephant weight, ranging from 2,200 kg to 6,800 kg. Which modeling approach is most consistent with the lecture's argument?",
       "options": [
-        "Build a PMF with one row per distinct weight value observed",
-        "Bin the data into intervals (e.g., 100 bins) and describe it with a histogram, then think of it as a continuous random variable",
-        "Round all weights to the nearest 1,000 kg and use a discrete random variable",
-        "Discard outliers and use only the central 50% of the data"
+        "Build a 50,000-row PMF table with one row per distinct weight value observed in the data",
+        "Bin the data into intervals and treat the variable as continuous via the histogram",
+        "Round all weights to the nearest 100 kg and use a 47-value discrete PMF",
+        "Take only the central 50% of weights and discard outliers before modeling"
       ],
       "correctIndex": 1,
-      "hint": "The lecture's core move is from individual values to intervals via binning.",
-      "explanation": "Binning the continuous-valued data into intervals and treating the variable as continuous is exactly the move the lecture advocates. A 50,000-row PMF is unwieldy; aggressive rounding throws away real information; discarding outliers changes the question being asked.",
+      "hint": "The lecture's central move is from individual values to intervals via binning.",
+      "explanation": "Binning into intervals and treating the variable as continuous is exactly the move the lecture advocates for large, real-valued datasets. A 50,000-row PMF reproduces the problem the lecture is trying to escape; aggressive rounding throws away precision the data has; discarding outliers changes the question entirely.",
       "concept": "From individual values to intervals (the key idea)",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "distractorRationale": {
+        "0": "Reproduces the very problem the lecture is solving — a giant unwieldy PMF",
+        "2": "A 'compromise' that loses precision and still gives a clunky 47-bin discrete model; the lecture argues binning is the right move but to continuous, not to coarser discrete",
+        "3": "Conflates outlier handling with model choice; outliers are a separate concern and discarding them isn't a modeling decision"
+      }
     },
     {
       "id": "q3",
-      "question": "Why does the lecture apply a logarithm to the meteorite weights before plotting the histogram?",
+      "question": "Why does the lecture apply log₂ to the meteorite weights before constructing the histogram?",
       "options": [
-        "Logarithms make the data more random",
-        "The original range spans many orders of magnitude, and the log transformation compresses it into a range that plots and bins sensibly",
-        "Logarithms convert continuous data into discrete data",
-        "Probability theory requires log-transformed inputs for binomial-like data"
+        "Logarithms increase the statistical randomness present in heavily skewed datasets",
+        "The original range spans 10 orders of magnitude and log compresses it into a plottable scale",
+        "Logarithms convert continuously distributed values into discretely binnable integer ones",
+        "Probability theory requires log inputs for combinatorial distributions like binomial"
       ],
       "correctIndex": 1,
-      "hint": "The original range is 0.01 grams to 60 tons. What is the practical problem with plotting that on a linear x-axis?",
-      "explanation": "The log transform compresses the multiplicative scale into an additive one. 0.01 g to 60 tons spans about 10 orders of magnitude, which cannot be visualized linearly. log₂ maps the same range to about −6.6 to 25.8, which fits on a normal axis. The data is unchanged — only the representation is.",
+      "hint": "Think about the original range — 0.01 g to 60 tons spans 10 orders of magnitude. What goes wrong if you plot that on a linear axis?",
+      "explanation": "The log transform compresses a multiplicative scale into an additive one. The meteorite range from 0.01 g to 60 million g spans roughly 10 orders of magnitude — invisible on a linear axis. log₂ maps it to about −6.6 to 25.8, a normal-looking range. The data is unchanged; only the coordinate system is.",
       "concept": "Log transformation of wide-ranging data",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "distractorRationale": {
+        "0": "A common confusion: thinking transformations change the data's randomness rather than its presentation",
+        "2": "Conflates the log transform with the binning step; they're independent operations that the lecture happens to apply together",
+        "3": "Invents a non-existent theoretical requirement; logs are a useful trick, not a prerequisite of any distribution"
+      }
     },
     {
       "id": "q4",
-      "question": "The lecture argues that moving to a continuous model involves a trade-off. What is given up, and what is gained?",
+      "question": "Moving to a continuous model involves a trade-off, according to the lecture. What is given up, and what is gained?",
       "options": [
-        "Given up: nothing. Gained: mathematical elegance.",
-        "Given up: precision about individual values. Gained: a tractable, simpler description of the distribution.",
-        "Given up: the ability to compute any probabilities. Gained: cleaner notation.",
-        "Given up: the random variable itself. Gained: a deterministic model."
+        "Given up: nothing material; gained: a more elegant mathematical formulation of the same content",
+        "Given up: precision about individual values; gained: a tractable, simpler description of the distribution",
+        "Given up: the ability to compute exact probabilities; gained: cleaner notation and integral calculus",
+        "Given up: the random variable as a concept; gained: a deterministic function-based model"
       ],
       "correctIndex": 1,
-      "hint": "The lecture explicitly names the trade-off: you lose access to individual values, but you can now actually work with the distribution.",
-      "explanation": "Once you bin into intervals, you cannot recover the exact value an observation took — that precision is gone. In exchange, you can describe a distribution with a single curve (a density) instead of thousands of individual probabilities, and you can do calculations on it. The lecture argues this trade-off is almost always worth it when the alphabet is large.",
+      "hint": "The lecture explicitly names the trade-off. What can you no longer recover after binning, and what becomes possible?",
+      "explanation": "Once you bin into intervals, you cannot recover the exact value any single observation took — that precision is gone. In exchange, you describe the distribution with a single curve (eventually, a density) instead of thousands of individual probabilities. The lecture argues this trade-off is almost always worth it at scale.",
       "concept": "The precision-tractability trade-off",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "distractorRationale": {
+        "0": "Denies that any trade-off occurs; misses that the lecture is explicit about giving up per-value precision",
+        "2": "Half-right: precision goes, but it's not 'the ability to compute exact probabilities of intervals' — interval probabilities are exactly what the continuous model gives you",
+        "3": "Misunderstands the continuous-RV framework; the random variable concept is retained, only its description changes"
+      }
     },
     {
       "id": "q5",
-      "question": "The lecture argues that even in the physical world, individual real-valued measurements are 'really intervals.' Which statement best captures this argument?",
+      "question": "The lecture argues that even individual real-valued physical measurements 'are really intervals.' Which statement best captures this argument?",
       "options": [
-        "Real numbers don't exist in physical reality",
-        "Any physical measurement has finite precision, so a reported value of 0.01 g really represents 'somewhere in a small interval around 0.01 g' — intervals are the natural representation anyway",
-        "Measurement devices introduce random noise that must be modeled as a continuous random variable",
-        "Statistical theory requires us to round all measurements"
+        "Real numbers are a useful mathematical abstraction but do not directly apply to any physical measurement situation",
+        "Every measurement device has finite precision, so a reported value implicitly represents a small interval around itself",
+        "Measurement devices add noise to readings, which must be modeled as a continuous random variable",
+        "Probability theory mandates that physical measurements be discretized into intervals before analysis"
       ],
       "correctIndex": 1,
-      "hint": "Think about what your scale actually tells you when it reads '0.01 g' — is that the exact weight, or a value within the scale's resolution?",
-      "explanation": "The lecture makes a physical-realism argument for intervals: no measurement device has infinite precision, so reported values are already intervals in disguise. Modeling with continuous distributions on intervals is therefore not a loss of physical fidelity — it matches how measurement actually works.",
+      "hint": "Think about your scale reading '0.01 g' — is that an exact value, or a value within the scale's resolution?",
+      "explanation": "The lecture makes a physical-realism argument: no measurement device has infinite precision, so any reported value already represents an interval (the resolution of the device). Modeling with continuous distributions on intervals therefore doesn't lose physical fidelity — it matches how measurement actually works.",
       "concept": "The precision-tractability trade-off",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "distractorRationale": {
+        "0": "Philosophical overreach: the lecture doesn't claim real numbers don't exist, just that measurement is finite-precision",
+        "2": "Confuses measurement precision with measurement noise — two different things; noise is a separate modeling concern",
+        "3": "Inverts the argument; the lecture observes that measurement is intrinsically discretized, not that probability theory imposes it"
+      }
     },
     {
       "id": "q6",
-      "question": "For a binomial(100, 0.6) random variable, computing P(50 ≤ X ≤ 60) exactly requires summing ¹⁰⁰Cₖ p^k (1−p)^(100−k) for k = 50 to 60. Why does the lecture call this 'unwieldy' and suggest a continuous approximation?",
+      "question": "For binomial(100, 0.6), computing P(50 ≤ X ≤ 60) exactly requires summing ¹⁰⁰Cₖ p^k (1−p)^(100−k) for k = 50 to 60. Why does the lecture call this 'unwieldy' and motivate continuous approximation?",
       "options": [
-        "The sum is mathematically incorrect",
-        "Each individual term involves combinatorial numbers and powers that are difficult to compute and interpret, even though the final answer is well-defined",
-        "Binomial random variables cannot be summed",
-        "The probability is always exactly 0.5"
+        "The discrete summation produces a numerically wrong answer at large n; only the continuous form gives the correct probability value",
+        "Each term involves combinatorial numbers and probability powers that are difficult to compute and interpret by hand",
+        "The eleven individual terms always cancel each other out and the resulting sum is exactly zero",
+        "Binomial random variables don't permit summation of probabilities across multiple distinct values"
       ],
       "correctIndex": 1,
-      "hint": "Think about computing ¹⁰⁰C₅₀ by hand — what's the practical issue?",
-      "explanation": "The sum is correct in principle, but each term involves enormous combinatorial numbers (¹⁰⁰C₅₀ is about 10²⁹) multiplied by tiny powers of probabilities. The result is well-defined, but it gives you no intuition about where the mass is. A continuous approximation — which we will see in lecture 4.3 — gives a simple formula that produces nearly the same answer with much less effort.",
+      "hint": "Think about computing ¹⁰⁰C₅₀ by hand — what's the practical problem?",
+      "explanation": "The sum is correct in principle, but each term involves enormous combinatorial numbers (¹⁰⁰C₅₀ ≈ 10²⁹) multiplied by tiny probability powers. The result is well-defined but gives no intuition for where the mass sits. The continuous approximation we'll see in lecture 4.3 gives nearly the same answer in a fraction of the effort.",
       "concept": "Binomial PMF shape: motivation for continuous",
-      "difficulty": "hard"
+      "difficulty": "hard",
+      "distractorRationale": {
+        "0": "Misunderstands approximation; the exact discrete answer is correct, just hard to compute. The continuous form is the approximation, not the truth",
+        "2": "Random plausible-sounding wrong answer to test reading comprehension",
+        "3": "Confuses 'summing terms of a single distribution' with some other operation; binomials are perfectly summable across their support"
+      }
     },
     {
       "id": "q7",
-      "question": "Suppose you take the meteorite log-weight histogram and double the number of bins, then double it again, and again. What does the lecture suggest happens in the limit?",
+      "question": "Take the meteorite log-weight histogram and double the number of bins, then double it again, indefinitely. What does the lecture suggest happens in the limit?",
       "options": [
-        "The histogram becomes useless because each bin has too few data points",
-        "The histogram shape converges to a smooth curve — a continuous probability density",
-        "The histogram becomes equivalent to the original PMF",
-        "The histogram disappears entirely"
+        "Each bin's count eventually drops to zero and the histogram becomes uninformative",
+        "The stepped silhouette smooths into a continuous curve like a probability density",
+        "The histogram becomes mathematically identical to the original discrete PMF table",
+        "The histogram collapses to a single point at the data's empirical mean"
       ],
       "correctIndex": 1,
-      "hint": "The lecture suggests intervals can be made arbitrarily small. What kind of object does a histogram with very small bins start to look like?",
-      "explanation": "As bins shrink (with enough data to fill them), the histogram's stepped silhouette smooths into a continuous curve — the probability density. This is the conceptual bridge to continuous random variables: a continuous model is what the histogram is trying to be in the limit of infinitely many, infinitely narrow bins.",
+      "hint": "What kind of object does a stepped histogram with infinitely many infinitely-narrow bins start to look like?",
+      "explanation": "As bins shrink (and with enough data to populate them), the histogram's stepped silhouette smooths into a continuous curve — the probability density. This is the conceptual bridge to continuous random variables: a continuous model is what the histogram is reaching toward in the limit.",
       "concept": "Histograms: binning and counting",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "distractorRationale": {
+        "0": "True at any finite dataset but misses the conceptual point — the lecture is making an idealized limiting argument, not a practical-sample-size one",
+        "2": "Inverts the direction: the histogram approaches the continuous limit, not the original PMF",
+        "3": "Confuses limit-of-binning with concentration; a histogram doesn't collapse to a point under refinement"
+      }
     }
   ],
   "relatedVideos": []

@@ -66,14 +66,19 @@
       "title": "Concept check: what makes a function a valid CDF?",
       "question": "Which of the following functions F: ℝ → [0, 1] is a valid CDF?",
       "options": [
-        "F(x) = 0.5 for all x",
-        "F(x) = 1 − x² for −1 ≤ x ≤ 1, else 0",
-        "F(x) = 0 for x < 0, F(x) = x for 0 ≤ x ≤ 1, F(x) = 1 for x > 1",
-        "F(x) = sin(x) clipped to [0, 1]"
+        "F(x) = 0.5 for all x, a constant value of one-half everywhere on the real line",
+        "F(x) = 0 for x < 0, F(x) = x for 0 ≤ x ≤ 1, F(x) = 1 for x > 1 (the uniform[0,1] form)",
+        "F(x) = 1 − x² for −1 ≤ x ≤ 1 and 0 elsewhere, a downward parabola on [−1, 1]",
+        "F(x) = sin(x) clipped to lie in [0, 1], oscillating but bounded between zero and one"
       ],
-      "correctIndex": 2,
-      "hint": "Run through the four properties: range in [0, 1]? Non-decreasing? Limit 0 at −∞? Limit 1 at +∞?",
-      "explanation": "Only option C satisfies all four: it lives in [0, 1], it's non-decreasing (zero, then linearly increasing, then constant), it approaches 0 as x → −∞ and 1 as x → +∞. Option A doesn't reach 1. Option B isn't non-decreasing — 1 − x² decreases as |x| increases from 0. Option D oscillates, so it's not non-decreasing. Option C is actually the CDF of the uniform distribution on [0, 1] — your first continuous CDF."
+      "correctIndex": 1,
+      "hint": "Run through the four properties: non-decreasing? Values in [0, 1]? Limit 0 at −∞? Limit 1 at +∞?",
+      "explanation": "Option B satisfies all four properties: it lives in [0, 1], is non-decreasing (zero, then linear, then constant 1), approaches 0 at −∞ and 1 at +∞. It's the CDF of the uniform distribution on [0, 1] — your first continuous CDF. The others all fail at least one property.",
+      "distractorRationale": {
+        "0": "Constant value never reaches 1 (no limit at +∞); also never reaches 0 at −∞. Fails two of the four limit properties at once",
+        "2": "1 − x² is not non-decreasing — it decreases from x = 0 outward; also doesn't approach 0 at −∞ (it just becomes 0 at x = ±1)",
+        "3": "Oscillates with sin; not non-decreasing. Clipping to [0,1] doesn't fix the non-monotonic shape"
+      }
     },
     {
       "id": "a3",
@@ -89,16 +94,21 @@
       "behavior": "pause",
       "timestamp": 895,
       "title": "Concept check: approximation error",
-      "question": "X is uniform on {1, 2, ..., 100}. Using the exact discrete CDF, P(3.2 < X ≤ 10.6) = 7/100. Using the continuous approximation F(x) = x/100, the same probability is computed as F(10.6) − F(3.2). What value does the continuous approximation give?",
+      "question": "X is uniform on {1, …, 100}. The exact discrete CDF gives P(3.2 < X ≤ 10.6) = 7/100. Using the continuous approximation F(x) = x/100, what value would you get for the same probability?",
       "options": [
-        "7/100",
-        "7.4/100",
-        "10.6/100",
-        "Cannot be computed"
+        "7/100, matching the exact discrete answer",
+        "7.4/100, applying F(10.6) − F(3.2) = 10.6/100 − 3.2/100",
+        "10.6/100, the value of F at the upper endpoint",
+        "Cannot be computed without the original underlying PMF values"
       ],
       "correctIndex": 1,
-      "hint": "Just plug into F(x) = x/100: F(10.6) = 10.6/100 and F(3.2) = 3.2/100. Subtract.",
-      "explanation": "F(10.6) − F(3.2) = 10.6/100 − 3.2/100 = 7.4/100. The exact discrete answer is 7/100 because the discrete uniform doesn't take non-integer values — F is flat between integers. The continuous approximation 'doesn't know' about that flatness and gives a slightly different answer. The error here (0.4/100 = 0.004) is small enough to be tolerable; the gain is a clean formula F(x) = x/100 that works for any interval, no off-by-one bookkeeping required."
+      "hint": "Plug straight into F(x) = x/100: F(10.6) = 10.6/100 and F(3.2) = 3.2/100. Subtract.",
+      "explanation": "F(10.6) − F(3.2) = 10.6/100 − 3.2/100 = 7.4/100. The exact discrete answer is 7/100 because the discrete uniform doesn't take non-integer values, so F is flat between integers. The continuous approximation 'doesn't know' about that flatness and reads off the fractional values, producing a slight discrepancy that's worth it for the clean formula.",
+      "distractorRationale": {
+        "0": "Assumes the approximation matches the exact answer at non-integer endpoints — but that's precisely where the two diverge",
+        "2": "Forgot to subtract the lower endpoint; reported F(10.6) alone",
+        "3": "Treats the approximation as needing additional inputs; in fact, F(x) = x/100 is self-contained and can be applied directly"
+      }
     },
     {
       "id": "a5",
@@ -354,123 +364,163 @@
   "questions": [
     {
       "id": "q1",
-      "question": "When the lecture shows the CDF of binomial(n, 0.6) for n = 10, 20, 50, 100 on the same axes, what observation is being made?",
+      "question": "When the lecture shows binomial(n, 0.6) CDFs for n = 10, 20, 50, 100 on the same axes, what visual observation is the lecturer drawing attention to?",
       "options": [
-        "The CDFs become identical for large n",
-        "As n grows (with the scale fixed), the staircase structure visibly smooths into what looks like a continuous curve",
-        "The CDFs become discontinuous for large n",
-        "Larger n produces narrower CDFs that vanish in the limit"
+        "The CDFs become numerically identical for large n, regardless of n's exact value",
+        "As n grows with the scale fixed, the staircase silhouette visibly smooths into a continuous curve",
+        "The CDFs shift rightward as n grows and eventually exit the visible range on the right side entirely",
+        "The CDFs become discontinuous (more jumpy) as n grows, with finer-grained steps"
       ],
       "correctIndex": 1,
-      "hint": "Look at the four panels side by side: n = 10 is clearly stepped, n = 100 looks smooth. What's happening visually?",
-      "explanation": "With a fixed scale, the individual jumps shrink relative to the whole as n grows, and the staircase silhouette approaches a continuous curve. This is the visual motivation for defining continuous CDFs — they're the natural limit of these progressively smoother step functions.",
+      "hint": "Look at the four panels side by side: n = 10 has clear steps; n = 100 looks almost smooth. What's happening?",
+      "explanation": "With a fixed scale, each individual jump shrinks relative to the whole as n grows, and the staircase silhouette approaches a smooth curve. This visual motivates the formal definition of continuous CDFs — the limiting object the staircases are approaching.",
       "concept": "Binomial CDF as n grows: from steps to a smooth curve",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "distractorRationale": {
+        "0": "Inverts 'similar in shape' with 'identical'; the CDFs converge in shape but not in absolute values (mean shifts with n)",
+        "2": "Confuses 'shifts' with 'concentrates'; the binomial CDF does concentrate around np but doesn't 'exit the range' on the same axes",
+        "3": "Inverts the direction of the observation; jumps become smaller and more numerous, but visually smoother, not 'more jumpy'"
+      }
     },
     {
       "id": "q2",
-      "question": "The lecture introduces a new definition: a CDF is any function F: ℝ → [0, 1] with four properties. Which set of properties is correct?",
+      "question": "The lecture redefines a CDF as any function F: ℝ → [0, 1] with four properties (plus right-continuity). Which set of properties is correct?",
       "options": [
-        "Differentiable, bounded, increasing, finite",
-        "Non-decreasing; values in [0, 1]; lim_{x→−∞} F(x) = 0; lim_{x→+∞} F(x) = 1 (plus right-continuity as a technical requirement)",
-        "Continuous, strictly increasing, integrable, normalized",
-        "Discrete, piecewise constant, increasing, bounded"
+        "Continuous, strictly increasing, integrable everywhere, and normalized to integrate to one",
+        "Non-decreasing, values in [0, 1], approaches 0 at minus infinity, approaches 1 at plus infinity",
+        "Differentiable everywhere, bounded above by one, strictly increasing, continuous from the left",
+        "Piecewise constant, monotonically non-decreasing, bounded above by one, right-continuous everywhere"
       ],
       "correctIndex": 1,
-      "hint": "The defining properties don't require differentiability or strict monotonicity — they're more permissive than that.",
-      "explanation": "The defining properties are: range in [0, 1], non-decreasing, limit 0 at −∞, limit 1 at +∞, plus right-continuity. Crucially, no continuity, differentiability, or strict monotonicity is required — that's what lets the definition include both staircase (discrete) and smooth (continuous) CDFs.",
+      "hint": "The defining properties are permissive — they don't require differentiability or strict increase. They allow both step functions and smooth curves.",
+      "explanation": "A CDF must be (i) non-decreasing, (ii) bounded in [0, 1], (iii) approach 0 at −∞, (iv) approach 1 at +∞, and (v) right-continuous. No requirement of continuity, differentiability, or strict monotonicity — that permissiveness is exactly what allows both staircase (discrete) and smooth (continuous) CDFs into the same framework.",
       "concept": "Four defining properties",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "distractorRationale": {
+        "0": "Confuses density-function properties (integrating to 1) with CDF properties (limiting to 1); also wrongly requires continuity and strict increase",
+        "2": "Imposes too many requirements: differentiability and left-continuity are both incorrect (CDFs are right-continuous and can have jumps)",
+        "3": "Restricts to discrete-only CDFs; this set of properties would exclude all continuous CDFs from the definition"
+      }
     },
     {
       "id": "q3",
       "question": "Which of the following functions is NOT a valid CDF?",
       "options": [
-        "F(x) = 0 for x < 0, F(x) = x for 0 ≤ x ≤ 1, F(x) = 1 for x > 1",
-        "F(x) = 1 − e^(−x) for x ≥ 0, F(x) = 0 for x < 0",
-        "F(x) = 0.5 + 0.5 sin(x), oscillating between 0 and 1",
-        "F(x) = 0 for x < 2, F(x) = 0.4 for 2 ≤ x < 5, F(x) = 1 for x ≥ 5"
+        "F(x) = 0 for x < 0, F(x) = x for 0 ≤ x ≤ 1, F(x) = 1 for x > 1 (uniform on [0, 1])",
+        "F(x) = 0.5 + 0.5 · sin(x), oscillating smoothly between 0 and 1 across the real line",
+        "F(x) = 1 − e^(−x) for x ≥ 0, F(x) = 0 for x < 0 (exponential CDF)",
+        "F(x) = 0 for x < 2, F(x) = 0.4 for 2 ≤ x < 5, F(x) = 1 for x ≥ 5 (a step CDF)"
       ],
-      "correctIndex": 2,
-      "hint": "Check each candidate against the four properties — especially 'non-decreasing.'",
-      "explanation": "Option C oscillates, so it isn't non-decreasing — it goes up and down repeatedly, which disqualifies it. Option A is the CDF of Uniform[0, 1]. Option B is the CDF of an Exponential(1) random variable. Option D is the CDF of a discrete random variable that takes value 2 with probability 0.4 and value 5 with probability 0.6. All three are valid; only C fails the non-decreasing test.",
+      "correctIndex": 1,
+      "hint": "Check each option against the four properties. Which one fails 'non-decreasing'?",
+      "explanation": "Option B oscillates: sin(x) goes up and down, so 0.5 + 0.5·sin(x) violates the non-decreasing requirement. The others are valid: A is the uniform [0,1] CDF, C is the exponential(1) CDF, and D is a discrete CDF with point masses at 2 and 5.",
       "concept": "Four defining properties",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "distractorRationale": {
+        "0": "A genuinely valid continuous CDF (uniform on [0,1]); a student picking this may not recognize the linear ramp as a legitimate CDF shape",
+        "2": "A genuinely valid continuous CDF (exponential); a student picking this may be uncomfortable with the e^(−x) form or not see it approaches 1 at infinity",
+        "3": "A genuinely valid discrete CDF; a student picking this may think 'CDFs must be smooth' and reject the staircase form"
+      }
     },
     {
       "id": "q4",
-      "question": "X is uniform on {1, 2, ..., 100}. Using the continuous approximation F(x) = x/100, what is the approximate value of P(17.5 < X ≤ 42.3)?",
+      "question": "X is uniform on {1, 2, …, 100}. Using the continuous approximation F(x) = x/100, compute the approximate P(17.5 < X ≤ 42.3).",
       "options": [
-        "17.5/100",
-        "42.3/100",
-        "24.8/100",
-        "25/100"
+        "17.5/100, the value of the approximation at the lower endpoint",
+        "24.8/100, applying the formula F(42.3) − F(17.5) directly",
+        "42.3/100, the value of the approximation at the upper endpoint",
+        "60.8/100, the sum F(42.3) + F(17.5) of the two endpoint values"
       ],
-      "correctIndex": 2,
-      "hint": "Use the interval formula F(b) − F(a) directly with the continuous approximation.",
-      "explanation": "F(42.3) − F(17.5) = 42.3/100 − 17.5/100 = 24.8/100. The exact discrete answer would round these to F(42) − F(17) = 25/100, since the discrete uniform CDF is flat between integers. The 0.2/100 = 0.002 discrepancy is the price you pay for the much simpler formula.",
+      "correctIndex": 1,
+      "hint": "Apply the interval formula with the approximation: F(42.3) − F(17.5) = (42.3 − 17.5)/100.",
+      "explanation": "F(42.3) − F(17.5) = 42.3/100 − 17.5/100 = 24.8/100 = 0.248. The exact discrete answer would round these to F(42) − F(17) = 25/100, since the discrete uniform CDF is flat between integers. The 0.002 discrepancy is the price of the clean continuous formula.",
       "concept": "Uniform discrete approximated by F(x) = x/100",
-      "difficulty": "easy"
+      "difficulty": "easy",
+      "distractorRationale": {
+        "0": "Forgot to subtract; reported F at the lower endpoint",
+        "2": "Forgot to subtract; reported F at the upper endpoint",
+        "3": "Sign error — added rather than subtracted, producing an impossibly large probability"
+      }
     },
     {
       "id": "q5",
-      "question": "Why does the lecture care that we can define a CDF without reference to a random variable?",
+      "question": "Why does the lecture care that we can define a CDF without reference to any random variable?",
       "options": [
-        "It simplifies the notation by removing the subscript",
-        "It allows the existence of CDFs (like F(x) = x on [0, 1]) that no discrete random variable could produce — which is precisely what's needed to define continuous random variables",
-        "It makes the theory more abstract for its own sake",
-        "It eliminates the need for probability axioms"
+        "It simplifies notation by allowing us to omit the subscript X from F_X(x)",
+        "It permits smooth CDFs like F(x) = x on [0,1] that no discrete random variable can produce",
+        "It makes the theory more abstract and therefore easier to prove theorems about",
+        "It eliminates any need for measure theory or the axiomatic foundations of probability"
       ],
       "correctIndex": 1,
-      "hint": "The lecture is setting up a theoretical jump. What new kinds of distributions does this jump make available?",
-      "explanation": "A smooth, non-stepped CDF like F(x) = x on [0, 1] cannot come from any discrete random variable (discrete CDFs always have jumps). By defining CDFs as functions with the right properties — without requiring them to come from a random variable — we allow smooth CDFs into the framework, and these are exactly the CDFs of continuous random variables. The new definition is what makes continuous probability possible.",
+      "hint": "The lecture is setting up a theoretical jump. What new kinds of distributions does this allow into the framework?",
+      "explanation": "Discrete CDFs always have jumps. A smooth CDF like F(x) = x on [0, 1] cannot arise from any discrete random variable. By defining CDFs as functions with the right properties — independent of any random variable — we admit smooth CDFs into the framework, and these are precisely the CDFs of continuous random variables. The redefinition is what makes continuous probability possible.",
       "concept": "Definition: CDF without a random variable",
-      "difficulty": "hard"
+      "difficulty": "hard",
+      "distractorRationale": {
+        "0": "Notation-level answer that misses the substantive theoretical move; subscript convention is unaffected",
+        "2": "Overshoots into abstraction-for-its-own-sake; the lecture has a specific concrete purpose, not a 'theory is good' motive",
+        "3": "Misunderstands the role of measure theory; this redefinition coexists with, doesn't replace, the foundational framework"
+      }
     },
     {
       "id": "q6",
       "question": "The continuous approximation F(x) ≈ 1 / (1 + exp(−(x − 60)/√24)) is used for binomial(100, 0.6). What do the numbers 60 and 24 represent?",
       "options": [
-        "Arbitrary fitting constants with no meaning",
-        "60 is the mean np and 24 is the variance np(1−p) of the binomial",
-        "60 is n − 40 and 24 is just 24",
-        "60 is the median and 24 is the interquartile range"
+        "60 is the median of the binomial and 24 is its interquartile range",
+        "60 = np is the mean of the binomial and 24 = np(1−p) is its variance",
+        "60 is the maximum value the variable takes and 24 is its minimum",
+        "60 and 24 are fitting constants chosen empirically with no statistical meaning"
       ],
       "correctIndex": 1,
-      "hint": "The lecture mentions these are 'related to' specific properties of the binomial. Recall: mean of binomial(n, p) = np, variance = np(1−p).",
-      "explanation": "For binomial(n = 100, p = 0.6): mean = np = 60, variance = np(1−p) = 100 × 0.6 × 0.4 = 24. The continuous approximation centers a sigmoid at the mean and uses the variance to set its width. This is a foreshadowing of the Central Limit Theorem: large-n binomial distributions are well-approximated by smooth bell-shaped distributions characterized by their mean and variance.",
+      "hint": "Recall the basic facts about binomial(n, p): mean = np, variance = np(1−p). Plug in n = 100, p = 0.6.",
+      "explanation": "For binomial(100, 0.6): mean = np = 60, variance = np(1−p) = 24. The continuous approximation centers a sigmoid at the mean and uses the variance to set its width. This previews the Central Limit Theorem: large-n binomial distributions are well-approximated by sigmoidal CDFs parameterized by their first two moments.",
       "concept": "Binomial approximated by a logistic-like CDF",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "distractorRationale": {
+        "0": "Plausible confusion — median and IQR are real summary statistics but don't appear in this approximation form",
+        "2": "Misreads the formula as bounding the support; the binomial's support is 0 to n, not 24 to 60",
+        "3": "'Empirical fitting' framing that misses the principled connection to mean and variance"
+      }
     },
     {
       "id": "q7",
-      "question": "For X uniform on {1, ..., 100}, the discrete CDF gives P(3.2 < X ≤ 10.6) = 7/100 while the continuous approximation gives 7.4/100. Why does this discrepancy arise?",
+      "question": "For X uniform on {1, …, 100}, the exact discrete CDF gives P(3.2 < X ≤ 10.6) = 7/100 while the continuous approximation F(x) = x/100 gives 7.4/100. Why the discrepancy?",
       "options": [
-        "The continuous approximation is incorrect",
-        "The discrete CDF is flat between integer jumps, so it 'ignores' non-integer endpoints; the continuous F(x) = x/100 treats every value of x as meaningful",
-        "Both answers are wrong; the true value is 0.04",
-        "The discrepancy is due to rounding error in the calculator"
+        "The continuous approximation contains a computational error; both methods should give the exact same result",
+        "The discrete CDF is flat between integers, while the continuous F(x) = x/100 reads off every fractional value",
+        "The discrepancy is due to floating-point rounding error in performing the subtraction calculation",
+        "Both answers are wrong; the actual probability is 0.04 by a third independent computation method"
       ],
       "correctIndex": 1,
       "hint": "Think about what F_X(3.2) means for the discrete uniform vs. for the continuous approximation.",
-      "explanation": "For the discrete uniform, F_X(3.2) = F_X(3) = 3/100 because there's no probability mass between 3 and 4 — the CDF is flat there. The continuous approximation, by contrast, evaluates F(3.2) = 3.2/100, picking up 'imaginary' mass between integers. Neither is wrong; they describe different objects. The continuous version is a useful approximation that loses a bit of precision in exchange for a clean formula.",
+      "explanation": "For the discrete uniform, F_X(3.2) = F_X(3) = 3/100 — the CDF is flat between integers because no probability mass exists there. The continuous approximation evaluates F(3.2) = 3.2/100, treating every fractional value as meaningful. Neither answer is wrong; they describe different objects. The 0.4/100 discrepancy is the price of the cleaner formula.",
       "concept": "Approximation error: 7/100 vs 7.4/100",
-      "difficulty": "hard"
+      "difficulty": "hard",
+      "distractorRationale": {
+        "0": "Treats the discrepancy as an error rather than as a meaningful approximation effect — misses the lecture's point",
+        "2": "Attributes the discrepancy to numerical noise; the 0.4/100 gap is exact arithmetic on the approximation, not floating-point",
+        "3": "Invents a third 'true' answer that doesn't exist; the question is about comparing two valid models, not finding a hidden truth"
+      }
     },
     {
       "id": "q8",
       "question": "Across lectures 4.1, 4.2, and 4.3, the conceptual arc moves through three stages. Which ordering best captures it?",
       "options": [
-        "Continuous CDFs → discrete PMFs → histograms",
-        "Histograms motivate continuous models → CDFs are defined for discrete RVs → CDFs are generalized to functions without random variables, enabling continuous RVs",
-        "Random variables → expectations → variances",
-        "Bernoulli → binomial → uniform"
+        "Continuous CDFs first introduced; then discrete PMFs derived from them; then histograms used to visualize",
+        "Histograms motivate continuous models; CDF defined for discrete RVs; CDF generalized to allow continuous CDFs",
+        "Random variables defined; expectations computed; variances analyzed across the three lectures",
+        "Bernoulli RVs introduced; binomial built from Bernoullis; uniform discrete generalized"
       ],
       "correctIndex": 1,
-      "hint": "Trace the arc from lecture 4.1 (data motivation) through 4.2 (CDF definition) to 4.3 (the theoretical jump).",
-      "explanation": "Lecture 4.1 motivates the need for continuous models using real data (meteorites) and histograms. Lecture 4.2 introduces the CDF as F_X(x) = P(X ≤ x) and works out its properties for discrete random variables. Lecture 4.3 makes the theoretical jump: CDFs are functions with certain properties, and this broader definition admits continuous CDFs that no discrete random variable could produce. This sets up the continuous random variable formally in the next lecture.",
+      "hint": "Trace the arc from 4.1 (motivation from real data) through 4.2 (CDF technical setup) to 4.3 (the theoretical generalization).",
+      "explanation": "Lecture 4.1 motivates continuous models from real data (meteorites, histograms). Lecture 4.2 defines the CDF F_X(x) = P(X ≤ x) and develops its properties for discrete RVs. Lecture 4.3 generalizes 'CDF' to be any function with the right properties — admitting continuous CDFs that no discrete RV could produce, and setting up the continuous random variable concept for the next lecture.",
       "concept": "Definition: CDF without a random variable",
-      "difficulty": "medium"
+      "difficulty": "medium",
+      "distractorRationale": {
+        "0": "Reverses the logical order; the discrete case is the foundation, not the derivation from continuous",
+        "2": "Lists topics from a different part of the course (expectation/variance theory) that aren't covered in 4.1–4.3",
+        "3": "Lists specific distribution families rather than the conceptual arc; the lectures aren't structured as a distribution tour"
+      }
     }
   ],
   "relatedVideos": []
